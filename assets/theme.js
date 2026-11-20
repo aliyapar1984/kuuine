@@ -712,20 +712,43 @@
       root.style.setProperty("--hero-interval", `${Math.max(ms, 500)}ms`);
     };
 
-    const restartPip = (i) => {
+    const setPipScale = (i, ratio) => {
+      const fill = qs(".hero__pip-fill", pips[i]);
+      if (!fill) return;
+      const r = Math.min(1, Math.max(0, ratio));
+      fill.style.animation = "none";
+      fill.style.transform = `translateY(-50%) scaleX(${r})`;
+    };
+
+    const syncPipFromVideo = (video) => {
+      if (!video) return;
+      const d = video.duration;
+      if (!Number.isFinite(d) || d <= 0) {
+        setPipScale(index, 0);
+        return;
+      }
+      setPipScale(index, video.currentTime / d);
+    };
+
+    /* clock=true → görsel slayt CSS animasyonu; video → JS scaleX */
+    const restartPip = (i, { clock = false, paused = false, progress = 0 } = {}) => {
       pips.forEach((pip, idx) => {
         const on = idx === i;
         pip.classList.toggle("is-active", on);
-        pip.classList.toggle("is-paused", on && (!inView || reduced));
+        pip.classList.toggle("is-clock", on && clock && !reduced);
+        pip.classList.toggle("is-paused", on && paused);
         pip.setAttribute("aria-selected", on ? "true" : "false");
         const fill = qs(".hero__pip-fill", pip);
         if (!fill) return;
-        if (on && !reduced) {
-          fill.style.animation = "none";
+        fill.style.animation = "none";
+        if (on && clock && !reduced) {
+          fill.style.transform = "";
           void fill.offsetWidth;
           fill.style.animation = "";
+        } else if (on) {
+          fill.style.transform = `translateY(-50%) scaleX(${Math.min(1, Math.max(0, progress))})`;
         } else {
-          fill.style.animation = "none";
+          fill.style.transform = "translateY(-50%) scaleX(0)";
         }
       });
     };
@@ -740,16 +763,18 @@
 
         if (i === active && allowPlay) {
           loadLazyVideo(video).then(() => {
+            if (i !== index) return;
             if (restart) {
               try {
                 video.currentTime = 0;
               } catch (_) {}
             }
+            syncPipFromVideo(video);
             playLazyVideo(video);
           });
         } else if (i === active) {
-          /* Viewport / pin dışı: pause — currentTime korunur, tekrar girince devam */
           pauseLazyVideo(video);
+          syncPipFromVideo(video);
         } else {
           pauseLazyVideo(video);
           unloadLazyVideo(video);
@@ -763,13 +788,7 @@
 
       const video = slideVideo(index);
       if (video) {
-        const syncDuration = () => {
-          const d = video.duration;
-          if (Number.isFinite(d) && d > 0) setPipDuration(d * 1000);
-        };
-        if (video.readyState >= 1) syncDuration();
-        else video.addEventListener("loadedmetadata", syncDuration, { once: true });
-        /* Geçiş video 'ended' ile — timer yok */
+        /* Geçiş video 'ended' ile — pip timeupdate ile */
         return;
       }
 
@@ -794,12 +813,18 @@
         slide.setAttribute("aria-hidden", on ? "false" : "true");
       });
       index = i;
+      const video = slideVideo(i);
+      if (video) {
+        restartPip(i, { clock: false, paused: !canRun(), progress: 0 });
+      } else {
+        setPipDuration(IMAGE_MS);
+        restartPip(i, { clock: true, paused: !canRun() });
+      }
       syncVideos(i, true);
       scheduleAdvance();
-      restartPip(i);
     };
 
-    /* ended → sonraki slayt (bir kez bağla) */
+    /* ended → sonraki slayt; timeupdate → pip (bir kez bağla) */
     slides.forEach((slide, i) => {
       const video = qs("[data-hero-video]", slide);
       if (!video) return;
@@ -807,20 +832,39 @@
       video.loop = false;
       video.addEventListener("ended", () => {
         if (i !== index || !canRun()) return;
+        setPipScale(i, 1);
         goTo(index + 1, false);
+      });
+      video.addEventListener("timeupdate", () => {
+        if (i !== index) return;
+        syncPipFromVideo(video);
+      });
+      video.addEventListener("loadedmetadata", () => {
+        if (i !== index) return;
+        syncPipFromVideo(video);
       });
     });
 
     prevBtn?.addEventListener("click", () => goTo(index - 1, true));
     nextBtn?.addEventListener("click", () => goTo(index + 1, true));
 
-    /* Hover/focus’ta durmaz — oynatma devam eder */
-    root.addEventListener("kuuine:hero-resume", () => {
+    const resumeHeroUi = () => {
       syncVideos(index, false);
       scheduleAdvance();
-      if (slideVideo(index)) pips[index]?.classList.remove("is-paused");
-      else restartPip(index);
-    });
+      const video = slideVideo(index);
+      if (video) {
+        syncPipFromVideo(video);
+        restartPip(index, {
+          clock: false,
+          paused: !canRun(),
+          progress: video.duration > 0 ? video.currentTime / video.duration : 0,
+        });
+      } else {
+        restartPip(index, { clock: true, paused: !canRun() });
+      }
+    };
+
+    root.addEventListener("kuuine:hero-resume", resumeHeroUi);
 
     root.addEventListener(
       "touchstart",
@@ -846,14 +890,17 @@
         ([entry]) => {
           inView = entry.isIntersecting && entry.intersectionRatio > 0.2;
           if (inView) {
-            syncVideos(index, false);
-            scheduleAdvance();
-            if (slideVideo(index)) pips[index]?.classList.remove("is-paused");
-            else restartPip(index);
+            resumeHeroUi();
           } else {
             clearTimer();
             syncVideos(index, false);
-            pips[index]?.classList.add("is-paused");
+            const video = slideVideo(index);
+            if (video) {
+              syncPipFromVideo(video);
+              pips[index]?.classList.add("is-paused");
+            } else {
+              pips[index]?.classList.add("is-paused");
+            }
           }
         },
         { threshold: [0, 0.2, 0.5] }
