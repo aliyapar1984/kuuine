@@ -1,0 +1,73 @@
+<section class="instagram" {{ section.shopify_attributes }}>
+  <h2 class="instagram__title">{{ section.settings.title }}</h2>
+  {% if section.settings.handle != blank %}
+    <p class="instagram__handle">
+      <a href="{{ section.settings.link }}">{{ section.settings.handle }}</a>
+    </p>
+  {% endif %}
+  <div class="instagram__grid">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link | default: section.settings.link }}" {{ block.shopify_attributes }}>
+        {% if block.settings.image != blank %}
+          {{
+            block.settings.image
+            | image_url: width: 600
+            | image_tag: loading: 'lazy', alt: block.settings.alt | default: 'Instagram'
+          }}
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instagram grid",
+  "tag": "section",
+  "class": "section-instagram",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Başlık",
+      "default": "İlham almaya devam edin"
+    },
+    {
+      "type": "text",
+      "id": "handle",
+      "label": "Hesap adı",
+      "default": "@markaniz"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Profil bağlantısı"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Görsel",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Görsel" },
+        { "type": "text", "id": "alt", "label": "Alt metin" },
+        { "type": "url", "id": "link", "label": "Bağlantı" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram grid",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

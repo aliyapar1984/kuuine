@@ -1,0 +1,77 @@
+<section class="hero" {{ section.shopify_attributes }}>
+  <div class="hero__media">
+    {% if section.settings.video != blank %}
+      {{
+        section.settings.video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          image_size: '1920x'
+      }}
+    {% elsif section.settings.image != blank %}
+      {{
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag: loading: 'eager', sizes: '100vw', widths: '800, 1200, 1600, 2400', alt: section.settings.heading
+      }}
+    {% endif %}
+  </div>
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    {% if section.settings.heading != blank %}
+      <h1 class="hero__title">{{ section.settings.heading | newline_to_br }}</h1>
+    {% endif %}
+    {% if section.settings.text != blank %}
+      <p class="hero__text">{{ section.settings.text }}</p>
+    {% endif %}
+    {% if section.settings.button_label != blank %}
+      <a class="btn btn--ghost-light" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Homepage hero",
+  "tag": "div",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Yedek görsel"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Arka plan videosu"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Başlık",
+      "default": "Sofra\nMükemmel."
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Metin",
+      "default": "Premium züccaciye — tabak, bardak, tepsi; ziyafet sofraları için zamansız zarafet."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Buton metni",
+      "default": "KOLEKSİYONU KEŞFET"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Buton bağlantısı"
+    }
+  ],
+  "presets": [{ "name": "Homepage hero" }]
+}
+{% endschema %}

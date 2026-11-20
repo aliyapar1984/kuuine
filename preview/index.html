@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Premium Züccaciye & Sofra | kuuine Önizleme</title>
+  <link rel="icon" href="../assets/kuuine-swan.png" type="image/png">
+  <link rel="stylesheet" href="../assets/base.css">
+  <link rel="stylesheet" href="../assets/tailwind.css">
+  <script>
+    (function () {
+      var KEY = "kuuine-preloader-seen";
+      function isReload() {
+        var nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+        if (nav) return nav.type === "reload";
+        return !!(performance.navigation && performance.navigation.type === 1);
+      }
+      var seen = false;
+      try { seen = sessionStorage.getItem(KEY) === "1"; } catch (e) {}
+      if (seen && !isReload()) {
+        window.__KUUINE_SKIP_PRELOADER = true;
+        document.documentElement.classList.add("kuuine-preloader-skip");
+      } else {
+        document.documentElement.classList.add("kuuine-preloader-pending");
+      }
+    })();
+  </script>
+  <!--
+    Shopify mapping:
+    Her data-shopify-section değeri → sections/<name>.liquid
+    Theme Editor’da index.json order ile aynı sırada eklenir.
+  -->
+</head>
+<body>
+  <!-- PAGE PRELOADER (Prava-style entrance) -->
+  <div id="kuuine-preloader" class="kuuine-preloader" role="presentation" aria-hidden="true">
+    <div class="kuuine-preloader__stage" aria-hidden="true">
+      <div class="kuuine-preloader__track" data-track="top"></div>
+      <div class="kuuine-preloader__track" data-track="bot"></div>
+    </div>
+    <script type="application/json" id="kuuine-preloader-data">
+      {
+        "steps": [
+          { "track": "top", "text": "Her Sofrada", "inY": -100, "outY": 100 },
+          { "track": "bot", "text": "Zamansız Zarafet", "inY": -100, "outY": -100 },
+          { "track": "top", "text": "kuuine", "inY": 100, "outY": -100, "brand": true }
+        ]
+      }
+    </script>
+  </div>
+
+  <!-- SECTION: header -->
+  <header data-shopify-section="header" class="site-header site-header--over-hero" data-site-header>
+    <div class="site-header__inner">
+      <div class="site-header__left">
+        <button type="button" class="menu-toggle" aria-label="Menü">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <a href="#" class="logo" aria-label="kuuine">
+          <span class="logo__mark">
+            <img class="logo__icon logo__icon--default" src="../assets/swan-logo-dark.svg" alt="" width="22" height="22">
+            <img class="logo__icon logo__icon--light" src="../assets/swan-logo.svg" alt="" width="22" height="22">
+          </span>
+          <span class="logo__wordmark">
+            <img class="logo__img logo__img--default" src="../assets/kuuine.svg" alt="kuuine" width="120" height="33">
+            <img class="logo__img logo__img--light" src="../assets/kuuine-white.svg" alt="" width="120" height="33">
+          </span>
+        </a>
+        <nav class="site-header__nav" aria-label="Ana menü">
+          <a class="nav-link" href="#shop">Ürünler</a>
+          <a class="nav-link" href="#shop">İndirim</a>
+          <a class="nav-link" href="#shop">Katalog</a>
+          <a class="nav-link" href="#about">Firma Hikayesi</a>
+        </nav>
+      </div>
+      <div class="site-header__center" aria-hidden="true"></div>
+      <div class="site-header__right">
+        <!-- <div class="site-header__meta">
+          <button type="button" class="nav-link">TL</button>
+          <a class="nav-link" href="#trade">Türkçe</a>
+        </div> -->
+        <div class="header-icons">
+          <a href="#search" aria-label="Ara"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
+          <a href="#wishlist" aria-label="Favoriler"><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3-5 3V4Z"/></svg></a>
+          <a href="#account" aria-label="Hesap"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.5-3 4-4.5 7-4.5s5.5 1.5 7 4.5"/></svg></a>
+          <a href="#cart" aria-label="Sepet"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="MainContent" class="main-stack">
+    <!-- SECTION: hero -->
+    <section
+      data-shopify-section="hero"
+      class="hero section-hero"
+      id="shop"
+      data-hero-slideshow
+      aria-roledescription="carousel"
+      aria-label="Öne çıkan koleksiyon"
+    >
+      <div class="hero__viewport">
+        <article class="hero__slide is-active" data-hero-slide aria-hidden="false">
+          <div class="hero__media">
+            <video
+              autoplay
+              muted
+              playsinline
+              preload="auto"
+              poster="../public/images/frame-hero-video.jpg"
+              src="../public/videos/hero-video.mp4"
+              data-hero-video
+            ></video>
+          </div>
+          <div class="hero__content">
+            <h1 class="hero__title">Sofra<br>Mükemmel.</h1>
+            <p class="hero__text">Premium züccaciye — tabak, bardak, tepsi; ziyafet sofraları için zamansız zarafet.</p>
+            <a class="btn btn--ghost-light" href="#products">KOLEKSİYONU KEŞFET</a>
+          </div>
+        </article>
+
+        <article class="hero__slide" data-hero-slide aria-hidden="true">
+          <div class="hero__media">
+            <img
+              src="../public/images/Housewares_store_hero_banner_9b719f34.jpg"
+              alt=""
+              width="1920"
+              height="1080"
+              decoding="async"
+            >
+          </div>
+          <div class="hero__content">
+            <p class="hero__eyebrow">Yeni koleksiyon</p>
+            <h2 class="hero__title">Rüya gibi<br>ziyafet.</h2>
+            <p class="hero__text">Tabak ve tepsiyle sessiz lüksü sofranıza taşıyan zamansız parçalar.</p>
+            <a class="btn btn--ghost-light" href="#products">KOLEKSİYONU KEŞFET</a>
+          </div>
+        </article>
+
+        <article class="hero__slide" data-hero-slide aria-hidden="true">
+          <div class="hero__media">
+            <video
+              muted
+              playsinline
+              preload="none"
+              poster="../public/images/tw-pex-pastel-tableware.jpg"
+              src="../public/videos/hero-ceramic-plates.mp4"
+              data-hero-video
+            ></video>
+          </div>
+          <div class="hero__content">
+            <p class="hero__eyebrow">Seramik</p>
+            <h2 class="hero__title">Işığı tutan<br>formlar.</h2>
+            <p class="hero__text">Soft stoneware tabaklar — paylaşımı davet eden sakin silüetler.</p>
+            <a class="btn btn--ghost-light" href="#tableware">SERAMİKLERİ KEŞFET</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="hero__controls">
+        <div class="hero__pips" data-hero-pips role="tablist" aria-label="Slayt seçimi"></div>
+        <div class="hero__arrows">
+          <button type="button" class="hero__arrow" data-hero-prev aria-label="Önceki slayt">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="hero__arrow" data-hero-next aria-label="Sonraki slayt">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: collection-tabs -->
+    <section data-shopify-section="collection-tabs" class="collection-tabs" data-tabs>
+      <div class="collection-tabs__layout container">
+        <div class="collection-tabs__gallery">
+          <img class="is-active" data-tab-image="bean" src="../public/images/tw-pex-pastel-tableware.jpg" alt="Tabaklar">
+          <img data-tab-image="ham" src="../public/images/tw-pex-empty-glasses.jpg" alt="Bardaklar">
+          <img data-tab-image="sun" src="../public/images/tw-soft-green-bowls-linen.jpg" alt="Organik seramik tabak">
+          <img data-tab-image="lounge" src="../public/images/tw-feast-table-spread.jpg" alt="Soft sofra seramiği">
+          <img data-tab-image="day" src="../public/images/tw-soft-white-bowls.jpg" alt="Kaseler">
+        </div>
+        <div class="collection-tabs__info">
+          <h2 class="collection-tabs__title">Her sofra için zarafet</h2>
+          <div class="collection-tabs__nav">
+            <button type="button" class="is-active" data-tab="bean">Tabaklar</button>
+            <button type="button" data-tab="ham">Bardaklar</button>
+            <button type="button" data-tab="sun">Sofra detayı</button>
+            <button type="button" data-tab="lounge">Ziyafet setleri</button>
+            <button type="button" data-tab="day">Kaseler</button>
+          </div>
+          <div class="collection-tabs__panel is-active" data-panel="bean">
+            <p>Mat ve pastel seramik tabaklar; sofra düzenine sakin bir premium dokunuş katar. Günlük kullanım ve özel sofralar için dengeli formlar.</p>
+            <a class="btn--text" href="#">Tabakları keşfet</a>
+          </div>
+          <div class="collection-tabs__panel" data-panel="ham">
+            <p>Kristal netlikte bardaklar — boş camın ışık oyununu öne çıkaran minimal silüetler. Su, çay ve sofra servisi için zamansız parçalar.</p>
+            <a class="btn--text" href="#">Bardakları keşfet</a>
+          </div>
+          <div class="collection-tabs__panel" data-panel="sun">
+            <p>Organik kenarlı seramik tabaklar ve keten doku — sessiz lüksün soft hali.</p>
+            <a class="btn--text" href="#">Sofra detayını keşfet</a>
+          </div>
+          <div class="collection-tabs__panel" data-panel="lounge">
+            <p>Uzun masa düzenleri, boş kadehler ve altın detaylı tabaklarla ziyafet estetiği. Misafir sofrası için eksiksiz züccaciye.</p>
+            <a class="btn--text" href="#">Ziyafet setlerini keşfet</a>
+          </div>
+          <div class="collection-tabs__panel" data-panel="day">
+            <p>Altın kenarlı stoneware kaseler — soft doku, sakin form. Sofra ve servis için premium küçük parçalar.</p>
+            <a class="btn--text" href="#">Kaseleri keşfet</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: benefits -->
+    <section data-shopify-section="benefits" class="benefits">
+      <p class="benefits__eyebrow">Mutfak görünümünü değiştiren koleksiyonlar</p>
+      <h2 class="benefits__title">Güzel Anlarınıza Şıklık Katacak</h2>
+      <p class="benefits__intro">Konfor, düşünülmüş tasarım ve kalıcı kaliteyi dengeleyen; duraksamayı davet eden ve gündelik anları yükselten özenle üretilmiş bir koleksiyon.</p>
+      <div class="benefits__grid">
+        <article class="benefit-card">
+          <div class="benefit-card__media"><img src="../public/images/tw-brunch-feast-serving.jpg" alt="Duraksamaya davet"></div>
+          <div class="benefit-card__body tw:pr-3 tw:max-[700px]:pr-2">
+            <h3>Duraksamaya davet</h3>
+            <p>Sofra anlarını yavaşlatmaya inanıyoruz. Her parça, paylaşımı ve sakin zarafeti teşvik eder.</p>
+          </div>
+        </article>
+        <article class="benefit-card">
+          <div class="benefit-card__media"><img src="../public/images/tw-pex-wooden-plates-cups.jpg" alt="Kusursuz işçilik"></div>
+          <div class="benefit-card__body tw:pr-3 tw:max-[700px]:pr-2">
+            <h3>Kusursuz işçilik</h3>
+            <p>Türkiye’de özenle üretilir—ham maddeden bitmiş ürüne kadar.</p>
+          </div>
+        </article>
+        <article class="benefit-card">
+          <div class="benefit-card__media"><img src="../public/images/tw-pex-empty-glasses.jpg" alt="Kalıcı olmak için"></div>
+          <div class="benefit-card__body tw:pr-3 tw:max-[700px]:pr-2">
+            <h3>Kalıcı olmak için</h3>
+            <p>Günlük kullanıma ve özel sofralara uygun, özenle seçilmiş premium malzemeler.</p>
+          </div>
+        </article>
+        <article class="benefit-card">
+          <div class="benefit-card__media"><img src="../public/images/tw-soft-green-bowls-linen.jpg" alt="Keyif için tasarlandı"></div>
+          <div class="benefit-card__body tw:pr-3 tw:max-[700px]:pr-2">
+            <h3>Keyif için tasarlandı</h3>
+            <p>Sessiz bir keyif için eşsiz silüetler ve zarifçe rafine detaylar.</p>
+          </div>
+        </article>
+        <article class="benefit-card">
+          <div class="benefit-card__media"><img src="../public/images/tw-soft-ceramic-dishware.jpg" alt="Atölye el işçiliği"></div>
+          <div class="benefit-card__body tw:pr-3 tw:max-[700px]:pr-2">
+            <h3>Atölye el işçiliği</h3>
+            <p>Malzemeye ve zanaata duyulan saygının her parçayı şekillendirdiği yerde tasarlanır ve el işçiliğiyle üretilir.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: feature-banner -->
+    <section data-shopify-section="feature-banner" class="feature-banners" data-feature-slideshow>
+      <article class="feature-banner" data-feature-slide>
+        <div class="feature-banner__media">
+          <img src="../public/images/Housewares_store_hero_banner_9b719f34.jpg" alt="Yeni sofra koleksiyonu">
+        </div>
+        <div class="feature-banner__overlay"></div>
+        <div class="feature-banner__content">
+          <p class="feature-banner__eyebrow">YENİ KOLEKSİYON</p>
+          <h2 class="feature-banner__title">Rüya gibi<br>ziyafet sofraları</h2>
+          <p class="feature-banner__text">Tabak, tepsi ve bardaklarla sessiz lüksü sofranıza taşır.</p>
+          <a class="btn btn--ghost-light" href="#">KOLEKSİYONU KEŞFET</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION: thematic-duo -->
+    <section data-shopify-section="thematic-duo" class="thematic-duo" id="tableware">
+      <div class="thematic-duo__intro">
+        <p class="thematic-duo__eyebrow">Züccaciye koleksiyon</p>
+        <h2 class="thematic-duo__title">Sofra zarafeti<br>için tasarlandı</h2>
+        <p class="thematic-duo__text">Daha yavaş sofralar için tasarlandı. Her detayı düşünülmüş, ışığı taşıyan formlar; mevsime ve ruh haline göre yenilenebilir bir zarafet.</p>
+        <a class="btn thematic-duo__cta" href="#products">Züccaciye koleksiyonu keşfet</a>
+      </div>
+      <div class="thematic-duo__media">
+        <figure class="thematic-duo__figure thematic-duo__figure--wide">
+          <video
+            autoplay
+            muted
+            loop
+            playsinline
+            poster="../public/images/tw-pex-pastel-tableware.jpg"
+            src="../public/videos/hero-tableware.mp4"
+          ></video>
+          <div class="thematic-duo__overlay" aria-hidden="true"></div>
+          <div class="thematic-duo__caption">
+            <p class="thematic-duo__caption-eyebrow">Seramik</p>
+            <h3 class="thematic-duo__caption-title">Işığı tutan<br>formlar</h3>
+            <p class="thematic-duo__caption-text">Soft stoneware tabaklar — paylaşımı davet eden sakin silüetler ve zamansız dokunuş.</p>
+            <a class="btn btn--ghost-light" href="#products">Tabakları keşfet</a>
+          </div>
+        </figure>
+        <figure class="thematic-duo__figure thematic-duo__figure--tall">
+          <img src="../public/images/tw-pex-wooden-plates-cups.jpg" alt="Ahşap tabak ve seramik">
+          <div class="thematic-duo__overlay" aria-hidden="true"></div>
+          <div class="thematic-duo__caption">
+            <p class="thematic-duo__caption-eyebrow">Doğal doku</p>
+            <h3 class="thematic-duo__caption-title">Ahşap &amp;<br>seramik</h3>
+            <p class="thematic-duo__caption-text">Sofra ritüeline sıcaklık katan doğal malzemeler.</p>
+            <a class="btn btn--ghost-light" href="#products">Detayı gör</a>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- SECTION: product-row -->
+    <section data-shopify-section="product-row" class="product-row" id="products">
+      <div class="product-row__grid">
+        <div class="product-row__content">
+          <h2 class="product-row__title">Yeni Ürünler</h2>
+        </div>
+        <ul class="product-row__tabs" data-product-filters>
+          <li><button type="button" class="is-active">Tümü</button></li>
+          <li><button type="button">Tabaklar</button></li>
+          <li><button type="button">Bardaklar</button></li>
+          <li><button type="button">Tepsiler</button></li>
+          <li><button type="button">Sofra setleri</button></li>
+        </ul>
+      </div>
+
+      <div class="product-row__carousel">
+        <div class="product-row__track">
+          <!-- 1 Amber cam seti -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover"><img src="../public/images/Glassware_products_visual_presen…_4b23dd73.jpg" alt="Kullanım: Amber cam seti"></div>
+                <img class="is-main" src="../public/images/product-1.png" alt="Amber cam seti">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Amber cam seti</h3>
+                <p class="product-card__brand">Cam koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine glassware</p>
+                  <p class="product-card__price">₺12.900</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#f2ebe1" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#c9b8a0" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#8a8f8a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#2f2f2f" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#6b7a5a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#7a6b4f" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+
+          <!-- 2 -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover"><img src="../public/images/tw-soft-candle-place-setting.jpg" alt="Kullanım: Ahşap & seramik set"></div>
+                <img class="is-main" src="../public/images/product-2.png" alt="Ahşap ve seramik set">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Kristal su bardağı</h3>
+                <p class="product-card__brand">Cam koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine stoneware</p>
+                  <p class="product-card__price">₺1.850</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#f5f2eb" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#d6cfc4" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#a8a29a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#6e6a63" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#5a6b55" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#2c2c2c" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+
+          <!-- 3 -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <span class="product-card__badge">Yeni</span>
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover">
+                  <video
+                    src="../public/videos/story-plate-spoon.mp4"
+                    poster="../public/images/frame-story-plate-spoon.jpg"
+                    autoplay muted loop playsinline
+                  ></video>
+                </div>
+                <img class="is-main" src="../public/images/tw-soft-organic-plate.jpg" alt="Organik seramik tabak">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Organik seramik tabak</h3>
+                <p class="product-card__brand">Solace koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine stoneware</p>
+                  <p class="product-card__price">₺2.450</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#efe8dc" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#d4c4a8" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#9a958c" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#4a4540" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#8b7355" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#6a7d6a" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+
+          <!-- 4 -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover"><img src="../public/images/tw-feast-table-spread.jpg" alt="Kullanım: Soft seramik yemek seti"></div>
+                <img class="is-main" src="../public/images/tw-soft-ceramic-dishware.jpg" alt="Soft seramik yemek seti">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Soft seramik yemek seti</h3>
+                <p class="product-card__brand">Ziyafet koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine stoneware</p>
+                  <p class="product-card__price">₺1.290</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#f0e6d8" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#cbb89a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#9c8b73" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#b07a4a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#c4a35a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#2a2f3a" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+
+          <!-- 5 -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover"><img src="../public/images/tw-soft-floral-ceramics.jpg" alt="Kullanım: El yapımı seramik tabak"></div>
+                <img class="is-main" src="../public/images/tw-ceramic-pottery-plates.jpg" alt="El yapımı seramik tabak">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">El yapımı seramik tabak</h3>
+                <p class="product-card__brand">Atölye koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine stoneware</p>
+                  <p class="product-card__price">₺3.750</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#f2ebe1" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#c9b8a0" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#8a8f8a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#2f2f2f" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#6b7a5a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#7a6b4f" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+
+          <!-- 6 -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover"><img src="../public/images/tw-brunch-feast-serving.jpg" alt="Kullanım: Ahşap servis tepsisi"></div>
+                <img class="is-main" src="../public/images/tw-ceramic-plate-trays.jpg" alt="Ahşap servis tepsisi">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Ahşap servis tepsisi</h3>
+                <p class="product-card__brand">Servis koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine stoneware</p>
+                  <p class="product-card__price">₺4.200</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#f5f2eb" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#d6cfc4" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#a8a29a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#6e6a63" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#5a6b55" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#2c2c2c" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+
+          <!-- 7 -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover"><img src="../public/images/tw-white-dishware-setting.jpg" alt="Kullanım: Altın kenarlı kase"></div>
+                <img class="is-main" src="../public/images/tw-soft-white-bowls.jpg" alt="Altın kenarlı kase">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Altın kenarlı kase</h3>
+                <p class="product-card__brand">Kase koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine stoneware</p>
+                  <p class="product-card__price">₺2.890</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#efe8dc" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#d4c4a8" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#9a958c" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#4a4540" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#8b7355" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#6a7d6a" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+
+          <!-- 8 -->
+          <article class="product-card">
+            <div class="product-card__media">
+              <button type="button" class="product-card__wishlist" aria-label="Favoriler"><svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/></svg></button>
+              <div class="product-card__media-inner">
+                <div class="product-card__hover"><img src="../public/images/tw-soft-egg-place-setting.jpg" alt="Kullanım: Ahşap & seramik set"></div>
+                <img class="is-main" src="../public/images/tw-pex-wooden-plates-cups.jpg" alt="Ahşap ve seramik set">
+              </div>
+            </div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Ahşap & seramik set</h3>
+                <p class="product-card__brand">Doğa koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">kuuine stoneware</p>
+                  <p class="product-card__price">₺1.650</p>
+                </div>
+              </div>
+              <div class="product-card__swatches">
+                <span class="product-card__swatch" style="background:#f0e6d8" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#cbb89a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#9c8b73" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#b07a4a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#c4a35a" aria-hidden="true"></span>
+                <span class="product-card__swatch" style="background:#2a2f3a" aria-hidden="true"></span>
+                <span class="product-card__more">+6</span>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: our-story -->
+    <section data-shopify-section="our-story" class="our-story" data-our-story id="about">
+      <div class="our-story__grid">
+        <div class="our-story__left">
+          <nav class="our-story__menu" aria-label="Hikâyemiz">
+            <button type="button" class="is-active" data-story-tab="story">Hikâyemiz</button>
+            <button type="button" data-story-tab="process">Zanaat</button>
+            <button type="button" data-story-tab="materials">Dokular</button>
+          </nav>
+
+          <div class="our-story__content">
+            <article class="our-story__slide" data-story-slide="story" id="our-story">
+              <h3 class="our-story__slide-title">Hikâyemiz</h3>
+              <p class="our-story__slide-text">kuuine, sofrayı yavaşlatmaya ve paylaşmanın keyfine duyulan inançla kuruldu. Tabak, bardak ve tepsilerle ziyafet anlarını yükselten premium züccaciye tasarlıyoruz. Her parça, gündelik sofrayı sessiz bir zarafete dönüştürmek için üretilir.</p>
+              <a class="our-story__cta" href="#">Devamını oku</a>
+            </article>
+
+            <article class="our-story__slide" data-story-slide="process" id="our-process">
+              <h3 class="our-story__slide-title">Zanaat</h3>
+              <p class="our-story__slide-text">İlk eskizden son cilaya kadar her kuuine parçası tasarım, test ve iyileştirme yolculuğundan geçer. Modern araçları el işçiliğiyle birleştirir; her form, sır ve detay sofranıza ulaşmadan önce standartlarımızı karşılar.</p>
+            </article>
+
+            <article class="our-story__slide" data-story-slide="materials" id="our-materials">
+              <h3 class="our-story__slide-title">Dokular</h3>
+              <p class="our-story__slide-text">Yalnızca dayanıklılık ve rafine dokunuş için seçilmiş premium malzemelerle çalışırız. Stoneware, porselen ve camdan metal detaylara kadar her unsur günlük kullanıma uygun şekilde test edilir; zamansız bir zarafet sunar.</p>
+              <a class="our-story__cta" href="#materials">Dokuları keşfet</a>
+            </article>
+          </div>
+        </div>
+
+        <div class="our-story__right">
+          <div class="our-story__media-wrap">
+            <div class="our-story__media-slide is-active" data-story-media="story">
+              <img src="../public/images/Kitchenware_store_hero_banner_di…_d0cc7f18.jpg" alt="Hikâyemiz">
+            </div>
+            <div class="our-story__media-slide" data-story-media="process">
+              <video
+                src="../public/videos/story-table-setting.mp4"
+                poster="../public/images/tw-soft-linen-crockery.jpg"
+                autoplay muted loop playsinline
+              ></video>
+            </div>
+            <div class="our-story__media-slide" data-story-media="materials">
+              <img src="../public/images/tw-pex-empty-glasses.jpg" alt="Dokular">
+            </div>
+            <div class="our-story__gradient"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: testimonials (Minas-style info-wrap + Lottie) -->
+    <section data-shopify-section="testimonials" class="testimonials">
+      <ul class="testimonials__info">
+        <li class="testimonials__info-item">
+          <a class="testimonials__info-link" href="#" aria-label="Güvenli ödeme"></a>
+          <span class="testimonials__info-icon" data-lottie data-lottie-src="../assets/lottie-secure.json" data-lottie-idle="end" aria-hidden="true"></span>
+          <span class="testimonials__info-heading">Güvenli ödeme</span>
+          <p class="testimonials__info-text">Ödeme bilgileriniz güvenle işlenir; güvenliğiniz önceliğimizdir.</p>
+          <span class="testimonials__info-arrow" data-lottie data-lottie-src="../assets/lottie-arrow.json" data-lottie-idle="start" aria-hidden="true"></span>
+        </li>
+        <li class="testimonials__info-item">
+          <a class="testimonials__info-link" href="#" aria-label="Ücretsiz kargo"></a>
+          <span class="testimonials__info-icon" data-lottie data-lottie-src="../assets/lottie-shipping.json" data-lottie-idle="end" aria-hidden="true"></span>
+          <span class="testimonials__info-heading">Ücretsiz kargo</span>
+          <p class="testimonials__info-text">Belirli tutarın üzerindeki siparişlerde ücretsiz kargo ve iade.</p>
+          <span class="testimonials__info-arrow" data-lottie data-lottie-src="../assets/lottie-arrow.json" data-lottie-idle="start" aria-hidden="true"></span>
+        </li>
+        <li class="testimonials__info-item">
+          <a class="testimonials__info-link" href="#" aria-label="Mağazalar"></a>
+          <span class="testimonials__info-icon" data-lottie data-lottie-src="../assets/lottie-stores.json" data-lottie-idle="end" aria-hidden="true"></span>
+          <span class="testimonials__info-heading">Mağazalar</span>
+          <p class="testimonials__info-text">Mağazalarımızı keşfedin ve size en yakın noktayı bulun.</p>
+          <span class="testimonials__info-arrow" data-lottie data-lottie-src="../assets/lottie-arrow.json" data-lottie-idle="start" aria-hidden="true"></span>
+        </li>
+        <li class="testimonials__info-item">
+          <a class="testimonials__info-link" href="#" aria-label="Destek"></a>
+          <span class="testimonials__info-icon" data-lottie data-lottie-src="../assets/lottie-support.json" data-lottie-idle="end" aria-hidden="true"></span>
+          <span class="testimonials__info-heading">Destek</span>
+          <p class="testimonials__info-text">Sorularınız için buradayız; ürünlerimiz hakkında size yardımcı olmaktan mutluluk duyarız.</p>
+          <span class="testimonials__info-arrow" data-lottie data-lottie-src="../assets/lottie-arrow.json" data-lottie-idle="start" aria-hidden="true"></span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- SECTION: article-cards -->
+    <section data-shopify-section="article-cards" class="journal">
+      <div class="journal__head">
+        <h2 class="journal__title">Koleksiyon Ürünler</h2>
+        <a class="btn--text" href="#">Tümünü gör</a>
+      </div>
+      <div class="journal__grid">
+        <article class="journal-card">
+          <a href="#" class="journal-card__media">
+            <img src="../public/images/tw-elegant-place-setting2.jpg" alt="Zarif sofra düzeni">
+          </a>
+          <h3>Zarif sofra — soft bir ziyafet düzeni</h3>
+          <a class="btn--text" href="#">Koleksiyonu Gör</a>
+        </article>
+        <article class="journal-card">
+          <a href="#" class="journal-card__media">
+            <img src="../public/images/tw-soft-green-bowls-linen.jpg" alt="Soft seramik tabak">
+          </a>
+          <h3>Tepsi servisi — ziyafet detayları</h3>
+          <a class="btn--text" href="#">Koleksiyonu Gör</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: social-instagram -->
+    <section data-shopify-section="social-instagram" class="instagram">
+      <h2 class="instagram__title">İlham almaya devam edin</h2>
+      <p class="instagram__handle"><a href="#">@kuuine</a></p>
+      <div class="instagram__grid">
+        <a href="#"><img src="../public/images/tw-pex-pastel-tableware.jpg" alt=""></a>
+        <a href="#"><img src="../public/images/tw-pex-empty-glasses.jpg" alt=""></a>
+        <a href="#"><img src="../public/images/tw-soft-floral-ceramics.jpg" alt=""></a>
+        <a href="#"><img src="../public/images/tw-feast-table-spread.jpg" alt=""></a>
+        <a href="#"><img src="../public/images/tw-ceramic-plate-trays.jpg" alt=""></a>
+        <a href="#"><img src="../public/images/tw-white-plates-cutlery.jpg" alt=""></a>
+      </div>
+    </section>
+  </main>
+
+  <!-- SECTION: footer -->
+  <footer data-shopify-section="footer" class="site-footer">
+    <div class="footer-panel">
+      <div class="footer-row">
+        <div class="footer-brand">
+          <h2 class="footer-title">kuuine daha yavaş sofralar tasarlar—ziyafet, zarafet ve kalıcı kalite için züccaciye.</h2>
+          <div class="footer-brand__lower">
+            <p class="footer-note">Türkiye’de el işçiliğiyle üretildi.<br>Özenle teslim edilir.</p>
+            <div class="footer-newsletter" id="footerNewsletter">
+              <div class="footer-newsletter__inner">
+                <div class="footer-newsletter__head">
+                  <h3>E-bülten</h3>
+                  <p class="footer-newsletter__lead">Sofra kültürü, yeni koleksiyonlar ve malzeme hikâyeleri üzerine ara sıra notlar.</p>
+                </div>
+                <div class="footer-newsletter__body">
+                  <form class="footer-newsletter__form" onsubmit="event.preventDefault(); this.closest('.footer-newsletter').classList.add('is-success');">
+                    <div class="footer-newsletter__field">
+                      <label for="newsletterEmail">E-posta</label>
+                      <input type="email" id="newsletterEmail" name="email" placeholder="ornek@email.com" autocomplete="email" required>
+                      <button type="submit">Abone ol</button>
+                    </div>
+                  </form>
+                  <p class="footer-newsletter__success" role="status" aria-live="polite">Abone olduğunuz için teşekkürler.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-cols footer-accordion" data-footer-accordion>
+          <div class="footer-col is-open">
+            <button type="button" class="footer-col__head" aria-expanded="true">
+              <span>Keşfet</span>
+              <span class="footer-col__chev" aria-hidden="true"></span>
+            </button>
+            <div class="footer-col__panel">
+              <div class="footer-col__panel-inner">
+                <ul>
+                  <li><a href="#shop">Tabaklar</a></li>
+                  <li><a href="#shop">Bardaklar</a></li>
+                  <li>
+                    <a href="#materials">
+                      Materyal Kütüphanesi
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.15 9.96h10.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.98 4.12 15.81 9.96 9.98 15.79" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#products">
+                      Koleksiyonu keşfet
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.15 9.96h10.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.98 4.12 15.81 9.96 9.98 15.79" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-col is-open">
+            <button type="button" class="footer-col__head" aria-expanded="true">
+              <span>Destek</span>
+              <span class="footer-col__chev" aria-hidden="true"></span>
+            </button>
+            <div class="footer-col__panel">
+              <div class="footer-col__panel-inner">
+                <ul>
+                  <li><a href="#about">Hakkımızda</a></li>
+                  <li><a href="#">Kargo</a></li>
+                  <li><a href="#">Garanti</a></li>
+                  <li><a href="#">İadeler</a></li>
+                  <li><a href="#">SSS</a></li>
+                  <li><a href="#trade">Ticari</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-col is-open">
+            <button type="button" class="footer-col__head" aria-expanded="true">
+              <span>Sosyal</span>
+              <span class="footer-col__chev" aria-hidden="true"></span>
+            </button>
+            <div class="footer-col__panel">
+              <div class="footer-col__panel-inner">
+                <ul>
+                  <li><a href="#">Instagram</a></li>
+                  <li><a href="#">Pinterest</a></li>
+                  <li><a href="#">Blog</a></li>
+                  <li><a href="mailto:hello@kuuine.com">hello@kuuine.com</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-row is-bottom">
+        <p class="footer-copy">© 2026 kuuine</p>
+        <nav class="footer-legal" aria-label="Yasal">
+          <a href="#">Gizlilik Politikası</a>
+          <a href="#">Şartlar &amp; Koşullar</a>
+        </nav>
+      </div>
+
+      <div class="footer-watermark" aria-hidden="true">
+        <img class="footer-watermark__img" src="../assets/kuuine.svg" alt="" width="400" height="110">
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/lottie.min.js"></script>
+  <script src="../assets/theme.js"></script>
+</body>
+</html>

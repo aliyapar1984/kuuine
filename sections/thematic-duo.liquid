@@ -1,0 +1,205 @@
+<section class="thematic-duo" {{ section.shopify_attributes }}>
+  <div class="thematic-duo__intro">
+    {% if section.settings.eyebrow != blank %}
+      <p class="thematic-duo__eyebrow">{{ section.settings.eyebrow }}</p>
+    {% endif %}
+    {% if section.settings.title != blank %}
+      <h2 class="thematic-duo__title">{{ section.settings.title | newline_to_br }}</h2>
+    {% endif %}
+    {% if section.settings.text != blank %}
+      <p class="thematic-duo__text">{{ section.settings.text }}</p>
+    {% endif %}
+    {% if section.settings.button_label != blank %}
+      <a class="btn thematic-duo__cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+    {% endif %}
+  </div>
+
+  <div class="thematic-duo__media">
+    <figure class="thematic-duo__figure thematic-duo__figure--wide">
+      {% if section.settings.image_wide != blank %}
+        {{
+          section.settings.image_wide
+          | image_url: width: 1600
+          | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 66vw, 100vw',
+            widths: '600, 900, 1200, 1600',
+            alt: section.settings.image_wide_alt | default: section.settings.wide_title
+        }}
+      {% endif %}
+      <div class="thematic-duo__overlay" aria-hidden="true"></div>
+      {% if section.settings.wide_title != blank or section.settings.wide_text != blank or section.settings.wide_button_label != blank %}
+        <div class="thematic-duo__caption">
+          {% if section.settings.wide_eyebrow != blank %}
+            <p class="thematic-duo__caption-eyebrow">{{ section.settings.wide_eyebrow }}</p>
+          {% endif %}
+          {% if section.settings.wide_title != blank %}
+            <h3 class="thematic-duo__caption-title">{{ section.settings.wide_title | newline_to_br }}</h3>
+          {% endif %}
+          {% if section.settings.wide_text != blank %}
+            <p class="thematic-duo__caption-text">{{ section.settings.wide_text }}</p>
+          {% endif %}
+          {% if section.settings.wide_button_label != blank %}
+            <a class="btn btn--ghost-light" href="{{ section.settings.wide_button_link }}">{{ section.settings.wide_button_label }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </figure>
+    <figure class="thematic-duo__figure thematic-duo__figure--tall">
+      {% if section.settings.image_tall != blank %}
+        {{
+          section.settings.image_tall
+          | image_url: width: 900
+          | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 33vw, 100vw',
+            widths: '400, 600, 900',
+            alt: section.settings.image_tall_alt | default: section.settings.tall_title
+        }}
+      {% endif %}
+      <div class="thematic-duo__overlay" aria-hidden="true"></div>
+      {% if section.settings.tall_title != blank or section.settings.tall_text != blank or section.settings.tall_button_label != blank %}
+        <div class="thematic-duo__caption">
+          {% if section.settings.tall_eyebrow != blank %}
+            <p class="thematic-duo__caption-eyebrow">{{ section.settings.tall_eyebrow }}</p>
+          {% endif %}
+          {% if section.settings.tall_title != blank %}
+            <h3 class="thematic-duo__caption-title">{{ section.settings.tall_title | newline_to_br }}</h3>
+          {% endif %}
+          {% if section.settings.tall_text != blank %}
+            <p class="thematic-duo__caption-text">{{ section.settings.tall_text }}</p>
+          {% endif %}
+          {% if section.settings.tall_button_label != blank %}
+            <a class="btn btn--ghost-light" href="{{ section.settings.tall_button_link }}">{{ section.settings.tall_button_label }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </figure>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Thematic duo",
+  "tag": "section",
+  "class": "section-thematic-duo",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Üst etiket",
+      "default": "Züccaciye koleksiyon"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Başlık",
+      "default": "Sofra zarafeti\niçin tasarlandı"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Metin",
+      "default": "Daha yavaş sofralar için tasarlandı. Her detayı düşünülmüş, ışığı taşıyan formlar."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Buton metni",
+      "default": "Züccaciye koleksiyonu keşfet"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Buton bağlantısı"
+    },
+    {
+      "type": "header",
+      "content": "Geniş panel"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_wide",
+      "label": "Geniş görsel"
+    },
+    {
+      "type": "text",
+      "id": "image_wide_alt",
+      "label": "Geniş görsel alt metni"
+    },
+    {
+      "type": "text",
+      "id": "wide_eyebrow",
+      "label": "Geniş panel üst etiket",
+      "default": "Seramik"
+    },
+    {
+      "type": "textarea",
+      "id": "wide_title",
+      "label": "Geniş panel başlık",
+      "default": "Işığı tutan\nformlar"
+    },
+    {
+      "type": "textarea",
+      "id": "wide_text",
+      "label": "Geniş panel metin",
+      "default": "Soft stoneware tabaklar — paylaşımı davet eden sakin silüetler ve zamansız dokunuş."
+    },
+    {
+      "type": "text",
+      "id": "wide_button_label",
+      "label": "Geniş panel buton",
+      "default": "Tabakları keşfet"
+    },
+    {
+      "type": "url",
+      "id": "wide_button_link",
+      "label": "Geniş panel buton bağlantısı"
+    },
+    {
+      "type": "header",
+      "content": "Dikey panel"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_tall",
+      "label": "Dikey görsel"
+    },
+    {
+      "type": "text",
+      "id": "image_tall_alt",
+      "label": "Dikey görsel alt metni"
+    },
+    {
+      "type": "text",
+      "id": "tall_eyebrow",
+      "label": "Dikey panel üst etiket",
+      "default": "Doğal doku"
+    },
+    {
+      "type": "textarea",
+      "id": "tall_title",
+      "label": "Dikey panel başlık",
+      "default": "Ahşap &\nseramik"
+    },
+    {
+      "type": "textarea",
+      "id": "tall_text",
+      "label": "Dikey panel metin",
+      "default": "Sofra ritüeline sıcaklık katan doğal malzemeler."
+    },
+    {
+      "type": "text",
+      "id": "tall_button_label",
+      "label": "Dikey panel buton",
+      "default": "Detayı gör"
+    },
+    {
+      "type": "url",
+      "id": "tall_button_link",
+      "label": "Dikey panel buton bağlantısı"
+    }
+  ],
+  "presets": [{ "name": "Thematic duo" }]
+}
+{% endschema %}

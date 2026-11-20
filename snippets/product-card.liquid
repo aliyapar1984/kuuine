@@ -1,0 +1,92 @@
+{% doc %}
+  kuuine ürün kartı — ana görsel contain, hover cover, cream footer.
+  @param {product} product - Product object
+{% enddoc %}
+
+<article class="product-card">
+  <div class="product-card__media">
+    {% if product.tags contains 'new' %}
+      <span class="product-card__badge">Yeni</span>
+    {% endif %}
+
+    <a href="{{ routes.account_login_url }}" class="product-card__wishlist" aria-label="Favoriler">
+      <svg width="12" height="16" viewBox="0 0 12 16" fill="none" aria-hidden="true">
+        <path d="M11 15.5L6 12.375L1 15.5V1.75C1 1.33579 1.33579 1 1.75 1H10.25C10.6642 1 11 1.33579 11 1.75V15.5Z" stroke="currentColor"/>
+      </svg>
+    </a>
+
+    <div class="product-card__media-inner">
+      {% if product.media.size > 1 %}
+        <div class="product-card__hover">
+          {{
+            product.media[1]
+            | image_url: width: 900
+            | image_tag: loading: 'lazy', alt: ''
+          }}
+        </div>
+      {% endif %}
+      <a href="{{ product.url }}">
+        {% if product.featured_media %}
+          {% assign card_alt = product.featured_media.alt | default: product.title %}
+          {{
+            product.featured_media
+            | image_url: width: 900
+            | image_tag: loading: 'lazy', class: 'is-main', alt: card_alt
+          }}
+        {% endif %}
+      </a>
+    </div>
+  </div>
+
+  <div class="product-card__footer">
+    <div class="product-card__footer-top">
+      <h3 class="product-card__title">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h3>
+
+      {% if product.collections.first %}
+        <p class="product-card__brand">{{ product.collections.first.title }}</p>
+      {% endif %}
+
+      <div class="product-card__meta">
+        {% if product.metafields.custom.fabric != blank %}
+          <p class="product-card__fabric">{{ product.metafields.custom.fabric.value }}</p>
+        {% elsif product.vendor != blank %}
+          <p class="product-card__fabric">{{ product.vendor }}</p>
+        {% else %}
+          <p class="product-card__fabric">&nbsp;</p>
+        {% endif %}
+        <p class="product-card__price">{{ product.price | money }}</p>
+      </div>
+    </div>
+
+    {% if product.options_by_name['Color'] != blank or product.options_by_name['Colour'] != blank %}
+      {% assign color_option = product.options_by_name['Color'] | default: product.options_by_name['Colour'] %}
+      <div class="product-card__swatches">
+        {% for value in color_option.values limit: 6 %}
+          {% assign swatch_variant = value.variant %}
+          <span class="product-card__swatch">
+            {% if value.swatch.image %}
+              {{ value.swatch.image | image_url: width: 40 | image_tag: alt: value, loading: 'lazy' }}
+            {% elsif value.swatch.color %}
+              <span style="display:block;width:100%;height:100%;background:{{ value.swatch.color }}"></span>
+            {% elsif swatch_variant.image %}
+              {{ swatch_variant.image | image_url: width: 40 | image_tag: alt: value, loading: 'lazy' }}
+            {% endif %}
+          </span>
+        {% endfor %}
+        {% assign extra_colors = color_option.values.size | minus: 6 %}
+        {% if extra_colors > 0 %}
+          <span class="product-card__more">+{{ extra_colors }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% form 'product', product %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="product-card__add" {% unless product.available %}disabled{% endunless %}>
+        {% if product.available %}Sepete ekle{% else %}Tükendi{% endif %}
+      </button>
+    {% endform %}
+  </div>
+</article>

@@ -1,0 +1,13 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "İçeriğe geç"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Sepete ekle",
+      "sold_out": "Tükendi"
+    }
+  }
+}

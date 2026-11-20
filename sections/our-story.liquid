@@ -1,0 +1,134 @@
+<section class="our-story" data-our-story {{ section.shopify_attributes }}>
+  <div class="our-story__grid">
+    <div class="our-story__left">
+      <nav class="our-story__menu" aria-label="{{ section.settings.menu_label }}">
+        {% for block in section.blocks %}
+          <button
+            type="button"
+            class="{% if forloop.first %}is-active{% endif %}"
+            data-story-tab="{{ block.id }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.tab_label }}
+          </button>
+        {% endfor %}
+      </nav>
+
+      <div class="our-story__content">
+        {% for block in section.blocks %}
+          <article
+            class="our-story__slide"
+            data-story-slide="{{ block.id }}"
+            id="story-{{ block.id }}"
+          >
+            <h3 class="our-story__slide-title">{{ block.settings.title }}</h3>
+            {% if block.settings.text != blank %}
+              <div class="our-story__slide-text">{{ block.settings.text }}</div>
+            {% endif %}
+            {% if block.settings.link_label != blank %}
+              <a class="our-story__cta" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="our-story__right">
+      <div class="our-story__media-wrap">
+        {% for block in section.blocks %}
+          <div
+            class="our-story__media-slide {% if forloop.first %}is-active{% endif %}"
+            data-story-media="{{ block.id }}"
+          >
+            {% if block.settings.video != blank %}
+              {{
+                block.settings.video
+                | video_tag:
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  image_size: '1600x'
+              }}
+            {% elsif block.settings.image != blank %}
+              {{
+                block.settings.image
+                | image_url: width: 1800
+                | image_tag: loading: 'lazy', sizes: '50vw', widths: '800, 1200, 1600, 1800', alt: block.settings.title
+              }}
+            {% endif %}
+          </div>
+        {% endfor %}
+        <div class="our-story__gradient"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hikâyemiz",
+  "tag": "section",
+  "class": "section-our-story",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "menu_label",
+      "label": "Menü erişilebilirlik etiketi",
+      "default": "Hikâyemiz"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Slide",
+      "settings": [
+        { "type": "text", "id": "tab_label", "label": "Sekme etiketi", "default": "Hikâyemiz" },
+        { "type": "text", "id": "title", "label": "Başlık", "default": "Hikâyemiz" },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Metin",
+          "default": "Sofra anlarını yavaşlatmaya ve paylaşmanın keyfine duyulan inançla kuruldu."
+        },
+        { "type": "image_picker", "id": "image", "label": "Görsel" },
+        { "type": "video", "id": "video", "label": "Video (isteğe bağlı)" },
+        { "type": "text", "id": "link_label", "label": "Bağlantı metni", "default": "Devamını oku" },
+        { "type": "url", "id": "link", "label": "Bağlantı" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hikâyemiz",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Hikâyemiz",
+            "title": "Hikâyemiz",
+            "link_label": "Devamını oku"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Zanaat",
+            "title": "Zanaat",
+            "link_label": ""
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Dokular",
+            "title": "Dokular",
+            "link_label": "Dokuları keşfet"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

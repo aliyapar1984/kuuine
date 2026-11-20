@@ -1,0 +1,25 @@
+{% comment %}
+  Ana sayfa giriş animasyonu (Prava-style): gradient + karakter stagger + yukarı kapanma.
+{% endcomment %}
+{% if template.name == 'index' %}
+  <div
+    id="kuuine-preloader"
+    class="kuuine-preloader"
+    role="presentation"
+    aria-hidden="true"
+  >
+    <div class="kuuine-preloader__stage" aria-hidden="true">
+      <div class="kuuine-preloader__track" data-track="top"></div>
+      <div class="kuuine-preloader__track" data-track="bot"></div>
+    </div>
+    <script type="application/json" id="kuuine-preloader-data">
+      {
+        "steps": [
+          { "track": "top", "text": "Her Sofra", "inY": -100, "outY": 100 },
+          { "track": "bot", "text": "Zamansız Zarafet", "inY": -100, "outY": -100 },
+          { "track": "top", "text": "kuuine", "inY": 100, "outY": -100, "brand": true }
+        ]
+      }
+    </script>
+  </div>
+{% endif %}

@@ -1,0 +1,16 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_text": "kuuine",
+        "transparent_over_home": true,
+        "show_localization": true,
+        "trade_label": "Ticari"
+      }
+    }
+  },
+  "order": ["header"]
+}

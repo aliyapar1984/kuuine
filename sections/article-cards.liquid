@@ -1,0 +1,70 @@
+<section class="journal" {{ section.shopify_attributes }}>
+  <div class="journal__head">
+    <h2 class="journal__title">{{ section.settings.title }}</h2>
+    {% if section.settings.blog != blank %}
+      <a class="btn--text" href="{{ section.settings.blog.url }}">{{ section.settings.view_all_label }}</a>
+    {% endif %}
+  </div>
+  <div class="journal__grid">
+    {% if section.settings.blog != blank %}
+      {% for article in section.settings.blog.articles limit: section.settings.articles_to_show %}
+        <article class="journal-card">
+          <a href="{{ article.url }}" class="journal-card__media">
+            {% if article.image %}
+              {{
+                article.image
+                | image_url: width: 1200
+                | image_tag: loading: 'lazy', alt: article.title
+              }}
+            {% endif %}
+          </a>
+          <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
+          <a class="btn--text" href="{{ article.url }}">{{ section.settings.read_label }}</a>
+        </article>
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Journal cards",
+  "tag": "section",
+  "class": "section-article-cards",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Başlık",
+      "default": "Son Yazılar"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "articles_to_show",
+      "label": "Gösterilecek yazı sayısı",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Tümünü gör etiketi",
+      "default": "Tümünü gör"
+    },
+    {
+      "type": "text",
+      "id": "read_label",
+      "label": "Okuma etiketi",
+      "default": "Yazıyı oku"
+    }
+  ],
+  "presets": [{ "name": "Journal cards" }]
+}
+{% endschema %}

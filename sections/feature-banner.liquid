@@ -1,0 +1,64 @@
+<section class="feature-banners" data-feature-slideshow {{ section.shopify_attributes }}>
+  {% for block in section.blocks %}
+    <article class="feature-banner" data-feature-slide {{ block.shopify_attributes }} {% unless forloop.first %}hidden{% endunless %}>
+      <div class="feature-banner__media">
+        {% if block.settings.image != blank %}
+          {{
+            block.settings.image
+            | image_url: width: 2400
+            | image_tag: loading: 'lazy', sizes: '100vw', widths: '800, 1400, 2000, 2400', alt: block.settings.title
+          }}
+        {% endif %}
+      </div>
+      <div class="feature-banner__overlay"></div>
+      <div class="feature-banner__content">
+        {% if block.settings.eyebrow != blank %}
+          <p class="feature-banner__eyebrow">{{ block.settings.eyebrow }}</p>
+        {% endif %}
+        <h2 class="feature-banner__title">{{ block.settings.title | newline_to_br }}</h2>
+        {% if block.settings.text != blank %}
+          <p class="feature-banner__text">{{ block.settings.text }}</p>
+        {% endif %}
+        {% if block.settings.button_label != blank %}
+          <a class="btn btn--ghost-light" href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
+        {% endif %}
+      </div>
+    </article>
+  {% endfor %}
+</section>
+
+{% schema %}
+{
+  "name": "Feature banners",
+  "tag": "section",
+  "class": "section-feature-banner",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Görsel" },
+        { "type": "text", "id": "eyebrow", "label": "Üst başlık", "default": "Yeni koleksiyon" },
+        { "type": "textarea", "id": "title", "label": "Başlık", "default": "Rüya gibi\nziyafet sofraları" },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Metin",
+          "default": "Evde cömert oranlarla resort tarzı dinlenme."
+        },
+        { "type": "text", "id": "button_label", "label": "Buton metni", "default": "Şimdi ön sipariş" },
+        { "type": "url", "id": "button_link", "label": "Buton bağlantısı" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature banners",
+      "blocks": [
+        { "type": "slide", "settings": { "eyebrow": "Yeni koleksiyon", "title": "Rüya gibi\nziyafet sofraları" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

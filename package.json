@@ -1,0 +1,12 @@
+{
+  "name": "kuuine",
+  "private": true,
+  "scripts": {
+    "css:build": "tailwindcss -i ./src/css/tailwind.css -o ./assets/tailwind.css --minify",
+    "css:watch": "tailwindcss -i ./src/css/tailwind.css -o ./assets/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "tailwindcss": "^4.1.17"
+  }
+}

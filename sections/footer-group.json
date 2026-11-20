@@ -1,0 +1,53 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "explore": {
+          "type": "menu",
+          "settings": {
+            "heading": "Keşfet",
+            "show_arrows": true
+          }
+        },
+        "support": {
+          "type": "menu",
+          "settings": {
+            "heading": "Destek",
+            "show_arrows": false
+          }
+        },
+        "social": {
+          "type": "menu",
+          "settings": {
+            "heading": "Sosyal",
+            "show_arrows": false
+          }
+        }
+      },
+      "block_order": [
+        "explore",
+        "support",
+        "social"
+      ],
+      "settings": {
+        "heading": "kuuine daha yavaş sofralar tasarlar—ziyafet, zarafet ve kalıcı kalite için züccaciye.",
+        "note": "Türkiye’de el işçiliğiyle üretildi.\nÖzenle teslim edilir.",
+        "show_newsletter": true,
+        "newsletter_heading": "E-bülten",
+        "newsletter_text": "Sofra kültürü, yeni koleksiyonlar ve malzeme hikâyeleri üzerine ara sıra notlar.",
+        "newsletter_placeholder": "ornek@email.com",
+        "newsletter_button": "Abone ol",
+        "show_watermark": true,
+        "watermark_text": "kuuine",
+        "privacy_label": "Gizlilik Politikası",
+        "terms_label": "Şartlar & Koşullar"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

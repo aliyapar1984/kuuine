@@ -1,0 +1,88 @@
+<section class="benefits" {{ section.shopify_attributes }}>
+  {% if section.settings.eyebrow != blank %}
+    <p class="benefits__eyebrow">{{ section.settings.eyebrow }}</p>
+  {% endif %}
+  {% if section.settings.title != blank %}
+    <h2 class="benefits__title">{{ section.settings.title }}</h2>
+  {% endif %}
+  {% if section.settings.text != blank %}
+    <p class="benefits__intro">{{ section.settings.text }}</p>
+  {% endif %}
+
+  <div class="benefits__grid">
+    {% for block in section.blocks %}
+      <article class="benefit-card" {{ block.shopify_attributes }}>
+        <div class="benefit-card__media">
+          {% if block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 800
+              | image_tag: loading: 'lazy', alt: block.settings.title
+            }}
+          {% endif %}
+        </div>
+        <div class="benefit-card__body tw:pr-3 tw:max-[700px]:pr-2">
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Benefits",
+  "tag": "section",
+  "class": "section-benefits",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Üst başlık",
+      "default": "Dayanmak için tasarlandı"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Başlık",
+      "default": "Ömürlük tasarlandı"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Giriş metni",
+      "default": "Konfor, düşünülmüş tasarım ve kalıcı kaliteyi dengeleyen özenle üretilmiş bir koleksiyon."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Görsel" },
+        { "type": "text", "id": "title", "label": "Başlık", "default": "Duraksamaya davet" },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Metin",
+          "default": "Sofra anlarını yavaşlatan, paylaşımı teşvik eden tasarımlar."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Benefits",
+      "blocks": [
+        { "type": "benefit", "settings": { "title": "Duraksamaya davet" } },
+        { "type": "benefit", "settings": { "title": "Kusursuz işçilik" } },
+        { "type": "benefit", "settings": { "title": "Kalıcı olmak için" } },
+        { "type": "benefit", "settings": { "title": "Keyif için tasarlandı" } },
+        { "type": "benefit", "settings": { "title": "Atölye el işçiliği" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

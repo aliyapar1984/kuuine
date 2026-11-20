@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ page_title }}{% if current_tags %} – {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} – Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+    {{ content_for_header }}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'tailwind.css' | asset_url | stylesheet_tag }}
+    <style>
+      :root {
+        --color-bg: {{ settings.color_background }};
+        --color-text: {{ settings.color_text }};
+      }
+    </style>
+    {% if template.name == 'index' %}
+      <script>
+        (function () {
+          var KEY = 'kuuine-preloader-seen';
+          function isReload() {
+            var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+            if (nav) return nav.type === 'reload';
+            return !!(performance.navigation && performance.navigation.type === 1);
+          }
+          var seen = false;
+          try { seen = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+          if (seen && !isReload()) {
+            window.__KUUINE_SKIP_PRELOADER = true;
+            document.documentElement.classList.add('kuuine-preloader-skip');
+          } else {
+            document.documentElement.classList.add('kuuine-preloader-pending');
+          }
+        })();
+      </script>
+    {% endif %}
+  </head>
+  <body class="template-{{ template.name }}">
+    {% render 'site-preloader' %}
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="main-stack" role="main">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {{ 'lottie.min.js' | asset_url | script_tag }}
+    {{ 'theme.js' | asset_url | script_tag }}
+  </body>
+</html>

@@ -1,0 +1,310 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "heading": "Sofra\nMükemmel.",
+        "text": "Premium züccaciye — tabak, bardak, tepsi; ziyafet sofraları için zamansız zarafet.",
+        "button_label": "Koleksiyonu keşfet"
+      }
+    },
+    "tabs": {
+      "type": "collection-tabs",
+      "blocks": {
+        "bean": {
+          "type": "tab",
+          "settings": {
+            "title": "Tabaklar",
+            "link_label": "Tabakları keşfet"
+          }
+        },
+        "ham": {
+          "type": "tab",
+          "settings": {
+            "title": "Bardaklar",
+            "link_label": "Bardakları keşfet"
+          }
+        },
+        "sun": {
+          "type": "tab",
+          "settings": {
+            "title": "Organik seramik",
+            "link_label": "Organik seramiği keşfet"
+          }
+        },
+        "lounge": {
+          "type": "tab",
+          "settings": {
+            "title": "Ziyafet setleri",
+            "link_label": "Ziyafet setlerini keşfet"
+          }
+        },
+        "day": {
+          "type": "tab",
+          "settings": {
+            "title": "Kaseler",
+            "link_label": "Kaseleri keşfet"
+          }
+        }
+      },
+      "block_order": [
+        "bean",
+        "ham",
+        "sun",
+        "lounge",
+        "day"
+      ],
+      "settings": {
+        "heading": "Her sofra için zarafet"
+      }
+    },
+    "benefits": {
+      "type": "benefits",
+      "blocks": {
+        "b1": {
+          "type": "benefit",
+          "settings": {
+            "title": "Duraksamaya davet"
+          }
+        },
+        "b2": {
+          "type": "benefit",
+          "settings": {
+            "title": "Kusursuz işçilik"
+          }
+        },
+        "b3": {
+          "type": "benefit",
+          "settings": {
+            "title": "Kalıcı olmak için"
+          }
+        },
+        "b4": {
+          "type": "benefit",
+          "settings": {
+            "title": "Keyif için tasarlandı"
+          }
+        },
+        "b5": {
+          "type": "benefit",
+          "settings": {
+            "title": "Atölye el işçiliği"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ],
+      "settings": {
+        "eyebrow": "Dayanmak için tasarlandı",
+        "title": "Ömürlük tasarlandı"
+      }
+    },
+    "feature": {
+      "type": "feature-banner",
+      "blocks": {
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Yeni koleksiyon",
+            "title": "Rüya gibi\nziyafet sofraları",
+            "button_label": "Koleksiyonu keşfet"
+          }
+        }
+      },
+      "block_order": [
+        "s1"
+      ]
+    },
+    "products": {
+      "type": "product-row",
+      "blocks": {
+        "f1": {
+          "type": "filter",
+          "settings": {
+            "label": "Tümü"
+          }
+        },
+        "f2": {
+          "type": "filter",
+          "settings": {
+            "label": "Tabaklar"
+          }
+        },
+        "f3": {
+          "type": "filter",
+          "settings": {
+            "label": "Bardaklar"
+          }
+        },
+        "f4": {
+          "type": "filter",
+          "settings": {
+            "label": "Tepsiler"
+          }
+        },
+        "f5": {
+          "type": "filter",
+          "settings": {
+            "label": "Sofra setleri"
+          }
+        }
+      },
+      "block_order": [
+        "f1",
+        "f2",
+        "f3",
+        "f4",
+        "f5"
+      ],
+      "settings": {
+        "title": "Yeni Ürünler",
+        "products_to_show": 8
+      }
+    },
+    "story": {
+      "type": "our-story",
+      "blocks": {
+        "t1": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Hikâyemiz",
+            "title": "Hikâyemiz"
+          }
+        },
+        "t2": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Zanaat",
+            "title": "Zanaat"
+          }
+        },
+        "t3": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Dokular",
+            "title": "Dokular"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3"
+      ]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "i1": {
+          "type": "info",
+          "settings": {
+            "icon": "payment",
+            "title": "Güvenli ödeme",
+            "text": "Ödeme bilgileriniz güvenle işlenir; güvenliğiniz önceliğimizdir."
+          }
+        },
+        "i2": {
+          "type": "info",
+          "settings": {
+            "icon": "shipping",
+            "title": "Ücretsiz kargo",
+            "text": "Belirli tutarın üzerindeki siparişlerde ücretsiz kargo ve iade."
+          }
+        },
+        "i3": {
+          "type": "info",
+          "settings": {
+            "icon": "store",
+            "title": "Mağazalar",
+            "text": "Mağazalarımızı keşfedin ve size en yakın noktayı bulun."
+          }
+        },
+        "i4": {
+          "type": "info",
+          "settings": {
+            "icon": "support",
+            "title": "Destek",
+            "text": "Sorularınız için buradayız; ürünlerimiz hakkında size yardımcı olmaktan mutluluk duyarız."
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4"
+      ],
+      "settings": {
+        "title": ""
+      }
+    },
+    "journal": {
+      "type": "article-cards",
+      "settings": {
+        "title": "Son Yazılar",
+        "articles_to_show": 2
+      }
+    },
+    "instagram": {
+      "type": "social-instagram",
+      "blocks": {
+        "i1": {
+          "type": "image"
+        },
+        "i2": {
+          "type": "image"
+        },
+        "i3": {
+          "type": "image"
+        },
+        "i4": {
+          "type": "image"
+        },
+        "i5": {
+          "type": "image"
+        },
+        "i6": {
+          "type": "image"
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "settings": {
+        "title": "İlham almaya devam edin",
+        "handle": "@markaniz"
+      }
+    },
+    "tableware": {
+      "type": "thematic-duo",
+      "settings": {
+        "eyebrow": "Züccaciye koleksiyon",
+        "title": "Sofra zarafeti\niçin tasarlandı",
+        "text": "Daha yavaş sofralar için tasarlandı. Her detayı düşünülmüş, ışığı taşıyan formlar; mevsime ve ruh haline göre yenilenebilir bir zarafet.",
+        "button_label": "Züccaciye koleksiyonu keşfet"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "tabs",
+    "benefits",
+    "feature",
+    "tableware",
+    "products",
+    "story",
+    "testimonials",
+    "journal",
+    "instagram"
+  ]
+}

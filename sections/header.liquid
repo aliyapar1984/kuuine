@@ -1,0 +1,150 @@
+<header
+  class="site-header {% if section.settings.transparent_over_home and template.name == 'index' %}site-header--over-hero{% else %}site-header--solid{% endif %}"
+  data-site-header
+  {{ section.shopify_attributes }}
+>
+  <div class="site-header__inner">
+    <div class="site-header__left">
+      <button type="button" class="menu-toggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a href="{{ routes.root_url }}" class="logo" aria-label="{{ section.settings.logo_text | default: 'kuuine' }}">
+        <span class="logo__mark">
+          {% if section.settings.logo_icon != blank %}
+            {{
+              section.settings.logo_icon
+              | image_url: width: 112
+              | image_tag: class: 'logo__icon logo__icon--default', loading: 'eager', alt: ''
+            }}
+          {% else %}
+            <img class="logo__icon logo__icon--default" src="{{ 'swan-logo-dark.svg' | asset_url }}" alt="" width="22" height="22">
+          {% endif %}
+          {% if section.settings.logo_icon_light != blank %}
+            {{
+              section.settings.logo_icon_light
+              | image_url: width: 112
+              | image_tag: class: 'logo__icon logo__icon--light', loading: 'eager', alt: ''
+            }}
+          {% else %}
+            <img class="logo__icon logo__icon--light" src="{{ 'swan-logo.svg' | asset_url }}" alt="" width="22" height="22">
+          {% endif %}
+        </span>
+        <span class="logo__wordmark">
+          {% if section.settings.logo != blank %}
+            {{
+              section.settings.logo
+              | image_url: width: 360
+              | image_tag: class: 'logo__img logo__img--default', loading: 'eager', alt: section.settings.logo_text | default: 'kuuine'
+            }}
+          {% else %}
+            <img class="logo__img logo__img--default" src="{{ 'kuuine.svg' | asset_url }}" alt="{{ section.settings.logo_text | default: 'kuuine' }}" width="120" height="33">
+          {% endif %}
+          {% if section.settings.logo_light != blank %}
+            {{
+              section.settings.logo_light
+              | image_url: width: 360
+              | image_tag: class: 'logo__img logo__img--light', loading: 'eager', alt: ''
+            }}
+          {% else %}
+            <img class="logo__img logo__img--light" src="{{ 'kuuine-white.svg' | asset_url }}" alt="" width="120" height="33">
+          {% endif %}
+        </span>
+      </a>
+      <nav class="site-header__nav" aria-label="Primary">
+        {% for link in section.settings.menu.links %}
+          <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+
+    <div class="site-header__center"></div>
+
+    <div class="site-header__right">
+      <div class="site-header__meta">
+        {% if section.settings.show_localization %}
+          <span class="nav-link">
+            {{ localization.country.name }}: {{ localization.country.currency.iso_code }}
+          </span>
+        {% endif %}
+        {% if section.settings.trade_link != blank %}
+          <a class="nav-link" href="{{ section.settings.trade_link }}">{{ section.settings.trade_label }}</a>
+        {% endif %}
+      </div>
+      <div class="header-icons">
+        <a href="{{ routes.search_url }}" aria-label="Search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </a>
+        <a href="{{ routes.account_url }}" aria-label="Account">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.5-3 4-4.5 7-4.5s5.5 1.5 7 4.5"/></svg>
+        </a>
+        <a href="{{ routes.cart_url }}" aria-label="Cart">
+          <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo_icon",
+      "label": "Logo ikonu — koyu (swan)"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_icon_light",
+      "label": "Logo ikonu — açık / hero (swan)"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo wordmark (koyu — açık zemin)"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_light",
+      "label": "Logo wordmark (açık — hero üzeri)"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo alt metni",
+      "default": "kuuine"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_over_home",
+      "label": "Ana sayfada şeffaf header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_localization",
+      "label": "Ülke / para birimini göster",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "trade_label",
+      "label": "Ticari bağlantı etiketi",
+      "default": "Ticari"
+    },
+    {
+      "type": "url",
+      "id": "trade_link",
+      "label": "Ticari bağlantı"
+    }
+  ]
+}
+{% endschema %}

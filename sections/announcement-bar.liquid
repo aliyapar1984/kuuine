@@ -1,0 +1,30 @@
+{% if section.settings.text != blank %}
+  <div class="announcement" data-announcement {{ section.shopify_attributes }}>
+    <p>{{ section.settings.text }}</p>
+    {% if section.settings.show_close %}
+      <button type="button" class="announcement__close" data-announcement-close aria-label="Close">×</button>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "section-announcement",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": ""
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close",
+      "label": "Kapat düğmesini göster",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "Announcement bar" }]
+}
+{% endschema %}

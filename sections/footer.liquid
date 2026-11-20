@@ -1,0 +1,229 @@
+<footer class="site-footer" {{ section.shopify_attributes }}>
+  <div class="footer-panel">
+    <div class="footer-row">
+      <div class="footer-brand">
+        {% if section.settings.heading != blank %}
+          <h2 class="footer-title">{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        <div class="footer-brand__lower">
+          {% if section.settings.note != blank %}
+            <p class="footer-note">{{ section.settings.note | newline_to_br }}</p>
+          {% endif %}
+
+          {% if section.settings.show_newsletter %}
+            <div class="footer-newsletter">
+              <div class="footer-newsletter__inner">
+                <div class="footer-newsletter__head">
+                  {% if section.settings.newsletter_heading != blank %}
+                    <h3>{{ section.settings.newsletter_heading }}</h3>
+                  {% endif %}
+                  {% if section.settings.newsletter_text != blank %}
+                    <p class="footer-newsletter__lead">{{ section.settings.newsletter_text }}</p>
+                  {% endif %}
+                </div>
+                <div class="footer-newsletter__body">
+                  {% form 'customer', class: 'footer-newsletter__form' %}
+                    <input type="hidden" name="contact[tags]" value="newsletter">
+                    <div class="footer-newsletter__field">
+                      <label for="FooterNewsletterEmail-{{ section.id }}">{{ section.settings.newsletter_label }}</label>
+                      <input
+                        id="FooterNewsletterEmail-{{ section.id }}"
+                        type="email"
+                        name="contact[email]"
+                        placeholder="{{ section.settings.newsletter_placeholder }}"
+                        autocomplete="email"
+                        required
+                      >
+                      <button type="submit">{{ section.settings.newsletter_button }}</button>
+                    </div>
+                  {% endform %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="footer-cols footer-accordion" data-footer-accordion>
+        {% for block in section.blocks %}
+          <div class="footer-col is-open" {{ block.shopify_attributes }}>
+            <button type="button" class="footer-col__head" aria-expanded="true">
+              <span>{{ block.settings.heading }}</span>
+              <span class="footer-col__chev" aria-hidden="true"></span>
+            </button>
+            <div class="footer-col__panel">
+              <div class="footer-col__panel-inner">
+                {% if block.settings.menu != blank %}
+                  <ul>
+                    {% for link in block.settings.menu.links %}
+                      <li>
+                        <a href="{{ link.url }}">
+                          {{ link.title }}
+                          {% if block.settings.show_arrows %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                              <path d="M4.15 9.96h10.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                              <path d="M9.98 4.12 15.81 9.96 9.98 15.79" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                          {% endif %}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="footer-row is-bottom">
+      <p class="footer-copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
+      <nav class="footer-legal" aria-label="Legal">
+        {% if section.settings.privacy_link != blank %}
+          <a href="{{ section.settings.privacy_link }}">{{ section.settings.privacy_label }}</a>
+        {% endif %}
+        {% if section.settings.terms_link != blank %}
+          <a href="{{ section.settings.terms_link }}">{{ section.settings.terms_label }}</a>
+        {% endif %}
+      </nav>
+    </div>
+
+    {% if section.settings.show_watermark %}
+      <div class="footer-watermark" aria-hidden="true">
+        {% if section.settings.watermark_image != blank %}
+          {{
+            section.settings.watermark_image
+            | image_url: width: 800
+            | image_tag: class: 'footer-watermark__img', loading: 'lazy', alt: ''
+          }}
+        {% else %}
+          <img class="footer-watermark__img" src="{{ 'kuuine.svg' | asset_url }}" alt="" width="400" height="110">
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Başlık",
+      "default": "kuuine daha yavaş sofralar tasarlar—ziyafet, zarafet ve kalıcı kalite için züccaciye."
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Not",
+      "default": "Türkiye’de el işçiliğiyle üretildi.\nÖzenle teslim edilir."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "E-bülteni göster",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "E-bülten başlığı",
+      "default": "E-bülten"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "E-bülten metni",
+      "default": "Sofra kültürü, yeni koleksiyonlar ve malzeme hikâyeleri üzerine ara sıra notlar."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_label",
+      "label": "E-posta etiketi",
+      "default": "E-posta"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "E-posta yer tutucu",
+      "default": "ornek@email.com"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button",
+      "label": "Buton metni",
+      "default": "Abone ol"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_watermark",
+      "label": "Filigranı göster",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "watermark_image",
+      "label": "Filigran görseli (kuuine)"
+    },
+    {
+      "type": "text",
+      "id": "watermark_text",
+      "label": "Filigran metni (yedek)",
+      "default": "kuuine"
+    },
+    {
+      "type": "text",
+      "id": "privacy_label",
+      "label": "Gizlilik etiketi",
+      "default": "Gizlilik Politikası"
+    },
+    {
+      "type": "url",
+      "id": "privacy_link",
+      "label": "Gizlilik politikası"
+    },
+    {
+      "type": "text",
+      "id": "terms_label",
+      "label": "Şartlar etiketi",
+      "default": "Şartlar & Koşullar"
+    },
+    {
+      "type": "url",
+      "id": "terms_link",
+      "label": "Şartlar"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Başlık", "default": "Keşfet" },
+        { "type": "link_list", "id": "menu", "label": "Menü" },
+        {
+          "type": "checkbox",
+          "id": "show_arrows",
+          "label": "Bağlantılarda ok ikonu göster",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "menu", "settings": { "heading": "Keşfet" } },
+        { "type": "menu", "settings": { "heading": "Destek" } },
+        { "type": "menu", "settings": { "heading": "Sosyal" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
