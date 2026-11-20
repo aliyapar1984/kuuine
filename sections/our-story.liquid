@@ -21,11 +21,11 @@
             data-story-slide="{{ block.id }}"
             id="story-{{ block.id }}"
           >
-            <h3 class="our-story__slide-title tw:mb-5 tw:font-normal tw:text-[clamp(28px,2.4vw,33px)] tw:leading-[1.15] tw:tracking-[0.01em]">
+            <h3 class="our-story__slide-title tw:mb-5 tw:font-normal tw:text-story">
               {{ block.settings.title }}
             </h3>
             {% if block.settings.text != blank %}
-              <div class="our-story__slide-text tw:mb-6 tw:max-w-[34ch] tw:text-sm tw:leading-[18px] tw:tracking-[0.02em]">
+              <div class="our-story__slide-text tw:mb-6 tw:max-w-[34ch] tw:text-sm tw:leading-[18px] tw:tracking-body">
                 {{ block.settings.text }}
               </div>
             {% endif %}
@@ -45,20 +45,12 @@
             data-story-media="{{ block.id }}"
           >
             {% if block.settings.video != blank %}
-              {{
-                block.settings.video
-                | video_tag:
-                  autoplay: true,
-                  loop: true,
-                  muted: true,
-                  controls: false,
-                  image_size: '1600x'
-              }}
+              {% render 'lazy-video', video: block.settings.video, poster_width: 1600, loop: true %}
             {% elsif block.settings.image != blank %}
               {{
                 block.settings.image
                 | image_url: width: 1800
-                | image_tag: loading: 'lazy', sizes: '50vw', widths: '800, 1200, 1600, 1800', alt: block.settings.title
+                | image_tag: loading: 'lazy', decoding: 'async', sizes: '50vw', widths: '800, 1200, 1600, 1800', alt: block.settings.title
               }}
             {% endif %}
           </div>

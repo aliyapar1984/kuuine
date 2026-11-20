@@ -1,18 +1,21 @@
-<section class="collection-tabs tw:bg-kuuine tw:py-[clamp(3rem,7vw,6rem)]" data-tabs {{ section.shopify_attributes }}>
-  <div class="collection-tabs__layout container tw:grid tw:grid-cols-1 tw:items-center tw:gap-[clamp(1.5rem,4vw,3.5rem)] tw:lg:grid-cols-[1.1fr_0.9fr]">
-    <div class="collection-tabs__gallery tw:relative tw:aspect-[3/4] tw:overflow-hidden tw:bg-kuuine-soft tw:lg:aspect-[4/5]">
+<section class="collection-tabs tw:bg-bg tw:py-section-md" data-tabs {{ section.shopify_attributes }}>
+  <div class="collection-tabs__layout container tw:grid tw:grid-cols-1 tw:items-center tw:gap-duo-gap tw:lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="collection-tabs__gallery tw:relative tw:aspect-[3/4] tw:overflow-hidden tw:bg-soft tw:lg:aspect-[4/5]">
       {% for block in section.blocks %}
         {% if block.settings.image != blank %}
           {% if forloop.first %}
             {% assign tab_image_class = 'is-active' %}
+            {% assign tab_loading = 'eager' %}
           {% else %}
             {% assign tab_image_class = '' %}
+            {% assign tab_loading = 'lazy' %}
           {% endif %}
           {{
             block.settings.image
             | image_url: width: 1400
             | image_tag:
-              loading: 'lazy',
+              loading: tab_loading,
+              decoding: 'async',
               class: tab_image_class,
               data-tab-image: block.id,
               alt: block.settings.title
@@ -22,7 +25,7 @@
     </div>
     <div class="collection-tabs__info tw:grid tw:min-w-0 tw:grid-cols-1 tw:content-center">
       {% if section.settings.heading != blank %}
-        <h2 class="collection-tabs__title tw:mb-6 tw:font-display tw:text-[clamp(28px,3.4vw,38px)] tw:font-normal tw:leading-[1.2] tw:tracking-[0.03em] tw:text-kuuine-ink">
+        <h2 class="collection-tabs__title tw:mb-6 tw:font-display tw:text-display tw:font-normal tw:tracking-display tw:text-ink">
           {{ section.settings.heading }}
         </h2>
       {% endif %}
@@ -43,7 +46,7 @@
           class="collection-tabs__panel {% if forloop.first %}is-active{% endif %}"
           data-panel="{{ block.id }}"
         >
-          <p class="tw:mb-6 tw:max-w-[40ch] tw:text-[15px] tw:leading-[1.7] tw:text-kuuine-ink">
+          <p class="tw:mb-6 tw:max-w-[40ch] tw:text-body-loose tw:text-ink">
             {{ block.settings.text }}
           </p>
           {% if block.settings.link_label != blank %}

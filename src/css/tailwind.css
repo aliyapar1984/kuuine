@@ -1,13 +1,18 @@
 /*
-  kuuine — Tailwind (utilities only, prefix: tw)
+  kuuine — Tailwind theme tokens + utilities (prefix: tw)
 
-  Kural:
-  - Layout grid/flex + spacing/tipografi → tw:…
-  - Animasyon, sticky/pin, overlay, hover medya → assets/base.css
-  - Preflight yok + tw prefix
-  - Utilities LAYER DIŞINDA (base.css unlayered kurallarını ezmek için)
+  Kullanim:
+  - Renk: tw:bg-bg tw:text-ink tw:text-muted tw:bg-soft tw:border-border
+  - Font: tw:font-sans tw:font-display
+  - Tipografi: tw:text-body tw:text-eyebrow tw:text-display tw:text-hero tw:text-story tw:text-caption tw:text-card
+  - Spacing: tw:px-pad-x tw:py-section tw:py-section-lg tw:py-section-md
+  - Tracking: tw:tracking-eyebrow tw:tracking-display tw:tracking-hero
+  - Responsive: sadece tw:lg:… (900px)
 
   Build: yarn css:build | Watch: yarn css:watch
+
+  Not: @theme / @source / prefix() Tailwind v4 soz dizimidir; standart CSS validator
+  bunlari hata sayar — .vscode/settings.json icinde css.validate kapali.
 */
 
 @import "tailwindcss/theme.css" prefix(tw);
@@ -18,10 +23,23 @@
 @source "../../sections/**/*.liquid";
 @source "../../snippets/**/*.liquid";
 @source "../../templates/**/*";
+@source "../../index.html";
 
 @theme {
+  /* Breakpoints — yalnizca lg */
   --breakpoint-lg: 900px;
 
+  /* Colors ↔ base.css :root */
+  --color-bg: #fbf7ef;
+  --color-soft: #f3eee4;
+  --color-ink: #000000;
+  --color-muted: #5a5a5a;
+  --color-border: #d9d2c6;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-stone: #5c5951;
+
+  /* Geriye donuk aliaslar */
   --color-kuuine: #fbf7ef;
   --color-kuuine-soft: #f3eee4;
   --color-kuuine-muted: #5a5a5a;
@@ -29,6 +47,61 @@
   --color-kuuine-ink: #000000;
   --color-kuuine-stone: #5c5951;
 
+  /* Fonts */
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Type scale */
+  --text-body: 0.9375rem; /* 15px */
+  --text-body--line-height: 1.5;
+
+  --text-body-loose: 0.9375rem;
+  --text-body-loose--line-height: 1.7;
+
+  --text-eyebrow: 0.6875rem; /* 11px */
+  --text-eyebrow--line-height: 1.2;
+
+  --text-card: 0.8125rem; /* 13px */
+  --text-card--line-height: 1.5;
+
+  --text-journal: 1.25rem;
+  --text-journal--line-height: 1.3;
+
+  --text-display: clamp(1.75rem, 3.4vw, 2.375rem); /* 28→38 */
+  --text-display--line-height: 1.2;
+
+  --text-hero: clamp(2.75rem, 6vw, 4.5rem);
+  --text-hero--line-height: 1.05;
+
+  --text-story: clamp(1.75rem, 2.4vw, 2.0625rem); /* 28→33 */
+  --text-story--line-height: 1.15;
+
+  --text-caption: clamp(1.375rem, 2.4vw, 2rem); /* 22→32 */
+  --text-caption--line-height: 1.2;
+
+  /* Letter-spacing */
+  --tracking-eyebrow: 0.14em;
+  --tracking-eyebrow-wide: 0.16em;
+  --tracking-eyebrow-wider: 0.22em;
+  --tracking-display: 0.03em;
+  --tracking-hero: -0.02em;
+  --tracking-body: 0.02em;
+
+  /* Spacing — pad-x & section rhythm */
+  --spacing-pad-x: clamp(1rem, 3vw, 2.5rem);
+  --spacing-section: clamp(3rem, 6vw, 5rem);
+  --spacing-section-md: clamp(3rem, 7vw, 6rem);
+  --spacing-section-lg: clamp(3rem, 8vw, 7rem);
+  --spacing-intro: clamp(2.5rem, 5vw, 4rem);
+  --spacing-caption-x: clamp(1.25rem, 2.5vw, 2rem);
+  --spacing-duo-gap: clamp(1.5rem, 4vw, 3.5rem);
+  --spacing-duo-intro: clamp(40px, 5vw, 64px);
+  --spacing-product-bottom: 7.5rem; /* 120px */
+
+  /* Container */
+  --container-max: 1440px;
+
+  /* Radius / motion helpers */
+  --radius-pill: 999px;
+  --transition-duration-kuuine: 0.35s;
 }

@@ -96,7 +96,7 @@
           {{
             section.settings.watermark_image
             | image_url: width: 800
-            | image_tag: class: 'footer-watermark__img', loading: 'lazy', alt: ''
+            | image_tag: class: 'footer-watermark__img', loading: 'lazy', decoding: 'async', alt: ''
           }}
         {% else %}
           <img class="footer-watermark__img" src="{{ 'kuuine.svg' | asset_url }}" alt="" width="400" height="110">

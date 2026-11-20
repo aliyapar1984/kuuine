@@ -1,0 +1,29 @@
+{%- comment -%}
+  Sayfa ailesi CSS — her Shopify template ayrı dosya değil; aile paylaşır.
+
+  Aileler:
+    home       → page-home.css       (index)
+    catalog    → page-catalog.css    (collection, search, list-collections)
+    product    → page-product.css    (product)
+    corporate  → page-corporate.css  (page, customers/* kurumsal yüzeyler)
+    blog       → page-blog.css       (blog, article)
+
+  Yeni stil: ilgili aile dosyasına yaz. Dosya yoksa oluştur + aşağıya when ekle.
+  Global (header/footer/tokens) → assets/base.css
+{%- endcomment -%}
+{% case template.name %}
+  {% when 'index' %}
+    {{ 'page-home.css' | asset_url | stylesheet_tag: preload: true }}
+
+  {% when 'collection', 'search', 'list-collections' %}
+    {{ 'page-catalog.css' | asset_url | stylesheet_tag: preload: true }}
+
+  {% when 'product' %}
+    {{ 'page-product.css' | asset_url | stylesheet_tag: preload: true }}
+
+  {% when 'page' %}
+    {{ 'page-corporate.css' | asset_url | stylesheet_tag: preload: true }}
+
+  {% when 'blog', 'article' %}
+    {{ 'page-blog.css' | asset_url | stylesheet_tag: preload: true }}
+{% endcase %}

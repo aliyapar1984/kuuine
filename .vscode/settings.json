@@ -1,0 +1,13 @@
+{
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  "files.associations": {
+    "**/src/css/tailwind.css": "tailwindcss"
+  },
+  "tailwindCSS.experimental.configFile": "src/css/tailwind.css",
+  "tailwindCSS.classAttributes": ["class", "className"],
+  "tailwindCSS.classRegex": [
+    ["class\\s*=\\s*[\"']([^\"']*)[\"']", "([^\\s\"']+)"]
+  ]
+}

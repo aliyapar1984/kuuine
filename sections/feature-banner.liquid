@@ -1,4 +1,4 @@
-<section class="feature-banners tw:grid tw:bg-kuuine tw:px-[var(--pad-x)]" data-feature-slideshow {{ section.shopify_attributes }}>
+<section class="feature-banners tw:grid tw:bg-bg tw:px-pad-x" data-feature-slideshow {{ section.shopify_attributes }}>
   {% for block in section.blocks %}
     <article
       class="feature-banner tw:relative tw:flex tw:min-h-[min(85dvh,820px)] tw:items-end tw:overflow-hidden tw:text-white"
@@ -12,7 +12,7 @@
             block.settings.image
             | image_url: width: 2400
             | image_tag:
-              loading: 'lazy',
+              loading: 'lazy', decoding: 'async',
               sizes: '100vw',
               widths: '800, 1400, 2000, 2400',
               alt: block.settings.title,
@@ -21,17 +21,17 @@
         {% endif %}
       </div>
       <div class="feature-banner__overlay"></div>
-      <div class="feature-banner__content tw:relative tw:z-[2] tw:max-w-[520px] tw:px-[clamp(1.25rem,2.5vw,2rem)] tw:py-14">
+      <div class="feature-banner__content tw:relative tw:z-[2] tw:max-w-[520px] tw:px-caption-x tw:py-14">
         {% if block.settings.eyebrow != blank %}
-          <p class="feature-banner__eyebrow tw:mb-3 tw:text-[11px] tw:uppercase tw:tracking-[0.16em]">
+          <p class="feature-banner__eyebrow tw:mb-3 tw:text-eyebrow tw:uppercase tw:tracking-eyebrow-wide">
             {{ block.settings.eyebrow }}
           </p>
         {% endif %}
-        <h2 class="feature-banner__title tw:mb-3.5 tw:font-display tw:text-[clamp(28px,3.4vw,38px)] tw:font-normal tw:leading-[1.2] tw:tracking-[0.03em] tw:text-white">
+        <h2 class="feature-banner__title tw:mb-3.5 tw:font-display tw:text-display tw:font-normal tw:tracking-display tw:text-white">
           {{ block.settings.title | newline_to_br }}
         </h2>
         {% if block.settings.text != blank %}
-          <p class="feature-banner__text tw:mb-6 tw:max-w-[36ch] tw:text-[15px] tw:leading-[1.5]">
+          <p class="feature-banner__text tw:mb-6 tw:max-w-[36ch] tw:text-body">
             {{ block.settings.text }}
           </p>
         {% endif %}

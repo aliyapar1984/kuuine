@@ -1,32 +1,29 @@
 <section class="hero" {{ section.shopify_attributes }}>
   <div class="hero__media">
     {% if section.settings.video != blank %}
-      {{
-        section.settings.video
-        | video_tag:
-          autoplay: true,
-          loop: true,
-          muted: true,
-          controls: false,
-          image_size: '1920x'
-      }}
+      {% render 'lazy-video', video: section.settings.video, poster_width: 1920, loop: true %}
     {% elsif section.settings.image != blank %}
       {{
         section.settings.image
         | image_url: width: 2400
-        | image_tag: loading: 'eager', sizes: '100vw', widths: '800, 1200, 1600, 2400', alt: section.settings.heading
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          sizes: '100vw',
+          widths: '800, 1200, 1600, 2400',
+          alt: section.settings.heading
       }}
     {% endif %}
   </div>
   <div class="hero__overlay"></div>
   <div class="hero__content">
     {% if section.settings.heading != blank %}
-      <h1 class="hero__title tw:mb-4 tw:font-display tw:text-[clamp(2.75rem,6vw,4.5rem)] tw:font-normal tw:leading-[1.05] tw:tracking-[-0.02em]">
+      <h1 class="hero__title tw:mb-4 tw:font-display tw:text-hero tw:font-normal tw:tracking-hero">
         {{ section.settings.heading | newline_to_br }}
       </h1>
     {% endif %}
     {% if section.settings.text != blank %}
-      <p class="hero__text tw:mb-7 tw:max-w-[28ch] tw:text-[15px] tw:leading-[1.5] tw:opacity-95">
+      <p class="hero__text tw:mb-7 tw:max-w-[28ch] tw:text-body tw:opacity-95">
         {{ section.settings.text }}
       </p>
     {% endif %}

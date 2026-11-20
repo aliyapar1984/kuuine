@@ -1,0 +1,70 @@
+---
+description: kuuine — Shopify geçişi odaklı kodlama (kaynak liquid, preview ikincil)
+alwaysApply: true
+---
+
+# kuuine: Shopify-first
+
+Bu proje bir **Shopify teması**. Bundan sonraki tüm UI/özellik işleri Shopify’a taşınacak varsayımıyla yazılır.
+
+## Kaynak sırası (zorunlu)
+
+1. **Asıl kaynak:** `sections/*.liquid`, `snippets/*.liquid`, `layout/theme.liquid`, `templates/*.json`
+2. **İkincil:** `preview/index.html` — sadece görsel doğrulama / GitHub Pages
+3. Preview’da yapılan her yapısal değişiklik **aynı anda** ilgili `.liquid` dosyasına da yazılır (veya önce liquid, sonra preview)
+
+```text
+❌ Sadece preview/index.html güncellemek
+✅ sections/foo.liquid (+ gerekirse preview eşlemesi)
+```
+
+## Markup
+
+- Section kökünde `data-shopify-section="<name>"` ile liquid `type` / dosya adı uyumlu kalsın
+- Ürün/koleksiyon/medya için sahte path yerine Shopify kalıbı düşün: `image_url`, `product.url`, `section.settings`, `block.settings`
+- Yeni tekrarlayan UI → `snippets/` (örn. product-card); kopyala-yapıştır kart/HTML büyütme
+- Theme Editor ayarı gerektiren metin/görsel → schema `settings` / `blocks` (preview’da sabit metin kalabilir)
+
+## CSS / Tailwind
+
+- **Sayfa ailesi yükleme (zorunlu):** her template’e ayrı CSS yok; aile paylaşır (yükleme kolaylığı)
+  - Global: `assets/base.css` — tokens, reset, btn, header, footer, sticky shell, preloader
+  - Aileler (`assets/page-{aile}.css`):
+    - `page-home` — anasayfa (`index`)
+    - `page-catalog` — ürün liste (`collection`, `search`, `list-collections`)
+    - `page-product` — ürün detay (`product`)
+    - `page-corporate` — kurumsal (`page`)
+    - `page-blog` — blog (`blog`, `article`)
+  - Yükleme: `snippets/css-page.liquid` (template → aile stylesheet); preview’da ilgili aile dosyasını linkle
+  - Stil yazarken: global → `base.css`; sayfa UI → doğru aile dosyası (yoksa oluştur + `css-page` when)
+- Bileşen, animasyon, sticky/pin, overlay, `::before/::after`, state (`.is-active`) → ilgili `page-*.css` veya global ise `base.css`
+- Spacing, tipografi, basit flex/grid → `tw:…` (prefix zorunlu)
+- Responsive: yalnızca **default + `tw:lg:`** (`lg` = 900px)
+- Token kullan (`src/css/tailwind.css` `@theme`): `tw:bg-bg`, `tw:text-ink`, `tw:text-muted`, `tw:text-body`, `tw:text-display`, `tw:text-hero`, `tw:text-eyebrow`, `tw:px-pad-x`, `tw:py-section`, `tw:tracking-eyebrow` — mümkünse `tw:text-[15px]` / ham `clamp` yazma
+- Utilities **layer dışında** build edilir; class ekleyince `yarn css:build` veya `yarn css:watch`
+- Canlı tema: `layout/theme.liquid` → `base.css` + `tailwind.css` + `{% render 'css-page' %}`
+
+## JS
+
+- Davranış `assets/theme.js` içinde; section’a özel init varsa mevcut pattern’e uy (`data-*` hook)
+- **Video:** `snippets/lazy-video.liquid` veya `data-src` + `js-kuuine-video` / `data-kuuine-video` — görünürken yükle/oynat; ambient/hero aktif: çıkınca pause (resume); hover/inaktif: unload OK; `autoplay` + erken `src` yok
+- Üçüncü parti (Lottie vb.) → global `script_tag` yok; `body[data-lottie-src]` + viewport/idle’da dinamik yükle
+- `theme.js` → `defer`; kritik olmayan init → `requestIdleCallback` / IntersectionObserver
+- Timer’lı carousel → viewport dışındayken `clearInterval`
+- Shopify Online Store’da çalışmayacak varsayımlar yok (localhost-only path, Node API, vb.)
+
+## Performans (zorunlu temel)
+
+- CSS: `stylesheet_tag: preload: true` + sayfa ailesi; below-fold section’larda `content-visibility: auto`
+- Görsel: `image_tag` ile `widths` + `sizes`; below-fold `loading: 'lazy'`; LCP (hero) `loading: 'eager'` + `fetchpriority: 'high'`; `decoding: 'async'`
+- Video: poster + `preload="none"` / `data-src`; görünür alan dışında network yok
+- Kalıcı `will-change` kullanma (sadece kısa animasyon anı)
+- `prefers-reduced-motion` saygı; ağır motion’ı kapat
+- Ölçüm hedefi: ilk boyama donmasın, scroll jank olmasın, gezilmeyen medya inmesin
+- **Agent:** her özellik/PR’da bu kurallara uy; performans engeli (erken ağır medya, global büyük JS, sürekli timer, layout thrash, CLS riski vb.) görürsen işi yapmadan / yaparken **açıkça belirt**
+
+## Dosya dokunulmaz / dikkat
+
+- `node_modules/` commit etme; `yarn.lock` + built `assets/tailwind.css` temayla gitsin
+- GitHub Pages için kök `index.html` → preview yönlendirmesi; tema deploy’unu bozma
+- `lottie.min.js` (~300KB) yalnızca testimonials yaklaşınca yüklenir — her sayfaya ekleme

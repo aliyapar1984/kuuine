@@ -3,19 +3,30 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>{{ page_title }}{% if current_tags %} – {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} – Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
+    <meta name="theme-color" content="{{ settings.color_background }}">
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} – {{ current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} – Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} – {{ shop.name }}{% endunless -%}
+    </title>
     {% if page_description %}
       <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
+
     {{ content_for_header }}
-    {{ 'base.css' | asset_url | stylesheet_tag }}
-    {{ 'tailwind.css' | asset_url | stylesheet_tag }}
+
+    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'tailwind.css' | asset_url | stylesheet_tag: preload: true }}
+    {% render 'css-page' %}
+
     <style>
       :root {
         --color-bg: {{ settings.color_background }};
         --color-text: {{ settings.color_text }};
       }
     </style>
+
     {% if template.name == 'index' %}
       <script>
         (function () {
@@ -37,7 +48,10 @@
       </script>
     {% endif %}
   </head>
-  <body class="template-{{ template.name }}">
+  <body
+    class="template-{{ template.name }}"
+    data-lottie-src="{{ 'lottie.min.js' | asset_url }}"
+  >
     {% render 'site-preloader' %}
     {% sections 'header-group' %}
 
@@ -47,7 +61,6 @@
 
     {% sections 'footer-group' %}
 
-    {{ 'lottie.min.js' | asset_url | script_tag }}
-    {{ 'theme.js' | asset_url | script_tag }}
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
   </body>
 </html>

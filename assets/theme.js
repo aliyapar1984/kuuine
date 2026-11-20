@@ -2,6 +2,273 @@
   const qs = (sel, ctx = document) => ctx.querySelector(sel);
   const qsa = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
+  const whenIdle = (fn, timeout = 1800) => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => fn(), { timeout });
+    } else {
+      window.setTimeout(fn, 1);
+    }
+  };
+
+  const loadScript = (src) =>
+    new Promise((resolve, reject) => {
+      if (!src) {
+        reject(new Error("missing script src"));
+        return;
+      }
+      const existing = document.querySelector(`script[data-kuuine-src="${src}"]`);
+      if (existing) {
+        if (existing.dataset.loaded === "1") resolve();
+        else existing.addEventListener("load", () => resolve(), { once: true });
+        return;
+      }
+      const s = document.createElement("script");
+      s.src = src;
+      s.async = true;
+      s.dataset.kuuineSrc = src;
+      s.addEventListener("load", () => {
+        s.dataset.loaded = "1";
+        resolve();
+      });
+      s.addEventListener("error", () => reject(new Error(`script fail: ${src}`)));
+      document.head.appendChild(s);
+    });
+
+  const ensureLottie = () => {
+    if (typeof window.lottie !== "undefined") return Promise.resolve();
+    const src =
+      document.body?.dataset?.lottieSrc ||
+      (document.querySelector("[data-lottie-src]")?.getAttribute("data-lottie-src") ?? "");
+    if (!src) return Promise.reject(new Error("lottie src missing"));
+    return loadScript(src);
+  };
+
+  /* ——— Viewport video: görünürken yükle/oynat, çıkınca durdur/unload ——— */
+  const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const prepareLazyVideo = (video) => {
+    if (!video || video.dataset.kuuineVideoReady === "1") return video;
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("muted", "");
+    video.removeAttribute("autoplay");
+    video.preload = "none";
+    video.setAttribute("preload", "none");
+
+    const sources = qsa("source", video);
+    if (sources.length) {
+      sources.forEach((s) => {
+        const url = s.getAttribute("src") || s.dataset.src;
+        if (url) {
+          s.dataset.src = url;
+          s.removeAttribute("src");
+        }
+      });
+    } else {
+      const url = video.getAttribute("src") || video.dataset.src || "";
+      if (url) {
+        video.dataset.src = url;
+        video.removeAttribute("src");
+        try {
+          video.removeAttribute("src");
+          video.src = "";
+        } catch (_) {}
+      }
+    }
+    video.dataset.kuuineLoaded = "0";
+    video.dataset.kuuineVideoReady = "1";
+    return video;
+  };
+
+  const loadLazyVideo = (video) => {
+    if (!video) return Promise.resolve();
+    prepareLazyVideo(video);
+    if (video.dataset.kuuineLoaded === "1" && video.readyState >= 2) {
+      return Promise.resolve(video);
+    }
+
+    const sources = qsa("source", video);
+    if (sources.length) {
+      sources.forEach((s) => {
+        if (s.dataset.src) s.setAttribute("src", s.dataset.src);
+      });
+    } else if (video.dataset.src) {
+      video.setAttribute("src", video.dataset.src);
+    }
+
+    video.dataset.kuuineLoaded = "1";
+    try {
+      video.load();
+    } catch (_) {}
+
+    return new Promise((resolve) => {
+      if (video.readyState >= 2) {
+        resolve(video);
+        return;
+      }
+      const done = () => resolve(video);
+      video.addEventListener("loadeddata", done, { once: true });
+      video.addEventListener("error", done, { once: true });
+      window.setTimeout(done, 8000);
+    });
+  };
+
+  const unloadLazyVideo = (video) => {
+    if (!video || video.dataset.kuuineLoaded !== "1") {
+      if (video) prepareLazyVideo(video);
+      return;
+    }
+    try {
+      video.pause();
+    } catch (_) {}
+    const sources = qsa("source", video);
+    if (sources.length) {
+      sources.forEach((s) => {
+        if (!s.dataset.src) {
+          const url = s.getAttribute("src");
+          if (url) s.dataset.src = url;
+        }
+        s.removeAttribute("src");
+      });
+    } else {
+      if (!video.dataset.src) {
+        const url = video.getAttribute("src") || video.currentSrc;
+        if (url) video.dataset.src = url;
+      }
+      video.removeAttribute("src");
+      try {
+        video.src = "";
+      } catch (_) {}
+    }
+    try {
+      video.load();
+    } catch (_) {}
+    video.dataset.kuuineLoaded = "0";
+  };
+
+  const playLazyVideo = (video) => {
+    if (!video || reduceMotion()) return;
+    const run = () => {
+      const p = video.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+    loadLazyVideo(video).then(() => {
+      if (video.readyState >= 2) run();
+      else video.addEventListener("loadeddata", run, { once: true });
+    });
+  };
+
+  const pauseLazyVideo = (video) => {
+    if (!video) return;
+    try {
+      video.pause();
+    } catch (_) {}
+  };
+
+  const initViewportVideos = () => {
+    if (!("IntersectionObserver" in window)) {
+      qsa("video.js-kuuine-video, video[data-kuuine-video]").forEach((v) => {
+        prepareLazyVideo(v);
+        if (v.dataset.kuuineVideo !== "hover") playLazyVideo(v);
+      });
+      return;
+    }
+
+    const ambientSel = [
+      "video.js-kuuine-video",
+      "video[data-kuuine-video]",
+      ".thematic-duo__figure video",
+      ".our-story__media-slide video",
+      ".product-card__hover video",
+    ].join(", ");
+
+    qsa(ambientSel).forEach((video) => {
+      if (video.hasAttribute("data-hero-video")) return;
+      prepareLazyVideo(video);
+
+      const isHover =
+        video.dataset.kuuineVideo === "hover" || !!video.closest(".product-card__hover");
+      const storySlide = video.closest("[data-story-media]");
+      const observeTarget =
+        video.closest(".thematic-duo__figure") ||
+        video.closest(".product-card") ||
+        storySlide ||
+        video.closest("section") ||
+        video;
+
+      if (isHover) {
+        const card = video.closest(".product-card") || observeTarget;
+        let near = false;
+        const io = new IntersectionObserver(
+          ([entry]) => {
+            near = entry.isIntersecting;
+            if (near) loadLazyVideo(video);
+            else {
+              pauseLazyVideo(video);
+              unloadLazyVideo(video);
+            }
+          },
+          { root: null, rootMargin: "20% 0px", threshold: 0.01 }
+        );
+        io.observe(card);
+        const onEnter = () => {
+          if (near) playLazyVideo(video);
+        };
+        const onLeave = () => pauseLazyVideo(video);
+        card.addEventListener("mouseenter", onEnter);
+        card.addEventListener("mouseleave", onLeave);
+        card.addEventListener("focusin", onEnter);
+        card.addEventListener("focusout", onLeave);
+        return;
+      }
+
+      if (storySlide) {
+        const root = video.closest("[data-our-story]") || observeTarget;
+        let sectionInView = false;
+        const sync = () => {
+          const active = storySlide.classList.contains("is-active");
+          if (sectionInView && active) playLazyVideo(video);
+          else {
+            pauseLazyVideo(video);
+            if (!active) unloadLazyVideo(video);
+          }
+        };
+        const io = new IntersectionObserver(
+          ([entry]) => {
+            sectionInView = entry.isIntersecting && entry.intersectionRatio > 0.15;
+            if (!sectionInView) {
+              pauseLazyVideo(video);
+              unloadLazyVideo(video);
+            } else sync();
+          },
+          { threshold: [0, 0.15, 0.4] }
+        );
+        io.observe(root);
+        video._kuuineStorySync = sync;
+        return;
+      }
+
+      /* Ambient loop (thematic-duo vb.): çıkınca pause, girince kaldığı yerden devam — unload yok */
+      video.loop = true;
+      let wasInView = false;
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          const on = entry.isIntersecting && entry.intersectionRatio > 0.2;
+          if (on) {
+            if (!wasInView) playLazyVideo(video);
+            wasInView = true;
+          } else if (wasInView) {
+            pauseLazyVideo(video);
+            wasInView = false;
+          }
+        },
+        { threshold: [0, 0.2, 0.5] }
+      );
+      io.observe(observeTarget);
+    });
+  };
+
   /* Page preloader — Prava-style, GSAP yok (WAAPI) */
   const initPreloader = () => {
     const root = qs("#kuuine-preloader");
@@ -257,11 +524,8 @@
       const wasDone = hero.classList.contains("is-pin-complete");
       hero.classList.toggle("is-pin-complete", done);
       if (done) {
-        qsa("[data-hero-video]", hero).forEach((v) => {
-          try {
-            v.pause();
-          } catch (_) {}
-        });
+        /* Pin sonrası sadece duraklat — kaldığı yerden devam için unload yok */
+        qsa("[data-hero-video]", hero).forEach((v) => pauseLazyVideo(v));
       } else if (wasDone) {
         hero.dispatchEvent(new CustomEvent("kuuine:hero-resume"));
       }
@@ -471,30 +735,24 @@
       slides.forEach((slide, i) => {
         const video = qs("[data-hero-video]", slide);
         if (!video) return;
+        prepareLazyVideo(video);
         video.loop = false;
-        video.muted = true;
-        video.playsInline = true;
 
         if (i === active && allowPlay) {
-          if (video.getAttribute("preload") === "none") {
-            video.setAttribute("preload", "auto");
-          }
-          if (restart) {
-            try {
-              video.currentTime = 0;
-            } catch (_) {}
-          }
-          const play = () => {
-            const p = video.play();
-            if (p && typeof p.catch === "function") p.catch(() => {});
-          };
-          if (video.readyState >= 2) play();
-          else {
-            video.addEventListener("loadeddata", play, { once: true });
-            play();
-          }
+          loadLazyVideo(video).then(() => {
+            if (restart) {
+              try {
+                video.currentTime = 0;
+              } catch (_) {}
+            }
+            playLazyVideo(video);
+          });
+        } else if (i === active) {
+          /* Viewport / pin dışı: pause — currentTime korunur, tekrar girince devam */
+          pauseLazyVideo(video);
         } else {
-          video.pause();
+          pauseLazyVideo(video);
+          unloadLazyVideo(video);
         }
       });
     };
@@ -545,6 +803,7 @@
     slides.forEach((slide, i) => {
       const video = qs("[data-hero-video]", slide);
       if (!video) return;
+      prepareLazyVideo(video);
       video.loop = false;
       video.addEventListener("ended", () => {
         if (i !== index || !canRun()) return;
@@ -610,20 +869,45 @@
     }
   });
 
-  /* Feature banner auto-rotate */
+  /* Feature banner auto-rotate — sadece viewport’tayken */
   qsa("[data-feature-slideshow]").forEach((root) => {
     const slides = qsa("[data-feature-slide]", root);
     if (slides.length < 2) return;
     let i = 0;
+    let timer = null;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     slides.forEach((s, idx) => {
       s.hidden = idx !== 0;
     });
-    setInterval(() => {
-      slides[i].hidden = true;
-      i = (i + 1) % slides.length;
-      slides[i].hidden = false;
-    }, 6000);
+    const stop = () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
+    const start = () => {
+      if (reduced || timer) return;
+      timer = setInterval(() => {
+        slides[i].hidden = true;
+        i = (i + 1) % slides.length;
+        slides[i].hidden = false;
+      }, 6000);
+    };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.2) start();
+          else stop();
+        },
+        { threshold: [0, 0.2, 0.5] }
+      );
+      io.observe(root);
+    } else {
+      start();
+    }
   });
+
+  initViewportVideos();
 
   /* Our Story: sticky media + scroll spy */
   qsa("[data-our-story]").forEach((root) => {
@@ -631,9 +915,18 @@
     const slides = qsa("[data-story-slide]", root);
     const medias = qsa("[data-story-media]", root);
 
+    const syncStoryMediaVideos = () => {
+      medias.forEach((m) => {
+        const video = qs("video", m);
+        if (!video || typeof video._kuuineStorySync !== "function") return;
+        video._kuuineStorySync();
+      });
+    };
+
     const activate = (id, scrollTo) => {
       tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.storyTab === id));
       medias.forEach((m) => m.classList.toggle("is-active", m.dataset.storyMedia === id));
+      syncStoryMediaVideos();
       if (scrollTo) {
         const target = slides.find((s) => s.dataset.storySlide === id);
         if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -684,44 +977,68 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
-  /* Minas-style info Lottie: ikon çizimi + kısa ok → uzun ok */
+  /* Minas-style info Lottie — lib + JSON yalnızca section yaklaşınca */
   const initInfoLottie = () => {
-    if (typeof lottie === "undefined") return;
+    const nodes = qsa("[data-lottie]");
+    if (!nodes.length) return;
 
-    qsa("[data-lottie]").forEach((el) => {
-      const src = el.getAttribute("data-lottie-src");
-      if (!src || el.dataset.lottieReady === "1") return;
+    const mount = () => {
+      ensureLottie()
+        .then(() => {
+          if (typeof window.lottie === "undefined") return;
+          nodes.forEach((el) => {
+            const src = el.getAttribute("data-lottie-src");
+            if (!src || el.dataset.lottieReady === "1") return;
 
-      const idle = el.getAttribute("data-lottie-idle") || "end";
-      const anim = lottie.loadAnimation({
-        container: el,
-        renderer: "svg",
-        loop: false,
-        autoplay: false,
-        path: src,
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid meet",
-        },
-      });
+            const idle = el.getAttribute("data-lottie-idle") || "end";
+            const anim = window.lottie.loadAnimation({
+              container: el,
+              renderer: "svg",
+              loop: false,
+              autoplay: false,
+              path: src,
+              rendererSettings: {
+                preserveAspectRatio: "xMidYMid meet",
+              },
+            });
 
-      const goIdle = () => {
-        const last = Math.max(0, anim.totalFrames - 1);
-        anim.goToAndStop(idle === "start" ? 0 : last, true);
-      };
+            const goIdle = () => {
+              const last = Math.max(0, anim.totalFrames - 1);
+              anim.goToAndStop(idle === "start" ? 0 : last, true);
+            };
 
-      anim.addEventListener("DOMLoaded", goIdle);
-      anim.addEventListener("complete", goIdle);
+            anim.addEventListener("DOMLoaded", goIdle);
+            anim.addEventListener("complete", goIdle);
 
-      const play = () => {
-        anim.stop();
-        anim.goToAndPlay(0, true);
-      };
+            const play = () => {
+              anim.stop();
+              anim.goToAndPlay(0, true);
+            };
 
-      const item = el.closest(".testimonials__info-item") || el;
-      item.addEventListener("mouseenter", play);
-      item.addEventListener("focusin", play);
-      el.dataset.lottieReady = "1";
-    });
+            const item = el.closest(".testimonials__info-item") || el;
+            item.addEventListener("mouseenter", play);
+            item.addEventListener("focusin", play);
+            el.dataset.lottieReady = "1";
+          });
+        })
+        .catch(() => {});
+    };
+
+    const section =
+      qs(".testimonials") || nodes[0].closest("section") || nodes[0];
+    if (!("IntersectionObserver" in window)) {
+      whenIdle(mount);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry], obs) => {
+        if (!entry.isIntersecting) return;
+        obs.disconnect();
+        whenIdle(mount, 1200);
+      },
+      { root: null, rootMargin: "30% 0px", threshold: 0.01 }
+    );
+    io.observe(section);
   };
 
   initInfoLottie();

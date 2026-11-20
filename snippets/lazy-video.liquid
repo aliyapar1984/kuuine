@@ -1,0 +1,28 @@
+{% doc %}
+  Viewport-lazy video — src yok; theme.js görünürken yükler/oynatır, çıkınca unload.
+  @param {video} video - Shopify video
+  @param {string} [class] - ek class
+  @param {string} [mode] - auto | hover
+  @param {boolean} [loop] - loop (default true)
+  @param {number} [poster_width] - poster genişliği (default 1600)
+{% enddoc %}
+{%- liquid
+  assign mode = mode | default: 'auto'
+  assign loop_video = loop | default: true, allow_false: true
+  assign poster_w = poster_width | default: 1600
+-%}
+<video
+  class="js-kuuine-video{% if class != blank %} {{ class }}{% endif %}"
+  data-kuuine-video="{{ mode }}"
+  muted
+  playsinline
+  preload="none"
+  {% if loop_video %}loop{% endif %}
+  {% if video.preview_image %}
+    poster="{{ video.preview_image | image_url: width: poster_w }}"
+  {% endif %}
+>
+  {%- for source in video.sources -%}
+    <source data-src="{{ source.url }}" type="{{ source.mime_type }}">
+  {%- endfor -%}
+</video>
