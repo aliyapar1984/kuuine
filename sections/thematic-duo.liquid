@@ -1,20 +1,29 @@
-<section class="thematic-duo" {{ section.shopify_attributes }}>
-  <div class="thematic-duo__intro">
+<section
+  class="thematic-duo tw:bg-kuuine tw:px-[var(--pad-x)] tw:py-[clamp(3rem,6vw,5rem)]"
+  {{ section.shopify_attributes }}
+>
+  <div class="thematic-duo__intro tw:mx-auto tw:max-w-[720px] tw:pb-[clamp(40px,5vw,64px)] tw:text-center">
     {% if section.settings.eyebrow != blank %}
-      <p class="thematic-duo__eyebrow">{{ section.settings.eyebrow }}</p>
+      <p class="thematic-duo__eyebrow tw:mb-6 tw:text-xs tw:uppercase tw:tracking-[0.22em] tw:text-kuuine-stone">
+        {{ section.settings.eyebrow }}
+      </p>
     {% endif %}
     {% if section.settings.title != blank %}
-      <h2 class="thematic-duo__title">{{ section.settings.title | newline_to_br }}</h2>
+      <h2 class="thematic-duo__title tw:mb-5 tw:font-display tw:text-[clamp(28px,3.4vw,38px)] tw:font-normal tw:leading-[1.2] tw:tracking-[0.03em] tw:text-kuuine-ink">
+        {{ section.settings.title | newline_to_br }}
+      </h2>
     {% endif %}
     {% if section.settings.text != blank %}
-      <p class="thematic-duo__text">{{ section.settings.text }}</p>
+      <p class="thematic-duo__text tw:mx-auto tw:mb-8 tw:max-w-[54ch] tw:text-[15px] tw:leading-[1.65] tw:tracking-[0.02em] tw:text-kuuine-stone">
+        {{ section.settings.text }}
+      </p>
     {% endif %}
     {% if section.settings.button_label != blank %}
       <a class="btn thematic-duo__cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
     {% endif %}
   </div>
 
-  <div class="thematic-duo__media">
+  <div class="thematic-duo__media tw:grid tw:grid-cols-1 tw:gap-1 tw:lg:grid-cols-[2fr_1fr]">
     <figure class="thematic-duo__figure thematic-duo__figure--wide">
       {% if section.settings.image_wide != blank %}
         {{

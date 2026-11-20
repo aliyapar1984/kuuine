@@ -1,18 +1,30 @@
-<section class="instagram" {{ section.shopify_attributes }}>
-  <h2 class="instagram__title">{{ section.settings.title }}</h2>
+<section
+  class="instagram tw:bg-kuuine tw:px-0 tw:pb-5 tw:pt-[clamp(2.5rem,5vw,4rem)] tw:text-center"
+  {{ section.shopify_attributes }}
+>
+  <h2 class="instagram__title tw:mb-1.5 tw:font-display tw:text-[clamp(28px,3.4vw,38px)] tw:font-normal tw:leading-[1.2] tw:tracking-[0.03em] tw:text-kuuine-ink">
+    {{ section.settings.title }}
+  </h2>
   {% if section.settings.handle != blank %}
-    <p class="instagram__handle">
+    <p class="instagram__handle tw:mb-7 tw:opacity-70">
       <a href="{{ section.settings.link }}">{{ section.settings.handle }}</a>
     </p>
   {% endif %}
-  <div class="instagram__grid">
+  <div class="instagram__grid tw:grid tw:grid-cols-3 tw:gap-1 tw:lg:grid-cols-6">
     {% for block in section.blocks %}
-      <a href="{{ block.settings.link | default: section.settings.link }}" {{ block.shopify_attributes }}>
+      <a
+        class="tw:aspect-square tw:overflow-hidden tw:bg-kuuine-soft"
+        href="{{ block.settings.link | default: section.settings.link }}"
+        {{ block.shopify_attributes }}
+      >
         {% if block.settings.image != blank %}
           {{
             block.settings.image
             | image_url: width: 600
-            | image_tag: loading: 'lazy', alt: block.settings.alt | default: 'Instagram'
+            | image_tag:
+              loading: 'lazy',
+              alt: block.settings.alt | default: 'Instagram',
+              class: 'tw:size-full tw:object-cover tw:transition-transform tw:duration-500 tw:hover:scale-105'
           }}
         {% endif %}
       </a>

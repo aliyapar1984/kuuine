@@ -21,9 +21,13 @@
             data-story-slide="{{ block.id }}"
             id="story-{{ block.id }}"
           >
-            <h3 class="our-story__slide-title">{{ block.settings.title }}</h3>
+            <h3 class="our-story__slide-title tw:mb-5 tw:font-normal tw:text-[clamp(28px,2.4vw,33px)] tw:leading-[1.15] tw:tracking-[0.01em]">
+              {{ block.settings.title }}
+            </h3>
             {% if block.settings.text != blank %}
-              <div class="our-story__slide-text">{{ block.settings.text }}</div>
+              <div class="our-story__slide-text tw:mb-6 tw:max-w-[34ch] tw:text-sm tw:leading-[18px] tw:tracking-[0.02em]">
+                {{ block.settings.text }}
+              </div>
             {% endif %}
             {% if block.settings.link_label != blank %}
               <a class="our-story__cta" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>

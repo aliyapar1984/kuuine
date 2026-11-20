@@ -1,23 +1,39 @@
-<section class="feature-banners" data-feature-slideshow {{ section.shopify_attributes }}>
+<section class="feature-banners tw:grid tw:bg-kuuine tw:px-[var(--pad-x)]" data-feature-slideshow {{ section.shopify_attributes }}>
   {% for block in section.blocks %}
-    <article class="feature-banner" data-feature-slide {{ block.shopify_attributes }} {% unless forloop.first %}hidden{% endunless %}>
-      <div class="feature-banner__media">
+    <article
+      class="feature-banner tw:relative tw:flex tw:min-h-[min(85dvh,820px)] tw:items-end tw:overflow-hidden tw:text-white"
+      data-feature-slide
+      {{ block.shopify_attributes }}
+      {% unless forloop.first %}hidden{% endunless %}
+    >
+      <div class="feature-banner__media tw:absolute tw:inset-0">
         {% if block.settings.image != blank %}
           {{
             block.settings.image
             | image_url: width: 2400
-            | image_tag: loading: 'lazy', sizes: '100vw', widths: '800, 1400, 2000, 2400', alt: block.settings.title
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100vw',
+              widths: '800, 1400, 2000, 2400',
+              alt: block.settings.title,
+              class: 'tw:size-full tw:object-cover'
           }}
         {% endif %}
       </div>
       <div class="feature-banner__overlay"></div>
-      <div class="feature-banner__content">
+      <div class="feature-banner__content tw:relative tw:z-[2] tw:max-w-[520px] tw:px-[clamp(1.25rem,2.5vw,2rem)] tw:py-14">
         {% if block.settings.eyebrow != blank %}
-          <p class="feature-banner__eyebrow">{{ block.settings.eyebrow }}</p>
+          <p class="feature-banner__eyebrow tw:mb-3 tw:text-[11px] tw:uppercase tw:tracking-[0.16em]">
+            {{ block.settings.eyebrow }}
+          </p>
         {% endif %}
-        <h2 class="feature-banner__title">{{ block.settings.title | newline_to_br }}</h2>
+        <h2 class="feature-banner__title tw:mb-3.5 tw:font-display tw:text-[clamp(28px,3.4vw,38px)] tw:font-normal tw:leading-[1.2] tw:tracking-[0.03em] tw:text-white">
+          {{ block.settings.title | newline_to_br }}
+        </h2>
         {% if block.settings.text != blank %}
-          <p class="feature-banner__text">{{ block.settings.text }}</p>
+          <p class="feature-banner__text tw:mb-6 tw:max-w-[36ch] tw:text-[15px] tw:leading-[1.5]">
+            {{ block.settings.text }}
+          </p>
         {% endif %}
         {% if block.settings.button_label != blank %}
           <a class="btn btn--ghost-light" href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>

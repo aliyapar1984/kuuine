@@ -1,9 +1,11 @@
 {
   "name": "kuuine",
   "private": true,
+  "packageManager": "yarn@1.22.22",
   "scripts": {
     "css:build": "tailwindcss -i ./src/css/tailwind.css -o ./assets/tailwind.css --minify",
-    "css:watch": "tailwindcss -i ./src/css/tailwind.css -o ./assets/tailwind.css --watch"
+    "css:watch": "tailwindcss -i ./src/css/tailwind.css -o ./assets/tailwind.css --watch",
+    "preview": "python3 -m http.server 8766"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.17",

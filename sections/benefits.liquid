@@ -1,29 +1,36 @@
-<section class="benefits" {{ section.shopify_attributes }}>
+<section
+  class="benefits tw:bg-kuuine tw:px-[var(--pad-x)] tw:py-[clamp(3rem,8vw,7rem)] tw:text-center"
+  {{ section.shopify_attributes }}
+>
   {% if section.settings.eyebrow != blank %}
-    <p class="benefits__eyebrow">{{ section.settings.eyebrow }}</p>
+    <p class="benefits__eyebrow tw:mb-3 tw:text-[11px] tw:uppercase tw:tracking-[0.14em]">{{ section.settings.eyebrow }}</p>
   {% endif %}
   {% if section.settings.title != blank %}
-    <h2 class="benefits__title">{{ section.settings.title }}</h2>
+    <h2 class="benefits__title tw:mb-4 tw:font-display tw:text-[clamp(28px,3.4vw,38px)] tw:font-normal tw:leading-[1.2] tw:tracking-[0.03em] tw:text-kuuine-ink">
+      {{ section.settings.title }}
+    </h2>
   {% endif %}
   {% if section.settings.text != blank %}
-    <p class="benefits__intro">{{ section.settings.text }}</p>
+    <p class="benefits__intro tw:mx-auto tw:mb-14 tw:max-w-[48ch] tw:text-[15px] tw:leading-[1.5] tw:text-kuuine-muted">
+      {{ section.settings.text }}
+    </p>
   {% endif %}
 
-  <div class="benefits__grid">
+  <div class="benefits__grid tw:grid tw:grid-cols-2 tw:gap-x-1 tw:gap-y-4 tw:text-left tw:lg:grid-cols-5">
     {% for block in section.blocks %}
       <article class="benefit-card" {{ block.shopify_attributes }}>
-        <div class="benefit-card__media">
+        <div class="benefit-card__media tw:mb-3.5 tw:aspect-[3/4] tw:overflow-hidden tw:bg-kuuine-soft">
           {% if block.settings.image != blank %}
             {{
               block.settings.image
               | image_url: width: 800
-              | image_tag: loading: 'lazy', alt: block.settings.title
+              | image_tag: loading: 'lazy', alt: block.settings.title, class: 'tw:size-full tw:object-cover'
             }}
           {% endif %}
         </div>
-        <div class="benefit-card__body tw:pr-3 tw:max-[700px]:pr-2">
-          <h3>{{ block.settings.title }}</h3>
-          <p>{{ block.settings.text }}</p>
+        <div class="benefit-card__body tw:pr-2 tw:lg:pr-3">
+          <h3 class="tw:mb-1.5 tw:text-sm tw:font-medium">{{ block.settings.title }}</h3>
+          <p class="tw:text-[13px] tw:leading-normal tw:text-kuuine-muted">{{ block.settings.text }}</p>
         </div>
       </article>
     {% endfor %}

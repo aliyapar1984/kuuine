@@ -1,6 +1,6 @@
-<section class="collection-tabs" data-tabs {{ section.shopify_attributes }}>
-  <div class="collection-tabs__layout container">
-    <div class="collection-tabs__gallery">
+<section class="collection-tabs tw:bg-kuuine tw:py-[clamp(3rem,7vw,6rem)]" data-tabs {{ section.shopify_attributes }}>
+  <div class="collection-tabs__layout container tw:grid tw:grid-cols-1 tw:items-center tw:gap-[clamp(1.5rem,4vw,3.5rem)] tw:lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="collection-tabs__gallery tw:relative tw:aspect-[3/4] tw:overflow-hidden tw:bg-kuuine-soft tw:lg:aspect-[4/5]">
       {% for block in section.blocks %}
         {% if block.settings.image != blank %}
           {% if forloop.first %}
@@ -20,9 +20,11 @@
         {% endif %}
       {% endfor %}
     </div>
-    <div class="collection-tabs__info">
+    <div class="collection-tabs__info tw:grid tw:min-w-0 tw:grid-cols-1 tw:content-center">
       {% if section.settings.heading != blank %}
-        <h2 class="collection-tabs__title">{{ section.settings.heading }}</h2>
+        <h2 class="collection-tabs__title tw:mb-6 tw:font-display tw:text-[clamp(28px,3.4vw,38px)] tw:font-normal tw:leading-[1.2] tw:tracking-[0.03em] tw:text-kuuine-ink">
+          {{ section.settings.heading }}
+        </h2>
       {% endif %}
       <div class="collection-tabs__nav" role="tablist">
         {% for block in section.blocks %}
@@ -41,7 +43,9 @@
           class="collection-tabs__panel {% if forloop.first %}is-active{% endif %}"
           data-panel="{{ block.id }}"
         >
-          <p>{{ block.settings.text }}</p>
+          <p class="tw:mb-6 tw:max-w-[40ch] tw:text-[15px] tw:leading-[1.7] tw:text-kuuine-ink">
+            {{ block.settings.text }}
+          </p>
           {% if block.settings.link_label != blank %}
             <a class="btn--text" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
           {% endif %}

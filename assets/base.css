@@ -546,30 +546,7 @@ body.announcement-hidden {
   transform: translate3d(0, 0, 0);
 }
 
-.hero__eyebrow {
-  margin: 0 0 0.85rem;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.8;
-}
-
-.hero__title {
-  font-family: var(--font-display);
-  font-size: clamp(2.75rem, 6vw, 4.5rem);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  margin: 0 0 1rem;
-}
-
-.hero__text {
-  font-size: 15px;
-  max-width: 28ch;
-  margin: 0 0 1.75rem;
-  opacity: 0.95;
-}
+/* hero__eyebrow / title / text → Tailwind */
 
 .hero__controls {
   position: absolute;
@@ -701,26 +678,8 @@ body.announcement-hidden {
   }
 }
 
-/* ——— Collection tabs ——— */
-.collection-tabs {
-  padding: clamp(3rem, 7vw, 6rem) 0;
-  background: var(--color-bg);
-}
-
-.collection-tabs__layout {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-  align-items: center;
-}
-
-.collection-tabs__gallery {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background: var(--color-bg-soft);
-}
-
+/* ——— Collection tabs ———
+   Section/layout/gallery shell → Tailwind. Fade + nav chrome: CSS. */
 .collection-tabs__gallery img {
   width: 100%;
   height: 100%;
@@ -735,24 +694,9 @@ body.announcement-hidden {
   opacity: 1;
 }
 
-.collection-tabs__info {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-content: center;
-  min-width: 0;
-}
-
 .collection-tabs__title {
   grid-column: 1;
   grid-row: 1;
-  margin: 0 0 1.5rem;
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-text);
 }
 
 .collection-tabs__nav {
@@ -861,212 +805,21 @@ body.announcement-hidden {
   z-index: 1;
 }
 
-.collection-tabs__panel p {
-  font-size: 15px;
-  line-height: 1.7;
-  max-width: 40ch;
-  margin: 0 0 1.5rem;
-  color: var(--color-text);
-}
 
-@media (max-width: 900px) {
-  .collection-tabs__layout {
-    grid-template-columns: 1fr;
-  }
 
-  .collection-tabs__gallery {
-    aspect-ratio: 3 / 4;
-  }
-}
+/* ——— Benefits ———
+   Layout / tipografi: Tailwind (tw:…, tw:lg:…) */
 
-/* ——— Benefits ——— */
-.benefits {
-  padding: clamp(3rem, 8vw, 7rem) var(--pad-x);
-  text-align: center;
-  background: var(--color-bg);
-}
-
-.benefits__eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
-
-.benefits__title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-text);
-  margin-bottom: 1rem;
-}
-
-.benefits__intro {
-  max-width: 48ch;
-  margin: 0 auto 3.5rem;
-  color: var(--color-text-muted);
-}
-
-.benefits__grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px 4px;
-  text-align: left;
-}
-
-.benefit-card__media {
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  margin-bottom: 0.85rem;
-  background: var(--color-bg-soft);
-}
-
-.benefit-card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.benefit-card h3 {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 0.35rem;
-}
-
-.benefit-card p {
-  font-size: 13px;
-  color: var(--color-text-muted);
-  line-height: 1.5;
-}
-
-@media (max-width: 1100px) {
-  .benefits__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 700px) {
-  .benefits__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* ——— Feature banner / slideshow ——— */
-.feature-banners {
-  display: grid;
-  padding-inline: var(--pad-x);
-  background: var(--color-bg);
-}
-
-.feature-banner {
-  position: relative;
-  min-height: min(85dvh, 820px);
-  color: var(--color-white);
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-}
-
-.feature-banner__media {
-  position: absolute;
-  inset: 0;
-}
-
-.feature-banner__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
+/* ——— Feature banner ———
+   Shell + tipografi → Tailwind. Overlay gradient: CSS. */
 .feature-banner__overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.35), transparent 55%);
 }
 
-.feature-banner__content {
-  position: relative;
-  z-index: 2;
-  padding: 3.5rem clamp(1.25rem, 2.5vw, 2rem);
-  max-width: 520px;
-}
-
-.feature-banner__eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
-
-.feature-banner__title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-white);
-  margin-bottom: 0.85rem;
-}
-
-.feature-banner__text {
-  margin-bottom: 1.5rem;
-  max-width: 36ch;
-}
-
-/* ——— Thematic duo (Omega Bracelets-style) ——— */
-.thematic-duo {
-  background: var(--color-bg);
-  padding: clamp(3rem, 6vw, 5rem) var(--pad-x);
-}
-
-.thematic-duo__intro {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 0 0 clamp(40px, 5vw, 64px);
-  text-align: center;
-}
-
-.thematic-duo__eyebrow {
-  margin: 0 0 1.5rem;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #5c5951;
-}
-
-.thematic-duo__title {
-  margin: 0 0 1.25rem;
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-text);
-}
-
-.thematic-duo__text {
-  margin: 0 auto 2rem;
-  max-width: 54ch;
-  font-size: 15px;
-  line-height: 1.65;
-  letter-spacing: 0.02em;
-  color: #5c5951;
-}
-
-.thematic-duo__media {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 4px;
-  width: 100%;
-  margin: 0;
-}
-
+/* ——— Thematic duo ———
+   Intro + media grid: Tailwind. Figure overlay / caption: CSS. */
 .thematic-duo__figure {
   position: relative;
   margin: 0;
@@ -1075,14 +828,33 @@ body.announcement-hidden {
   display: flex;
   align-items: flex-end;
   color: var(--color-white);
+  aspect-ratio: 16 / 10;
 }
 
 .thematic-duo__figure--wide {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
 }
 
 .thematic-duo__figure--tall {
-  aspect-ratio: 8 / 9;
+  aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 900px) {
+  .thematic-duo__figure--wide {
+    aspect-ratio: 16 / 9;
+  }
+
+  .thematic-duo__figure--tall {
+    aspect-ratio: 8 / 9;
+  }
+
+  .thematic-duo__figure--tall .thematic-duo__caption {
+    max-width: 280px;
+  }
+
+  .thematic-duo__figure--tall .thematic-duo__caption-text {
+    max-width: 26ch;
+  }
 }
 
 .thematic-duo__figure img,
@@ -1110,95 +882,10 @@ body.announcement-hidden {
   max-width: 420px;
 }
 
-.thematic-duo__figure--tall .thematic-duo__caption {
-  max-width: 280px;
-}
+/* caption tipografi → Tailwind; max-width tall override CSS’te */
 
-.thematic-duo__caption-eyebrow {
-  margin: 0 0 0.65rem;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.thematic-duo__caption-title {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-display);
-  font-size: clamp(22px, 2.4vw, 32px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  color: var(--color-white);
-}
-
-.thematic-duo__caption-text {
-  margin: 0 0 1.25rem;
-  max-width: 34ch;
-  font-size: 14px;
-  line-height: 1.5;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.thematic-duo__figure--tall .thematic-duo__caption-text {
-  max-width: 26ch;
-}
-
-@media (max-width: 899px) {
-  .thematic-duo__media {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-
-  .thematic-duo__figure--wide,
-  .thematic-duo__figure--tall {
-    aspect-ratio: 16 / 10;
-  }
-
-  .thematic-duo__figure--tall .thematic-duo__caption {
-    max-width: 420px;
-  }
-}
-
-/* ——— Product row ——— */
-.product-row {
-  padding: 32px 0 120px;
-  background: var(--color-bg);
-}
-
-.product-row__grid {
-  display: grid;
-  grid-template-columns: minmax(200px, 0.9fr) minmax(0, 1.4fr);
-  align-items: end;
-  gap: 24px;
-  max-width: none;
-  margin: 0;
-  padding: 0 var(--pad-x);
-  margin-bottom: 32px;
-}
-
-.product-row__title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-text);
-  margin: 0;
-}
-
-.product-row__tabs {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  column-gap: 28px;
-  row-gap: 12px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+/* ——— Product row ———
+   Shell/title/tabs layout → Tailwind. Active ::before + carousel/card: CSS. */
 
 .product-row__tabs button {
   position: relative;
@@ -1442,18 +1129,7 @@ body.announcement-hidden {
   opacity: 1;
 }
 
-@media (max-width: 900px) {
-  .product-row__grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 0 var(--pad-x-mobile);
-  }
-
-  .product-row__tabs {
-    justify-content: flex-start;
-    gap: 20px;
-  }
-
+@media (max-width: 899px) {
   .product-row__tabs button.is-active::before {
     display: none;
   }
@@ -1547,21 +1223,7 @@ body.announcement-hidden {
   scroll-margin-top: 120px;
 }
 
-.our-story__slide-title {
-  font-size: clamp(28px, 2.4vw, 33px);
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: 0.01em;
-  margin: 0 0 20px;
-}
-
-.our-story__slide-text {
-  font-size: 14px;
-  line-height: 18px;
-  letter-spacing: 0.02em;
-  max-width: 34ch;
-  margin: 0 0 24px;
-}
+/* slide title/text → Tailwind */
 
 .our-story__cta {
   display: inline-flex;
@@ -1665,34 +1327,10 @@ body.announcement-hidden {
   }
 }
 
-/* ——— Testimonials / info-wrap (Minas-style) ——— */
+/* ——— Testimonials ———
+   Section/grid/tipografi → Tailwind. Item chrome + Lottie: CSS. */
 .testimonials {
-  padding: 40px var(--pad-x);
-  background: #f3f0ea;
   color: var(--color-text);
-}
-
-.testimonials__title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-text);
-  margin: 0 0 2rem;
-  text-align: center;
-}
-
-.testimonials__info {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: center;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
 .testimonials__info-item {
@@ -1731,24 +1369,7 @@ body.announcement-hidden {
   height: 100%;
 }
 
-.testimonials__info-heading {
-  margin: 20px 0 10px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-text);
-}
-
-.testimonials__info-text {
-  margin: 0 0 24px;
-  max-width: 28ch;
-  font-size: 14px;
-  line-height: 1.45;
-  letter-spacing: 0.01em;
-  color: var(--color-text-muted);
-  flex: 0 1 auto;
-}
+/* heading/text → Tailwind */
 
 .testimonials__info-arrow {
   display: block;
@@ -1765,38 +1386,13 @@ body.announcement-hidden {
   height: auto !important;
 }
 
-@media (max-width: 900px) {
-  .testimonials__info {
-    flex-wrap: wrap;
-  }
-
-  .testimonials__info-item {
-    flex: 1 1 45%;
-    min-height: 150px;
-    padding: 1.25rem 16px;
-  }
-
-  .testimonials__info-item:nth-child(odd) {
-    border-left: 0;
-  }
-}
-
-@media (max-width: 560px) {
-  .testimonials {
-    padding: 28px var(--pad-x);
-  }
-
-  .testimonials__info {
-    flex-direction: column;
-  }
-
+@media (max-width: 899px) {
   .testimonials__info-item {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
     gap: 0 12px;
-    flex: 1 1 auto;
     min-height: 0;
     text-align: left;
     padding: 1rem 0;
@@ -1806,10 +1402,6 @@ body.announcement-hidden {
 
   .testimonials__info-item:last-child {
     border-bottom: 0;
-  }
-
-  .testimonials__info-heading {
-    margin: 0;
   }
 
   .testimonials__info-text {
@@ -1822,111 +1414,8 @@ body.announcement-hidden {
   }
 }
 
-/* ——— Journal ——— */
-.journal {
-  padding: clamp(3rem, 6vw, 5rem) var(--pad-x);
-  background: var(--color-bg);
-}
-
-.journal__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 1.75rem;
-}
-
-.journal__title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-text);
-}
-
-.journal__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-}
-
-.journal-card__media {
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  margin-bottom: 0.85rem;
-  background: var(--color-bg-soft);
-}
-
-.journal-card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.journal-card h3 {
-  font-size: 1.25rem;
-  font-weight: 400;
-  margin: 0.5rem 0;
-}
-
-@media (max-width: 700px) {
-  .journal__grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ——— Instagram ——— */
-.instagram {
-  padding: clamp(2.5rem, 5vw, 4rem) 0 20px;
-  background: var(--color-bg);
-  text-align: center;
-}
-
-.instagram__title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  color: var(--color-text);
-  margin-bottom: 0.35rem;
-}
-
-.instagram__handle {
-  margin-bottom: 1.75rem;
-  opacity: 0.7;
-}
-
-.instagram__grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 4px;
-}
-
-.instagram__grid a {
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: var(--color-bg-soft);
-}
-
-.instagram__grid img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.instagram__grid a:hover img {
-  transform: scale(1.04);
-}
-
-@media (max-width: 700px) {
-  .instagram__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
+/* ——— Journal / Instagram ———
+   Layout / tipografi: Tailwind (tw:…, tw:lg:…) */
 
 /* ——— Footer (PetDostum-style layout, kuuine palette) ——— */
 .site-footer {

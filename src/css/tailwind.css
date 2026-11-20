@@ -1,35 +1,34 @@
 /*
   kuuine — Tailwind (utilities only, prefix: tw)
 
-  Kullanım kuralı:
-  - Genel / tek seferlik layout, spacing, flex, gap, text → Tailwind (`tw:…`)
-    örn. class="tw:flex tw:gap-3 tw:px-3 tw:max-[700px]:px-2"
-  - Tekrarlayan bileşen stilleri, animasyon, sticky/pin, overlay → assets/base.css
-  - Preflight YOK + tw prefix: mevcut BEM/class’lar (container, relative…) ezilmesin
+  Kural:
+  - Layout grid/flex + spacing/tipografi → tw:…
+  - Animasyon, sticky/pin, overlay, hover medya → assets/base.css
+  - Preflight yok + tw prefix
+  - Utilities LAYER DIŞINDA (base.css unlayered kurallarını ezmek için)
 
-  Build: npm run css:build | Watch: npm run css:watch
+  Build: yarn css:build | Watch: yarn css:watch
 */
 
-@layer theme, components, utilities;
+@import "tailwindcss/theme.css" prefix(tw);
+@import "tailwindcss/utilities.css" prefix(tw);
 
-@import "tailwindcss/theme.css" layer(theme) prefix(tw);
-@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
-
-/* Shopify + preview kaynakları */
 @source "../../preview/**/*.html";
 @source "../../layout/**/*.liquid";
 @source "../../sections/**/*.liquid";
 @source "../../snippets/**/*.liquid";
 @source "../../templates/**/*";
 
-/* Marka token’ları — örn. tw:bg-kuuine, tw:text-kuuine-muted */
 @theme {
+  --breakpoint-lg: 900px;
+
   --color-kuuine: #fbf7ef;
   --color-kuuine-soft: #f3eee4;
   --color-kuuine-muted: #5a5a5a;
   --color-kuuine-border: #d9d2c6;
   --color-kuuine-ink: #000000;
+  --color-kuuine-stone: #5c5951;
+
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --breakpoint-nav: 900px;
 }

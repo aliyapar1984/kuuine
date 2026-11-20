@@ -21,10 +21,14 @@
   <div class="hero__overlay"></div>
   <div class="hero__content">
     {% if section.settings.heading != blank %}
-      <h1 class="hero__title">{{ section.settings.heading | newline_to_br }}</h1>
+      <h1 class="hero__title tw:mb-4 tw:font-display tw:text-[clamp(2.75rem,6vw,4.5rem)] tw:font-normal tw:leading-[1.05] tw:tracking-[-0.02em]">
+        {{ section.settings.heading | newline_to_br }}
+      </h1>
     {% endif %}
     {% if section.settings.text != blank %}
-      <p class="hero__text">{{ section.settings.text }}</p>
+      <p class="hero__text tw:mb-7 tw:max-w-[28ch] tw:text-[15px] tw:leading-[1.5] tw:opacity-95">
+        {{ section.settings.text }}
+      </p>
     {% endif %}
     {% if section.settings.button_label != blank %}
       <a class="btn btn--ghost-light" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
