@@ -52,7 +52,22 @@
       </a>
       <nav class="site-header__nav" aria-label="Primary">
         {% for link in section.settings.menu.links %}
-          <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+          {% assign title_down = link.title | downcase %}
+          {% if title_down == 'ürünler' or title_down == 'urunler' or title_down == 'products' or title_down == 'shop' %}
+            <div class="nav-item nav-item--mega" data-mega-trigger-wrap>
+              <a
+                class="nav-link"
+                href="{{ link.url }}"
+                data-mega-trigger
+                aria-expanded="false"
+                aria-controls="kuuine-mega-menu"
+              >
+                {{ link.title }}
+              </a>
+            </div>
+          {% else %}
+            <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+          {% endif %}
         {% endfor %}
       </nav>
     </div>
@@ -83,6 +98,7 @@
       </div>
     </div>
   </div>
+  {% render 'mega-menu' %}
 </header>
 
 {% schema %}

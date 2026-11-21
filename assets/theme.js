@@ -230,8 +230,8 @@
           const active = storySlide.classList.contains("is-active");
           if (sectionInView && active) playLazyVideo(video);
           else {
+            /* Tab değişiminde unload yok — kısa scroll salınımında poster/flash olmasın */
             pauseLazyVideo(video);
-            if (!active) unloadLazyVideo(video);
           }
         };
         const io = new IntersectionObserver(
@@ -276,11 +276,11 @@
 
     const SESSION_KEY = "kuuine-preloader-seen";
     const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
-    const DUR = 560;
-    const STAGGER = 20;
-    const DUR_BRAND = 900;
-    const STAGGER_BRAND = 62;
-    const HOLD = 240;
+    const DUR = 360;
+    const STAGGER = 14;
+    const DUR_BRAND = 560;
+    const STAGGER_BRAND = 38;
+    const HOLD = 110;
 
     const isReload = () => {
       const nav = performance.getEntriesByType?.("navigation")?.[0];
@@ -306,8 +306,9 @@
       document.documentElement.classList.remove("kuuine-preloader-pending");
       document.body.classList.remove("kuuine-preloader-active");
       root.remove();
+      /* Tek sinyal: hero startHero dinler. hero-resume burada yok —
+         aksi halde IO/resume ile çift start → video ~1–2sn sonra başa sarar */
       window.dispatchEvent(new CustomEvent("kuuine:preloader-complete"));
-      window.dispatchEvent(new CustomEvent("kuuine:hero-resume"));
     };
 
     if (window.__KUUINE_SKIP_PRELOADER || (hasSeen() && !isReload())) {
@@ -403,7 +404,7 @@
     document.body.classList.add("kuuine-preloader-active");
 
     const run = async () => {
-      await wait(120);
+      await wait(50);
       /* İlk satır girişi */
       await animateCharsFrom(built[0].chars, built[0].inY, 0, DUR, STAGGER);
 
@@ -681,10 +682,15 @@
     let inView = true;
     let touchX = null;
     let navLock = false;
+    let started = false;
 
     const slideVideo = (i) => qs("[data-hero-video]", slides[i]);
     const canRun = () =>
-      !reduced && inView && !root.classList.contains("is-pin-complete");
+      started &&
+      !reduced &&
+      inView &&
+      !root.classList.contains("is-pin-complete") &&
+      !document.documentElement.classList.contains("kuuine-preloader-pending");
 
     const pips = slides.map((_, i) => {
       const btn = document.createElement("button");
@@ -849,6 +855,8 @@
     nextBtn?.addEventListener("click", () => goTo(index + 1, true));
 
     const resumeHeroUi = () => {
+      /* Preloader / ilk start öncesi veya çift tetik: oynatmayı başlatma / başa sarma */
+      if (!started) return;
       syncVideos(index, false);
       scheduleAdvance();
       const video = slideVideo(index);
@@ -889,18 +897,15 @@
       const io = new IntersectionObserver(
         ([entry]) => {
           inView = entry.isIntersecting && entry.intersectionRatio > 0.2;
+          if (!started) return;
           if (inView) {
             resumeHeroUi();
           } else {
             clearTimer();
             syncVideos(index, false);
+            pips[index]?.classList.add("is-paused");
             const video = slideVideo(index);
-            if (video) {
-              syncPipFromVideo(video);
-              pips[index]?.classList.add("is-paused");
-            } else {
-              pips[index]?.classList.add("is-paused");
-            }
+            if (video) syncPipFromVideo(video);
           }
         },
         { threshold: [0, 0.2, 0.5] }
@@ -908,7 +913,11 @@
       io.observe(root);
     }
 
-    const startHero = () => goTo(index, true);
+    const startHero = () => {
+      if (started) return;
+      started = true;
+      goTo(index, true);
+    };
     if (document.documentElement.classList.contains("kuuine-preloader-pending")) {
       window.addEventListener("kuuine:preloader-complete", startHero, { once: true });
     } else {
@@ -961,6 +970,12 @@
     const tabs = qsa("[data-story-tab]", root);
     const slides = qsa("[data-story-slide]", root);
     const medias = qsa("[data-story-media]", root);
+    let activeId =
+      medias.find((m) => m.classList.contains("is-active"))?.dataset.storyMedia ||
+      slides[0]?.dataset.storySlide ||
+      "";
+    /* Tüm slide oranları — callback’te yalnız değişen entry’ye bakmak yanlış medyayı flash’lıyordu */
+    const slideEntries = new Map();
 
     const syncStoryMediaVideos = () => {
       medias.forEach((m) => {
@@ -971,8 +986,15 @@
     };
 
     const activate = (id, scrollTo) => {
+      if (!id) return;
+      if (id === activeId && !scrollTo) return;
+      activeId = id;
       tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.storyTab === id));
-      medias.forEach((m) => m.classList.toggle("is-active", m.dataset.storyMedia === id));
+      medias.forEach((m) => {
+        const on = m.dataset.storyMedia === id;
+        m.classList.toggle("is-active", on);
+        m.setAttribute("aria-hidden", on ? "false" : "true");
+      });
       syncStoryMediaVideos();
       if (scrollTo) {
         const target = slides.find((s) => s.dataset.storySlide === id);
@@ -987,14 +1009,47 @@
       });
     });
 
+    const pickBestSlide = () => {
+      let best = null;
+      let bestRatio = 0;
+      slides.forEach((slide) => {
+        const entry = slideEntries.get(slide);
+        if (!entry || !entry.isIntersecting) return;
+        if (entry.intersectionRatio > bestRatio) {
+          bestRatio = entry.intersectionRatio;
+          best = slide;
+        }
+      });
+      if (best) return best;
+
+      /* IO bandı boşsa: odak çizgisine (viewport %42) en yakın slide */
+      const focusY = window.innerHeight * 0.42;
+      let nearest = null;
+      let nearestDist = Infinity;
+      slides.forEach((slide) => {
+        const r = slide.getBoundingClientRect();
+        if (r.bottom <= 0 || r.top >= window.innerHeight) return;
+        const mid = r.top + r.height * 0.5;
+        const dist = Math.abs(mid - focusY);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearest = slide;
+        }
+      });
+      return nearest;
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) activate(visible.target.dataset.storySlide, false);
+        entries.forEach((entry) => slideEntries.set(entry.target, entry));
+        const best = pickBestSlide();
+        if (best) activate(best.dataset.storySlide, false);
       },
-      { root: null, threshold: [0.35, 0.55, 0.7], rootMargin: "-20% 0px -35% 0px" }
+      {
+        root: null,
+        threshold: [0, 0.15, 0.3, 0.45, 0.6, 0.75],
+        rootMargin: "-18% 0px -42% 0px",
+      }
     );
 
     slides.forEach((slide) => observer.observe(slide));
@@ -1017,12 +1072,120 @@
   const header = qs("[data-site-header]");
   if (header && header.classList.contains("site-header--over-hero")) {
     const onScroll = () => {
+      if (document.body.classList.contains("mega-menu-open")) return;
       const solid = window.scrollY > window.innerHeight * 0.7;
       header.classList.toggle("site-header--solid", solid);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
   }
+
+  /* Mega menü — Ürünler hover / focus */
+  (() => {
+    const root = qs("[data-mega-menu]");
+    const trigger = qs("[data-mega-trigger]");
+    const triggerWrap = qs("[data-mega-trigger-wrap]");
+    if (!root || !trigger || !header) return;
+    if (window.matchMedia("(max-width: 900px)").matches) return;
+
+    const cats = qsa("[data-mega-cat]", root);
+    const subs = qsa("[data-mega-subs]", root);
+    const mediaSets = qsa("[data-mega-media]", root);
+    const backdrop = qs("[data-mega-backdrop]", root);
+    let closeTimer = null;
+    let open = false;
+
+    const setCat = (id) => {
+      cats.forEach((btn) => {
+        const on = btn.dataset.megaCat === id;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-expanded", on ? "true" : "false");
+      });
+      subs.forEach((list) => {
+        const on = list.dataset.megaSubs === id;
+        list.classList.toggle("is-active", on);
+        list.setAttribute("aria-hidden", on ? "false" : "true");
+      });
+      mediaSets.forEach((set) => {
+        const on = set.dataset.megaMedia === id;
+        set.classList.toggle("is-active", on);
+        set.setAttribute("aria-hidden", on ? "false" : "true");
+      });
+    };
+
+    const openMenu = () => {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      if (open) return;
+      open = true;
+      root.hidden = false;
+      requestAnimationFrame(() => {
+        root.classList.add("is-open");
+        header.classList.add("mega-is-open");
+        document.body.classList.add("mega-menu-open");
+        trigger.setAttribute("aria-expanded", "true");
+      });
+    };
+
+    const closeMenu = () => {
+      if (!open) return;
+      open = false;
+      root.classList.remove("is-open");
+      header.classList.remove("mega-is-open");
+      document.body.classList.remove("mega-menu-open");
+      trigger.setAttribute("aria-expanded", "false");
+      window.setTimeout(() => {
+        if (!open) root.hidden = true;
+      }, 480);
+    };
+
+    const scheduleClose = () => {
+      if (closeTimer) clearTimeout(closeTimer);
+      closeTimer = window.setTimeout(closeMenu, 160);
+    };
+
+    const cancelClose = () => {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+    };
+
+    triggerWrap.addEventListener("mouseenter", () => {
+      cancelClose();
+      openMenu();
+    });
+    triggerWrap.addEventListener("mouseleave", scheduleClose);
+    root.addEventListener("mouseenter", cancelClose);
+    root.addEventListener("mouseleave", scheduleClose);
+
+    trigger.addEventListener("focus", openMenu);
+    trigger.addEventListener("click", (e) => {
+      if (window.matchMedia("(min-width: 901px)").matches) {
+        e.preventDefault();
+        if (open) closeMenu();
+        else openMenu();
+      }
+    });
+
+    cats.forEach((btn) => {
+      btn.addEventListener("mouseenter", () => setCat(btn.dataset.megaCat));
+      btn.addEventListener("focus", () => setCat(btn.dataset.megaCat));
+    });
+
+    backdrop?.addEventListener("click", closeMenu);
+    qsa("[data-mega-close]", root).forEach((btn) => {
+      btn.addEventListener("click", closeMenu);
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+
+    const active = cats.find((c) => c.classList.contains("is-active"));
+    if (active) setCat(active.dataset.megaCat);
+  })();
 
   /* Minas-style info Lottie — lib + JSON yalnızca section yaklaşınca */
   const initInfoLottie = () => {

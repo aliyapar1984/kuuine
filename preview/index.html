@@ -42,8 +42,7 @@
     <script type="application/json" id="kuuine-preloader-data">
       {
         "steps": [
-          { "track": "top", "text": "Her Sofrada", "inY": -100, "outY": 100 },
-          { "track": "bot", "text": "Zamansız Zarafet", "inY": -100, "outY": -100 },
+          { "track": "bot", "text": "Her Sofrada", "inY": -100, "outY": -100 },
           { "track": "top", "text": "kuuine", "inY": 100, "outY": -100, "brand": true }
         ]
       }
@@ -68,7 +67,9 @@
           </span>
         </a>
         <nav class="site-header__nav" aria-label="Ana menü">
-          <a class="nav-link" href="#shop">Ürünler</a>
+          <div class="nav-item nav-item--mega" data-mega-trigger-wrap>
+            <a class="nav-link" href="#products" data-mega-trigger aria-expanded="false" aria-controls="kuuine-mega-menu">Ürünler</a>
+          </div>
           <a class="nav-link" href="#shop">İndirim</a>
           <a class="nav-link" href="#shop">Katalog</a>
           <a class="nav-link" href="#about">Firma Hikayesi</a>
@@ -76,16 +77,138 @@
       </div>
       <div class="site-header__center" aria-hidden="true"></div>
       <div class="site-header__right">
-        <!-- <div class="site-header__meta">
-          <button type="button" class="nav-link">TL</button>
-          <a class="nav-link" href="#trade">Türkçe</a>
-        </div> -->
         <div class="header-icons">
           <a href="#search" aria-label="Ara"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
           <a href="#wishlist" aria-label="Favoriler"><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3-5 3V4Z"/></svg></a>
           <a href="#account" aria-label="Hesap"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.5-3 4-4.5 7-4.5s5.5 1.5 7 4.5"/></svg></a>
           <a href="#cart" aria-label="Sepet"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></a>
         </div>
+      </div>
+    </div>
+
+    <div class="mega-menu" data-mega-menu id="kuuine-mega-menu" hidden>
+      <div class="mega-menu__backdrop" data-mega-backdrop aria-hidden="true"></div>
+      <div class="mega-menu__panel" role="navigation" aria-label="Ürünler">
+        <div class="mega-menu__inner">
+          <ul class="mega-menu__cats" role="list">
+            <li><button type="button" class="mega-menu__cat is-active" data-mega-cat="yeni" aria-expanded="true">Yeni Gelenler</button></li>
+            <li><button type="button" class="mega-menu__cat" data-mega-cat="tum" aria-expanded="false">Tüm Ürünler</button></li>
+            <li><button type="button" class="mega-menu__cat" data-mega-cat="sofra" aria-expanded="false">Sofra Ürünleri</button></li>
+            <li><button type="button" class="mega-menu__cat" data-mega-cat="mutfak" aria-expanded="false">Mutfak Gereçleri</button></li>
+            <li><button type="button" class="mega-menu__cat" data-mega-cat="banyo" aria-expanded="false">Banyo Aksesuarları</button></li>
+            <li><button type="button" class="mega-menu__cat" data-mega-cat="emaye" aria-expanded="false">Emaye</button></li>
+            <li><button type="button" class="mega-menu__cat" data-mega-cat="outlet" aria-expanded="false">Outlet</button></li>
+          </ul>
+
+          <div class="mega-menu__subs-wrap">
+            <ul class="mega-menu__subs is-active" data-mega-subs="yeni" role="list" aria-hidden="false">
+              <li><a href="#products">Yemek Takımı</a></li>
+              <li><a href="#products">Borosilikat Cam Bardak</a></li>
+              <li><a href="#products">Su ve Meşrubat Bardağı</a></li>
+              <li><a href="#products">Kahvaltı Takımı</a></li>
+              <li><a href="#products">Kahve Yanı Su Bardağı</a></li>
+              <li><a href="#products">2 Kişilik Fincan Takımı</a></li>
+              <li><a href="#products">Kahve Fincanı Takımı</a></li>
+              <li><a href="#products">Çay Bardağı</a></li>
+              <li><a href="#products">Sunumluklar</a></li>
+              <li><a href="#products">Porselen Tabaklar</a></li>
+              <li><a href="#products">Pasta Tabağı</a></li>
+              <li><a href="#products">Çay Setleri</a></li>
+            </ul>
+            <ul class="mega-menu__subs" data-mega-subs="tum" role="list" aria-hidden="true">
+              <li><a href="#products">Tüm Koleksiyon</a></li>
+              <li><a href="#products">Yemek Takımı</a></li>
+              <li><a href="#products">Tabaklar</a></li>
+              <li><a href="#products">Bardaklar</a></li>
+              <li><a href="#products">Kaseler</a></li>
+              <li><a href="#products">Tepsiler</a></li>
+              <li><a href="#products">Fincan Takımları</a></li>
+              <li><a href="#products">Sunumluklar</a></li>
+            </ul>
+            <ul class="mega-menu__subs" data-mega-subs="sofra" role="list" aria-hidden="true">
+              <li><a href="#products">Yemek Takımı</a></li>
+              <li><a href="#products">Kahvaltı Takımı</a></li>
+              <li><a href="#products">Porselen Tabaklar</a></li>
+              <li><a href="#products">Pasta Tabağı</a></li>
+              <li><a href="#products">Sunumluklar</a></li>
+              <li><a href="#products">Çay Setleri</a></li>
+            </ul>
+            <ul class="mega-menu__subs" data-mega-subs="mutfak" role="list" aria-hidden="true">
+              <li><a href="#products">Mutfak Gereçleri</a></li>
+              <li><a href="#products">Kaseler</a></li>
+              <li><a href="#products">Tepsiler</a></li>
+              <li><a href="#products">Emaye Tencere</a></li>
+            </ul>
+            <ul class="mega-menu__subs" data-mega-subs="banyo" role="list" aria-hidden="true">
+              <li><a href="#products">Banyo Aksesuarları</a></li>
+              <li><a href="#products">Sabunluk</a></li>
+              <li><a href="#products">Diş Fırçalık</a></li>
+            </ul>
+            <ul class="mega-menu__subs" data-mega-subs="emaye" role="list" aria-hidden="true">
+              <li><a href="#products">Emaye Tabak</a></li>
+              <li><a href="#products">Emaye Kase</a></li>
+              <li><a href="#products">Emaye Tencere</a></li>
+            </ul>
+            <ul class="mega-menu__subs" data-mega-subs="outlet" role="list" aria-hidden="true">
+              <li><a href="#products">Outlet Seçkisi</a></li>
+              <li><a href="#products">Son Ürünler</a></li>
+              <li><a href="#products">İndirimli Setler</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-menu__media" aria-hidden="true">
+            <div class="mega-menu__media-set is-active" data-mega-media="yeni">
+              <figure class="mega-menu__shot mega-menu__shot--tall">
+                <img src="../assets/tw-soft-dining-set.jpg" alt="" loading="lazy" decoding="async" width="480" height="640">
+              </figure>
+              <figure class="mega-menu__shot">
+                <img src="../assets/tw-pex-empty-glasses.jpg" alt="" loading="lazy" decoding="async" width="360" height="480">
+              </figure>
+            </div>
+            <div class="mega-menu__media-set" data-mega-media="tum">
+              <figure class="mega-menu__shot mega-menu__shot--tall">
+                <img src="../assets/tw-feast-table-spread.jpg" alt="" loading="lazy" decoding="async" width="480" height="640">
+              </figure>
+              <figure class="mega-menu__shot">
+                <img src="../assets/tw-soft-ceramic-dishware.jpg" alt="" loading="lazy" decoding="async" width="360" height="480">
+              </figure>
+            </div>
+            <div class="mega-menu__media-set" data-mega-media="sofra">
+              <figure class="mega-menu__shot mega-menu__shot--tall">
+                <img src="../assets/tw-pex-pastel-tableware.jpg" alt="" loading="lazy" decoding="async" width="480" height="640">
+              </figure>
+              <figure class="mega-menu__shot">
+                <img src="../assets/tw-ceramic-pottery-plates.jpg" alt="" loading="lazy" decoding="async" width="360" height="480">
+              </figure>
+            </div>
+            <div class="mega-menu__media-set" data-mega-media="mutfak">
+              <figure class="mega-menu__shot mega-menu__shot--tall">
+                <img src="../assets/tw-kitchenware-ceramics.jpg" alt="" loading="lazy" decoding="async" width="480" height="640">
+              </figure>
+              <figure class="mega-menu__shot">
+                <img src="../assets/tw-ceramic-plate-trays.jpg" alt="" loading="lazy" decoding="async" width="360" height="480">
+              </figure>
+            </div>
+            <div class="mega-menu__media-set mega-menu__media-set--single" data-mega-media="banyo">
+              <figure class="mega-menu__shot mega-menu__shot--tall">
+                <img src="../assets/tw-soft-white-bowls.jpg" alt="" loading="lazy" decoding="async" width="480" height="640">
+              </figure>
+            </div>
+            <div class="mega-menu__media-set mega-menu__media-set--single" data-mega-media="emaye">
+              <figure class="mega-menu__shot mega-menu__shot--tall">
+                <img src="../assets/tw-soft-green-bowls-linen.jpg" alt="" loading="lazy" decoding="async" width="480" height="640">
+              </figure>
+            </div>
+            <div class="mega-menu__media-set mega-menu__media-set--single" data-mega-media="outlet">
+              <figure class="mega-menu__shot mega-menu__shot--tall">
+                <img src="../assets/tw-plates-pastel-flatlay.jpg" alt="" loading="lazy" decoding="async" width="480" height="640">
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mega-menu__footer">
+        <button type="button" class="mega-menu__close" data-mega-close>Kapat</button>
       </div>
     </div>
   </header>
@@ -651,7 +774,7 @@
     </section>
 
     <!-- SECTION: testimonials (Minas-style info-wrap + Lottie) -->
-    <section data-shopify-section="testimonials" class="testimonials tw:bg-soft tw:px-pad-x tw:py-10">
+    <section data-shopify-section="testimonials" class="testimonials tw:px-pad-x tw:py-10">
       <ul class="testimonials__info tw:m-0 tw:grid tw:list-none tw:grid-cols-1 tw:gap-0 tw:p-0 tw:lg:grid-cols-4">
         <li class="testimonials__info-item">
           <a class="testimonials__info-link" href="#" aria-label="Güvenli ödeme"></a>

@@ -1,0 +1,157 @@
+{% comment %}
+  Ürünler mega menü — header altında full-bleed panel + backdrop.
+  Kategori / alt linkler Theme Editor’da linklist ile bağlanabilir; varsayılan metinler preview ile uyumlu.
+{% endcomment %}
+<div class="mega-menu" data-mega-menu id="kuuine-mega-menu" hidden>
+  <div class="mega-menu__backdrop" data-mega-backdrop aria-hidden="true"></div>
+  <div class="mega-menu__panel" role="navigation" aria-label="Ürünler">
+    <div class="mega-menu__inner">
+      <ul class="mega-menu__cats" role="list">
+        <li>
+          <button type="button" class="mega-menu__cat is-active" data-mega-cat="yeni" aria-expanded="true">
+            Yeni Gelenler
+          </button>
+        </li>
+        <li>
+          <button type="button" class="mega-menu__cat" data-mega-cat="tum" aria-expanded="false">
+            Tüm Ürünler
+          </button>
+        </li>
+        <li>
+          <button type="button" class="mega-menu__cat" data-mega-cat="sofra" aria-expanded="false">
+            Sofra Ürünleri
+          </button>
+        </li>
+        <li>
+          <button type="button" class="mega-menu__cat" data-mega-cat="mutfak" aria-expanded="false">
+            Mutfak Gereçleri
+          </button>
+        </li>
+        <li>
+          <button type="button" class="mega-menu__cat" data-mega-cat="banyo" aria-expanded="false">
+            Banyo Aksesuarları
+          </button>
+        </li>
+        <li>
+          <button type="button" class="mega-menu__cat" data-mega-cat="emaye" aria-expanded="false">
+            Emaye
+          </button>
+        </li>
+        <li>
+          <button type="button" class="mega-menu__cat" data-mega-cat="outlet" aria-expanded="false">
+            Outlet
+          </button>
+        </li>
+      </ul>
+
+      <div class="mega-menu__subs-wrap">
+        <ul class="mega-menu__subs is-active" data-mega-subs="yeni" role="list" aria-hidden="false">
+          <li><a href="{{ routes.all_products_collection_url }}">Yemek Takımı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Borosilikat Cam Bardak</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Su ve Meşrubat Bardağı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Kahvaltı Takımı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Kahve Yanı Su Bardağı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">2 Kişilik Fincan Takımı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Kahve Fincanı Takımı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Çay Bardağı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Sunumluklar</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Porselen Tabaklar</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Pasta Tabağı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Çay Setleri</a></li>
+        </ul>
+        <ul class="mega-menu__subs" data-mega-subs="tum" role="list" aria-hidden="true">
+          <li><a href="{{ routes.all_products_collection_url }}">Tüm Koleksiyon</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Yemek Takımı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Tabaklar</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Bardaklar</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Kaseler</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Tepsiler</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Fincan Takımları</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Sunumluklar</a></li>
+        </ul>
+        <ul class="mega-menu__subs" data-mega-subs="sofra" role="list" aria-hidden="true">
+          <li><a href="{{ routes.all_products_collection_url }}">Yemek Takımı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Kahvaltı Takımı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Porselen Tabaklar</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Pasta Tabağı</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Sunumluklar</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Çay Setleri</a></li>
+        </ul>
+        <ul class="mega-menu__subs" data-mega-subs="mutfak" role="list" aria-hidden="true">
+          <li><a href="{{ routes.all_products_collection_url }}">Mutfak Gereçleri</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Kaseler</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Tepsiler</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Emaye Tencere</a></li>
+        </ul>
+        <ul class="mega-menu__subs" data-mega-subs="banyo" role="list" aria-hidden="true">
+          <li><a href="{{ routes.all_products_collection_url }}">Banyo Aksesuarları</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Sabunluk</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Diş Fırçalık</a></li>
+        </ul>
+        <ul class="mega-menu__subs" data-mega-subs="emaye" role="list" aria-hidden="true">
+          <li><a href="{{ routes.all_products_collection_url }}">Emaye Tabak</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Emaye Kase</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Emaye Tencere</a></li>
+        </ul>
+        <ul class="mega-menu__subs" data-mega-subs="outlet" role="list" aria-hidden="true">
+          <li><a href="{{ routes.all_products_collection_url }}">Outlet Seçkisi</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Son Ürünler</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">İndirimli Setler</a></li>
+        </ul>
+      </div>
+
+      <div class="mega-menu__media" aria-hidden="true">
+        <div class="mega-menu__media-set is-active" data-mega-media="yeni">
+          <figure class="mega-menu__shot mega-menu__shot--tall">
+            <img src="{{ 'tw-soft-dining-set.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="480" height="640">
+          </figure>
+          <figure class="mega-menu__shot">
+            <img src="{{ 'tw-pex-empty-glasses.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="360" height="480">
+          </figure>
+        </div>
+        <div class="mega-menu__media-set" data-mega-media="tum">
+          <figure class="mega-menu__shot mega-menu__shot--tall">
+            <img src="{{ 'tw-feast-table-spread.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="480" height="640">
+          </figure>
+          <figure class="mega-menu__shot">
+            <img src="{{ 'tw-soft-ceramic-dishware.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="360" height="480">
+          </figure>
+        </div>
+        <div class="mega-menu__media-set" data-mega-media="sofra">
+          <figure class="mega-menu__shot mega-menu__shot--tall">
+            <img src="{{ 'tw-pex-pastel-tableware.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="480" height="640">
+          </figure>
+          <figure class="mega-menu__shot">
+            <img src="{{ 'tw-ceramic-pottery-plates.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="360" height="480">
+          </figure>
+        </div>
+        <div class="mega-menu__media-set" data-mega-media="mutfak">
+          <figure class="mega-menu__shot mega-menu__shot--tall">
+            <img src="{{ 'tw-kitchenware-ceramics.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="480" height="640">
+          </figure>
+          <figure class="mega-menu__shot">
+            <img src="{{ 'tw-ceramic-plate-trays.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="360" height="480">
+          </figure>
+        </div>
+        <div class="mega-menu__media-set mega-menu__media-set--single" data-mega-media="banyo">
+          <figure class="mega-menu__shot mega-menu__shot--tall">
+            <img src="{{ 'tw-soft-white-bowls.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="480" height="640">
+          </figure>
+        </div>
+        <div class="mega-menu__media-set mega-menu__media-set--single" data-mega-media="emaye">
+          <figure class="mega-menu__shot mega-menu__shot--tall">
+            <img src="{{ 'tw-soft-green-bowls-linen.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="480" height="640">
+          </figure>
+        </div>
+        <div class="mega-menu__media-set mega-menu__media-set--single" data-mega-media="outlet">
+          <figure class="mega-menu__shot mega-menu__shot--tall">
+            <img src="{{ 'tw-plates-pastel-flatlay.jpg' | asset_url }}" alt="" loading="lazy" decoding="async" width="480" height="640">
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mega-menu__footer">
+    <button type="button" class="mega-menu__close" data-mega-close>Kapat</button>
+  </div>
+</div>

@@ -536,12 +536,13 @@
   box-sizing: border-box;
 }
 
-.product-card {
+/* 4 tam + 5. kartın kesiti (4.1) */
+.product-row .product-card {
   display: flex;
   flex-direction: column;
   background: transparent;
-  flex: 0 0 calc((100vw - (var(--pad-x) * 2) - 8px) / 3);
-  width: calc((100vw - (var(--pad-x) * 2) - 8px) / 3);
+  flex: 0 0 calc((100vw - (var(--pad-x) * 2) - 12.4px) / 4.1);
+  width: calc((100vw - (var(--pad-x) * 2) - 12.4px) / 4.1);
   min-width: 0;
 }
 
@@ -745,7 +746,7 @@
     padding: 0 var(--pad-x-mobile);
   }
 
-  .product-card {
+  .product-row .product-card {
     flex-basis: 82vw;
     width: 82vw;
     max-width: none;
@@ -855,12 +856,14 @@
 .our-story__media-slide {
   position: absolute;
   inset: 0;
+  z-index: 0;
   opacity: 0;
-  transition: opacity 0.45s ease;
+  transition: opacity 0.35s ease;
   pointer-events: none;
 }
 
 .our-story__media-slide.is-active {
+  z-index: 1;
   opacity: 1;
   pointer-events: auto;
 }
@@ -938,6 +941,7 @@
    Section/grid/tipografi → Tailwind. Item chrome + Lottie: CSS. */
 .testimonials {
   color: var(--color-text);
+  background: #f3f0ea; /* our-story ile aynı */
 }
 
 .testimonials__info-item {
