@@ -5,7 +5,7 @@
       "settings": {
         "story_label": "i.",
         "story_secondary_label": "ii.",
-        "story_secondary": "Soft stoneware — özenli sofralar için.",
+        "story_secondary": "Mat, ısı tutan stoneware — günlük kullanıma dengeli, sofraya sakin bir dokunuş.",
         "spec_style_label": "Stil",
         "spec_dimensions_label": "Ölçüler",
         "spec_materials_label": "Malzeme",
@@ -13,7 +13,110 @@
         "add_label": "Sepete ekle",
         "sold_out_label": "Tükendi"
       }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "title": "Benzer ürünler",
+        "link_label": "Koleksiyona git",
+        "products_to_show": 8
+      }
+    },
+    "story": {
+      "type": "product-story",
+      "blocks": {
+        "quote": {
+          "type": "quote",
+          "settings": {
+            "text": "Her parça, paylaşımı derinleştirmek ve sofrayı bir ritüele dönüştürmek için seçildi.",
+            "caption": "kuuine atelier"
+          }
+        },
+        "split": {
+          "type": "split",
+          "settings": {
+            "eyebrow": "Malzeme",
+            "title": "Soft stoneware",
+            "text": "Mat, ısı tutan gövde — günlük sofraya dengeli, zamansız bir dokunuş.",
+            "reverse": false
+          }
+        },
+        "split_reverse": {
+          "type": "split",
+          "settings": {
+            "eyebrow": "Kullanım",
+            "title": "Ziyafet ve günlük",
+            "text": "Paylaşımı davet eden oranlar; tek başına da, tam sofra düzeninde de dengeli durur.",
+            "reverse": true
+          }
+        },
+        "facts": {
+          "type": "facts",
+          "settings": {
+            "f1_label": "Üretim",
+            "f1_value": "Türkiye’de el işçiliği",
+            "f2_label": "Kullanım",
+            "f2_value": "Bulaşık makinesine uygun",
+            "f3_label": "Bakım",
+            "f3_value": "Yumuşak sünger, nötr deterjan"
+          }
+        },
+        "banner": {
+          "type": "banner",
+          "settings": {
+            "wide": true,
+            "eyebrow": "Koleksiyon",
+            "title": "Aynı dilde tamamlayıcı parçalar",
+            "text": "Tabak, tepsi ve bardaklarla masayı bütünleyen seçkiler.",
+            "cta": "Keşfet"
+          }
+        }
+      },
+      "block_order": ["quote", "split", "split_reverse", "facts", "banner"],
+      "settings": {
+        "eyebrow": "Ürün hikâyesi",
+        "heading": "Sofra için düşünülmüş bir form",
+        "lead": "Malzeme, oran ve dokunuş — günlük kullanıma dengeli, ziyafete hazır."
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "question": "Ürünler bulaşık makinesinde yıkanabilir mi?",
+            "answer": "Çoğu stoneware ve cam parça bulaşık makinesine uygundur. Metalik detaylı veya el boyaması parçalarda elden yıkamayı öneririz."
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "question": "Kargo ve teslimat süresi nedir?",
+            "answer": "Siparişler genellikle 1–3 iş günü içinde kargoya verilir. Teslimat bölgesine göre 2–5 iş günü sürebilir."
+          }
+        },
+        "q3": {
+          "type": "item",
+          "settings": {
+            "question": "İade ve değişim nasıl yapılır?",
+            "answer": "Ürünü teslim aldıktan sonra 14 gün içinde, kullanılmamış ve orijinal ambalajında iade edebilirsiniz. Destek ekibimiz süreçte yanınızda."
+          }
+        },
+        "q4": {
+          "type": "item",
+          "settings": {
+            "question": "Renkler ekranda göründüğü gibi mi?",
+            "answer": "Stoneware ve cam doğal ışığa göre nüans gösterir. Ekran ayarları da fark yaratabilir; şüpheniz olursa bize yazın, yardımcı olalım."
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"],
+      "settings": {
+        "eyebrow": "Yardım",
+        "title": "Sıkça sorulan sorular"
+      }
     }
   },
-  "order": ["main"]
+  "order": ["main", "related", "story", "faq"]
 }

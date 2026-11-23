@@ -1,0 +1,232 @@
+{%- comment -%}
+  PDP — ürünü anlatan editorial alanlar (liste banner dili + hikâye şeritleri).
+{%- endcomment -%}
+<section
+  class="pdp-story"
+  data-shopify-section="product-story"
+  {{ section.shopify_attributes }}
+>
+  <div class="pdp-story__inner tw:px-pad-x">
+    {% if section.settings.heading != blank %}
+      <header class="pdp-story__intro">
+        <p class="pdp-story__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 class="pdp-story__heading tw:font-display tw:text-display tw:font-normal tw:tracking-display tw:text-ink">
+          {{ section.settings.heading }}
+        </h2>
+        {% if section.settings.lead != blank %}
+          <p class="pdp-story__lead">{{ section.settings.lead }}</p>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    <div class="pdp-story__blocks">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'quote' %}
+            <blockquote class="" {{ block.shopify_attributes }}>
+              <p>{{ block.settings.text }}</p>
+              {% if block.settings.caption != blank %}
+                <cite>{{ block.settings.caption }}</cite>
+              {% endif %}
+            </blockquote>
+
+          {% when 'split' %}
+            <article class="pdp-story__split{% if block.settings.reverse %} is-reverse{% endif %}" {{ block.shopify_attributes }}>
+              <div class="pdp-story__split-media">
+                {% if block.settings.image != blank %}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1600
+                    | image_tag:
+                      loading: 'lazy',
+                      decoding: 'async',
+                      widths: '600,900,1200,1600',
+                      sizes: '(min-width: 900px) 50vw, 100vw',
+                      alt: block.settings.title | default: product.title
+                  }}
+                {% else %}
+                  <div class="pdp-story__ph" aria-hidden="true"></div>
+                {% endif %}
+              </div>
+              <div class="pdp-story__split-copy">
+                {% if block.settings.eyebrow != blank %}
+                  <p class="pdp-story__eyebrow">{{ block.settings.eyebrow }}</p>
+                {% endif %}
+                {% if block.settings.title != blank %}
+                  <h3 class="pdp-story__split-title">{{ block.settings.title }}</h3>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <p class="pdp-story__split-text">{{ block.settings.text }}</p>
+                {% endif %}
+              </div>
+            </article>
+
+          {% when 'banner' %}
+            <a
+              class="pdp-story__banner{% if block.settings.wide %} pdp-story__banner--wide{% endif %}"
+              href="{{ block.settings.link | default: routes.all_products_collection_url }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="pdp-story__banner-media" aria-hidden="true">
+                {% if block.settings.image != blank %}
+                  {{
+                    block.settings.image
+                    | image_url: width: 2000
+                    | image_tag:
+                      loading: 'lazy',
+                      decoding: 'async',
+                      widths: '800,1200,1600,2000',
+                      sizes: '100vw',
+                      alt: ''
+                  }}
+                {% else %}
+                  <span class="pdp-story__ph" aria-hidden="true"></span>
+                {% endif %}
+              </span>
+              <span class="pdp-story__banner-shade" aria-hidden="true"></span>
+              <span class="pdp-story__banner-inner">
+                {% if block.settings.eyebrow != blank %}
+                  <span class="pdp-story__banner-eyebrow">{{ block.settings.eyebrow }}</span>
+                {% endif %}
+                {% if block.settings.title != blank %}
+                  <span class="pdp-story__banner-title">{{ block.settings.title }}</span>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <span class="pdp-story__banner-text">{{ block.settings.text }}</span>
+                {% endif %}
+                {% if block.settings.cta != blank %}
+                  <span class="pdp-story__banner-cta">{{ block.settings.cta }}</span>
+                {% endif %}
+              </span>
+            </a>
+
+          {% when 'facts' %}
+            <div class="pdp-story__facts" {{ block.shopify_attributes }}>
+              {% if block.settings.f1_label != blank %}
+                <div class="pdp-story__fact">
+                  <span class="pdp-story__fact-label">{{ block.settings.f1_label }}</span>
+                  <span class="pdp-story__fact-value">{{ block.settings.f1_value }}</span>
+                </div>
+              {% endif %}
+              {% if block.settings.f2_label != blank %}
+                <div class="pdp-story__fact">
+                  <span class="pdp-story__fact-label">{{ block.settings.f2_label }}</span>
+                  <span class="pdp-story__fact-value">{{ block.settings.f2_value }}</span>
+                </div>
+              {% endif %}
+              {% if block.settings.f3_label != blank %}
+                <div class="pdp-story__fact">
+                  <span class="pdp-story__fact-label">{{ block.settings.f3_label }}</span>
+                  <span class="pdp-story__fact-value">{{ block.settings.f3_value }}</span>
+                </div>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product story",
+  "tag": "section",
+  "class": "section-product-story",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Üst etiket", "default": "Ürün hikâyesi" },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Başlık",
+      "default": "Sofra için düşünülmüş bir form"
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Giriş",
+      "default": "Malzeme, oran ve dokunuş — günlük kullanıma dengeli, ziyafete hazır."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Alıntı",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Metin",
+          "default": "Her parça, paylaşımı derinleştirmek ve sofrayı bir ritüele dönüştürmek için seçildi."
+        },
+        { "type": "text", "id": "caption", "label": "Kaynak", "default": "kuuine atelier" }
+      ]
+    },
+    {
+      "type": "split",
+      "name": "Görsel + metin",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Görsel" },
+        { "type": "checkbox", "id": "reverse", "label": "Metin solda", "default": false },
+        { "type": "text", "id": "eyebrow", "label": "Üst etiket", "default": "Malzeme" },
+        { "type": "text", "id": "title", "label": "Başlık", "default": "Soft stoneware" },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Metin",
+          "default": "El izini taşıyan kenarlar; ısıyı tutan, masaya sakin bir dokunuş bırakan bir gövde."
+        }
+      ]
+    },
+    {
+      "type": "banner",
+      "name": "Kampanya banner",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Görsel" },
+        { "type": "checkbox", "id": "wide", "label": "Geniş (tam satır)", "default": true },
+        { "type": "text", "id": "eyebrow", "label": "Üst etiket", "default": "Koleksiyon" },
+        { "type": "text", "id": "title", "label": "Başlık", "default": "Aynı dilde tamamlayıcı parçalar" },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Metin",
+          "default": "Tabak, tepsi ve bardaklarla masayı bütünleyen seçkiler."
+        },
+        { "type": "text", "id": "cta", "label": "Buton", "default": "Keşfet" },
+        { "type": "url", "id": "link", "label": "Bağlantı" }
+      ]
+    },
+    {
+      "type": "facts",
+      "name": "Özellik şeridi",
+      "settings": [
+        { "type": "text", "id": "f1_label", "label": "1. etiket", "default": "Üretim" },
+        { "type": "text", "id": "f1_value", "label": "1. değer", "default": "Türkiye’de el işçiliği" },
+        { "type": "text", "id": "f2_label", "label": "2. etiket", "default": "Kullanım" },
+        { "type": "text", "id": "f2_value", "label": "2. değer", "default": "Bulaşık makinesine uygun" },
+        { "type": "text", "id": "f3_label", "label": "3. etiket", "default": "Bakım" },
+        { "type": "text", "id": "f3_value", "label": "3. değer", "default": "Yumuşak sünger, nötr deterjan" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product story",
+      "blocks": [
+        { "type": "quote" },
+        { "type": "split", "settings": { "reverse": false } },
+        {
+          "type": "split",
+          "settings": {
+            "reverse": true,
+            "eyebrow": "Kullanım",
+            "title": "Ziyafet ve günlük",
+            "text": "Paylaşımı davet eden oranlar; tek başına da, tam sofra düzeninde de dengeli durur."
+          }
+        },
+        { "type": "facts" },
+        { "type": "banner" }
+      ]
+    }
+  ]
+}
+{% endschema %}

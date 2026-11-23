@@ -1,0 +1,101 @@
+{%- comment -%}
+  PDP — benzer ürünler (Yeni Ürünler / product-row kart + carousel).
+{%- endcomment -%}
+{%- liquid
+  assign limit = section.settings.products_to_show | default: 8
+  assign related = section.settings.collection
+  if related == blank and product.collections.first
+    assign related = product.collections.first
+  endif
+-%}
+
+<section
+  class="pdp-related"
+  data-shopify-section="related-products"
+  {{ section.shopify_attributes }}
+>
+  <div class="pdp-related__head tw:px-pad-x">
+    <h2 class="pdp-related__title tw:m-0 tw:font-display tw:text-display tw:font-normal tw:tracking-display tw:text-ink">
+      {{ section.settings.title | default: 'Benzer ürünler' }}
+    </h2>
+    {% if section.settings.link_label != blank %}
+      {% assign related_url = routes.all_products_collection_url %}
+      {% if related != blank %}
+        {% assign related_url = related.url %}
+      {% endif %}
+      <a class="btn--text" href="{{ related_url }}">{{ section.settings.link_label }}</a>
+    {% endif %}
+  </div>
+
+  <div class="pdp-related__carousel">
+    <div class="pdp-related__track">
+      {% if recommendations.performed and recommendations.products_count > 0 %}
+        {% for product in recommendations.products limit: limit %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      {% elsif related != blank %}
+        {% assign shown = 0 %}
+        {% for p in related.products %}
+          {% if p.id != product.id and shown < limit %}
+            {% render 'product-card', product: p %}
+            {% assign shown = shown | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for i in (1..4) %}
+          <article class="product-card">
+            <div class="product-card__media"></div>
+            <div class="product-card__footer">
+              <div class="product-card__footer-top">
+                <h3 class="product-card__title">Benzer ürün</h3>
+                <p class="product-card__brand">Koleksiyon</p>
+                <div class="product-card__meta">
+                  <p class="product-card__fabric">&nbsp;</p>
+                  <p class="product-card__price"><span class="product-card__price-current">{{ 0 | money }}</span></p>
+                </div>
+              </div>
+              <button type="button" class="product-card__add">Sepete ekle</button>
+            </div>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Related products",
+  "tag": "section",
+  "class": "section-related-products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Başlık",
+      "default": "Benzer ürünler"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Bağlantı metni",
+      "default": "Koleksiyona git"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Koleksiyon (öneri yoksa)"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Ürün sayısı",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [{ "name": "Related products" }]
+}
+{% endschema %}

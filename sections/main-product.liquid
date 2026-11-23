@@ -84,7 +84,17 @@
       <div class="pdp__gallery" data-pdp-gallery>
         {% if media_count > 0 %}
           {% for media in product.media %}
-            <figure class="pdp__frame" data-pdp-frame data-index="{{ forloop.index }}">
+            <figure
+              class="pdp__frame{% if media.media_type == 'image' %} pdp__frame--zoomable{% endif %}"
+              data-pdp-frame
+              data-index="{{ forloop.index }}"
+              {% if media.media_type == 'image' %}
+                data-pdp-zoom="{{ media | image_url: width: 2400 }}"
+                tabindex="0"
+                role="button"
+                aria-label="{{ media.alt | default: product.title | escape }} — büyüt"
+              {% endif %}
+            >
               {% if media.media_type == 'video' or media.media_type == 'external_video' %}
                 {{
                   media
@@ -339,7 +349,7 @@
       "type": "textarea",
       "id": "story_secondary",
       "label": "İkincil metin",
-      "default": "Soft stoneware — özenli sofralar için."
+      "default": "Mat, ısı tutan stoneware — günlük kullanıma dengeli, sofraya sakin bir dokunuş."
     },
     { "type": "text", "id": "detail_label", "label": "Detay etiketi", "default": "Detay" },
     { "type": "header", "content": "Özellikler" },

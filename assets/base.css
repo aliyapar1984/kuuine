@@ -1663,9 +1663,17 @@ body.ai-search-open .site-header .logo__icon--light {
   transition: opacity 0.35s ease;
 }
 
+.product-card__media-inner > a {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+}
+
 .product-card__hover {
   position: absolute;
   inset: 0;
+  z-index: 1;
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;

@@ -1073,6 +1073,23 @@
     });
   });
 
+  /* FAQ accordion */
+  qsa("[data-faq-accordion]").forEach((root) => {
+    qsa("[data-faq-trigger]", root).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".pdp-faq__item");
+        if (!item) return;
+        const open = !item.classList.contains("is-open");
+        qsa(".pdp-faq__item", root).forEach((el) => {
+          const on = el === item && open;
+          el.classList.toggle("is-open", on);
+          const t = qs("[data-faq-trigger]", el);
+          if (t) t.setAttribute("aria-expanded", on ? "true" : "false");
+        });
+      });
+    });
+  });
+
   /* Header: sadece görünüm değişir (fixed kalır → layout kayması olmaz) */
   const header = qs("[data-site-header]");
   const syncHeaderSolid = () => {
@@ -1759,6 +1776,218 @@
         setIndex(i + 1);
       });
     });
+
+    /* Görsel zoom lightbox + slide */
+    (() => {
+      const zoomFrames = frames.filter((f) => f.classList.contains("pdp__frame--zoomable"));
+      if (!zoomFrames.length) return;
+
+      const slides = zoomFrames.map((frame) => {
+        const img = qs("img.pdp__media", frame);
+        return {
+          src: frame.dataset.pdpZoom || img?.currentSrc || img?.src || "",
+          alt: img?.alt || "",
+        };
+      }).filter((s) => s.src);
+
+      if (!slides.length) return;
+
+      let dialog = qs("[data-pdp-zoom-dialog]");
+      if (!dialog) {
+        dialog = document.createElement("dialog");
+        dialog.className = "pdp-zoom";
+        dialog.setAttribute("data-pdp-zoom-dialog", "");
+        dialog.innerHTML =
+          '<button type="button" class="pdp-zoom__close" data-pdp-zoom-close aria-label="Kapat">×</button>' +
+          '<div class="pdp-zoom__stage" data-pdp-zoom-stage>' +
+          '<button type="button" class="pdp-zoom__nav pdp-zoom__nav--prev" data-pdp-zoom-prev aria-label="Önceki">‹</button>' +
+          '<img class="pdp-zoom__img is-settle" data-pdp-zoom-img alt="" decoding="async">' +
+          '<button type="button" class="pdp-zoom__nav pdp-zoom__nav--next" data-pdp-zoom-next aria-label="Sonraki">›</button>' +
+          "</div>" +
+          '<div class="pdp-zoom__meta" data-pdp-zoom-meta aria-live="polite"></div>';
+        document.body.appendChild(dialog);
+      }
+
+      const zoomImg = qs("[data-pdp-zoom-img]", dialog);
+      const closeBtn = qs("[data-pdp-zoom-close]", dialog);
+      const prevBtn = qs("[data-pdp-zoom-prev]", dialog);
+      const nextBtn = qs("[data-pdp-zoom-next]", dialog);
+      const metaEl = qs("[data-pdp-zoom-meta]", dialog);
+      const stage = qs("[data-pdp-zoom-stage]", dialog);
+      const pad = (n) => String(n).padStart(2, "0");
+      let index = 0;
+      let animating = false;
+      let touchX = 0;
+      let touchY = 0;
+
+      const syncChrome = () => {
+        if (metaEl) metaEl.textContent = `${pad(index + 1)} / ${pad(slides.length)}`;
+        if (prevBtn) prevBtn.disabled = slides.length < 2;
+        if (nextBtn) nextBtn.disabled = slides.length < 2;
+        if (prevBtn) prevBtn.hidden = slides.length < 2;
+        if (nextBtn) nextBtn.hidden = slides.length < 2;
+      };
+
+      const setSlide = (i) => {
+        const slide = slides[i];
+        if (!slide || !zoomImg) return;
+        zoomImg.src = slide.src;
+        zoomImg.alt = slide.alt;
+        zoomImg.classList.remove("is-leave-next", "is-leave-prev", "is-enter-next", "is-enter-prev");
+        zoomImg.classList.add("is-settle");
+        index = i;
+        syncChrome();
+      };
+
+      const waitTransition = (el) =>
+        new Promise((resolve) => {
+          if (reduceMotion()) {
+            resolve();
+            return;
+          }
+          let done = false;
+          const finish = () => {
+            if (done) return;
+            done = true;
+            el.removeEventListener("transitionend", onEnd);
+            resolve();
+          };
+          const onEnd = (e) => {
+            if (e.target === el && (e.propertyName === "transform" || e.propertyName === "opacity")) finish();
+          };
+          el.addEventListener("transitionend", onEnd);
+          window.setTimeout(finish, 450);
+        });
+
+      const goTo = async (nextIndex, dir) => {
+        if (!zoomImg || animating || !slides.length) return;
+        const len = slides.length;
+        const i = ((nextIndex % len) + len) % len;
+        if (i === index && dialog.open) return;
+
+        if (reduceMotion() || !dialog.open) {
+          setSlide(i);
+          return;
+        }
+
+        animating = true;
+        const leave = dir >= 0 ? "is-leave-next" : "is-leave-prev";
+        const enter = dir >= 0 ? "is-enter-next" : "is-enter-prev";
+        zoomImg.classList.remove("is-settle", "is-enter-next", "is-enter-prev", "is-leave-next", "is-leave-prev");
+        // force reflow so leave starts from settle
+        void zoomImg.offsetWidth;
+        zoomImg.classList.add(leave);
+        await waitTransition(zoomImg);
+
+        const slide = slides[i];
+        zoomImg.src = slide.src;
+        zoomImg.alt = slide.alt;
+        zoomImg.classList.remove(leave);
+        zoomImg.classList.add(enter);
+        void zoomImg.offsetWidth;
+        zoomImg.classList.remove(enter);
+        zoomImg.classList.add("is-settle");
+        await waitTransition(zoomImg);
+
+        index = i;
+        syncChrome();
+        animating = false;
+      };
+
+      const closeZoom = () => {
+        if (typeof dialog.close === "function" && dialog.open) dialog.close();
+        else dialog.removeAttribute("open");
+        document.body.classList.remove("pdp-zoom-open");
+        animating = false;
+        if (zoomImg) {
+          zoomImg.removeAttribute("src");
+          zoomImg.alt = "";
+        }
+      };
+
+      const openZoom = (startIndex) => {
+        const i = Math.max(0, Math.min(startIndex, slides.length - 1));
+        setSlide(i);
+        document.body.classList.add("pdp-zoom-open");
+        if (typeof dialog.showModal === "function") {
+          if (!dialog.open) dialog.showModal();
+        } else {
+          dialog.setAttribute("open", "");
+        }
+      };
+
+      closeBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeZoom();
+      });
+      prevBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        goTo(index - 1, -1);
+      });
+      nextBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        goTo(index + 1, 1);
+      });
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog || e.target === stage) closeZoom();
+      });
+      dialog.addEventListener("close", () => {
+        document.body.classList.remove("pdp-zoom-open");
+        animating = false;
+        if (zoomImg) {
+          zoomImg.removeAttribute("src");
+          zoomImg.alt = "";
+        }
+      });
+      dialog.addEventListener("keydown", (e) => {
+        if (!dialog.open) return;
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          goTo(index - 1, -1);
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          goTo(index + 1, 1);
+        }
+      });
+
+      stage?.addEventListener(
+        "touchstart",
+        (e) => {
+          const t = e.changedTouches[0];
+          if (!t) return;
+          touchX = t.clientX;
+          touchY = t.clientY;
+        },
+        { passive: true }
+      );
+      stage?.addEventListener(
+        "touchend",
+        (e) => {
+          const t = e.changedTouches[0];
+          if (!t) return;
+          const dx = t.clientX - touchX;
+          const dy = t.clientY - touchY;
+          if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+          if (dx < 0) goTo(index + 1, 1);
+          else goTo(index - 1, -1);
+        },
+        { passive: true }
+      );
+
+      zoomFrames.forEach((frame) => {
+        const open = () => {
+          const i = zoomFrames.indexOf(frame);
+          openZoom(i < 0 ? 0 : i);
+        };
+        frame.addEventListener("click", open);
+        frame.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            open();
+          }
+        });
+      });
+    })();
 
     const selectedOptions = () => {
       const map = {};

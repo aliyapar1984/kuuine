@@ -1,0 +1,113 @@
+{%- comment -%}
+  SSS — accordion (PDP / kurumsal).
+{%- endcomment -%}
+<section
+  class="pdp-faq"
+  data-shopify-section="faq"
+  data-faq-accordion
+  {{ section.shopify_attributes }}
+>
+  <div class="pdp-faq__inner tw:px-pad-x">
+    <header class="pdp-faq__head">
+      {% if section.settings.eyebrow != blank %}
+        <p class="pdp-faq__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h2 class="pdp-faq__title tw:font-display tw:text-display tw:font-normal tw:tracking-display tw:text-ink">
+        {{ section.settings.title | default: 'Sıkça sorulan sorular' }}
+      </h2>
+    </header>
+
+    <div class="pdp-faq__list">
+      {% for block in section.blocks %}
+        <div class="pdp-faq__item" {{ block.shopify_attributes }}>
+          <button
+            type="button"
+            class="pdp-faq__q"
+            aria-expanded="false"
+            data-faq-trigger
+          >
+            <span>{{ block.settings.question }}</span>
+            <span class="pdp-faq__chev" aria-hidden="true"></span>
+          </button>
+          <div class="pdp-faq__a" data-faq-panel>
+            <div class="pdp-faq__a-inner">
+              <p>{{ block.settings.answer }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "section-faq",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Üst etiket", "default": "Yardım" },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Başlık",
+      "default": "Sıkça sorulan sorular"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Soru",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Soru",
+          "default": "Ürünler bulaşık makinesinde yıkanabilir mi?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Yanıt",
+          "default": "Çoğu stoneware ve cam parça bulaşık makinesine uygundur. Metalik detaylı veya el boyaması parçalarda elden yıkamayı öneririz."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "question": "Ürünler bulaşık makinesinde yıkanabilir mi?",
+            "answer": "Çoğu stoneware ve cam parça bulaşık makinesine uygundur. Metalik detaylı veya el boyaması parçalarda elden yıkamayı öneririz."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "question": "Kargo ve teslimat süresi nedir?",
+            "answer": "Siparişler genellikle 1–3 iş günü içinde kargoya verilir. Teslimat bölgesine göre 2–5 iş günü sürebilir."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "question": "İade ve değişim nasıl yapılır?",
+            "answer": "Ürünü teslim aldıktan sonra 14 gün içinde, kullanılmamış ve orijinal ambalajında iade edebilirsiniz. Destek ekibimiz süreçte yanınızda."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "question": "Renkler ekranda göründüğü gibi mi?",
+            "answer": "Stoneware ve cam doğal ışığa göre nüans gösterir. Ekran ayarları da fark yaratabilir; şüpheniz olursa bize yazın, yardımcı olalım."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
