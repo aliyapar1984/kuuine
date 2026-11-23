@@ -291,6 +291,11 @@
           >
             <span class="pdp__progress-fill" data-pdp-progress-fill style="width: 25%;"></span>
           </div>
+          <nav class="pdp__crumbs pdp__crumbs--stage" aria-label="Kategori">
+            <a href="index.html">Anasayfa</a>
+            <span class="pdp__crumbs-sep" aria-hidden="true">|</span>
+            <a href="collection.html">Seramik Ürünler</a>
+          </nav>
         </div>
 
         <div class="pdp__buy" data-pdp-buy>
@@ -299,26 +304,42 @@
               <span class="pdp__counter-current" data-pdp-index>01</span>
               <span class="pdp__counter-range">001 – 004</span>
             </div>
-            <nav class="pdp__crumbs" aria-label="Kategori">
+            <nav class="pdp__crumbs pdp__crumbs--buy" aria-label="Kategori">
               <a href="index.html">Anasayfa</a>
-              <span class="pdp__crumbs-sep" aria-hidden="true">-</span>
+              <span class="pdp__crumbs-sep" aria-hidden="true">|</span>
               <a href="collection.html">Seramik Ürünler</a>
             </nav>
           </div>
 
           <div class="pdp__buy-main">
             <h1 class="pdp__title">Organik seramik tabak</h1>
-            <p class="pdp__price" data-pdp-price>₺2.450</p>
+            <p class="pdp__price is-sale" data-pdp-price>
+              <span class="pdp__price-current">₺2.450</span>
+              <s class="pdp__price-compare">₺3.150</s>
+              <span class="pdp__price-badge">-%22</span>
+            </p>
 
             <form data-pdp-form>
               <input type="hidden" name="id" value="1" data-pdp-variant-id>
               <div class="pdp__options">
-                <fieldset class="pdp__option">
-                  <legend class="pdp__option-label">Renk</legend>
-                  <div class="pdp__option-values">
-                    <label class="pdp__swatch-label"><input type="radio" name="option1" value="Krem" data-pdp-option data-option-position="1" checked><span>Krem</span></label>
-                    <label class="pdp__swatch-label"><input type="radio" name="option1" value="Sage" data-pdp-option data-option-position="1"><span>Sage</span></label>
-                    <label class="pdp__swatch-label"><input type="radio" name="option1" value="Kum" data-pdp-option data-option-position="1"><span>Kum</span></label>
+                <fieldset class="pdp__option pdp__option--color">
+                  <legend class="pdp__option-label">Renk<span class="pdp__option-selected" data-pdp-color-label>: Krem</span></legend>
+                  <div class="pdp__option-values pdp__option-values--swatches">
+                    <label class="pdp__swatch-label pdp__swatch-label--color">
+                      <input type="radio" name="option1" value="Krem" data-pdp-option data-option-position="1" checked>
+                      <span class="pdp__swatch" title="Krem"><span class="pdp__swatch-fill" style="background:#efe8dc"></span></span>
+                      <span class="visually-hidden">Krem</span>
+                    </label>
+                    <label class="pdp__swatch-label pdp__swatch-label--color">
+                      <input type="radio" name="option1" value="Sage" data-pdp-option data-option-position="1">
+                      <span class="pdp__swatch" title="Sage"><span class="pdp__swatch-fill" style="background:#6a7d6a"></span></span>
+                      <span class="visually-hidden">Sage</span>
+                    </label>
+                    <label class="pdp__swatch-label pdp__swatch-label--color">
+                      <input type="radio" name="option1" value="Kum" data-pdp-option data-option-position="1">
+                      <span class="pdp__swatch" title="Kum"><span class="pdp__swatch-fill" style="background:#d4c4a8"></span></span>
+                      <span class="visually-hidden">Kum</span>
+                    </label>
                   </div>
                 </fieldset>
               </div>
@@ -334,9 +355,9 @@
 
             <script type="application/json" data-pdp-variants>
               [
-                {"id":1,"available":true,"price":245000,"compare_at_price":null,"options":["Krem"]},
-                {"id":2,"available":true,"price":245000,"compare_at_price":null,"options":["Sage"]},
-                {"id":3,"available":false,"price":245000,"compare_at_price":null,"options":["Kum"]}
+                {"id":1,"available":true,"price":245000,"compare_at_price":315000,"options":["Krem"]},
+                {"id":2,"available":true,"price":245000,"compare_at_price":315000,"options":["Sage"]},
+                {"id":3,"available":false,"price":245000,"compare_at_price":315000,"options":["Kum"]}
               ]
             </script>
           </div>
@@ -374,8 +395,8 @@
         </div>
 
         <div class="footer-cols footer-accordion" data-footer-accordion>
-          <div class="footer-col is-open">
-            <button type="button" class="footer-col__head" aria-expanded="true">
+          <div class="footer-col">
+            <button type="button" class="footer-col__head" aria-expanded="false">
               <span>Keşfet</span>
               <span class="footer-col__chev" aria-hidden="true"></span>
             </button>
@@ -401,8 +422,8 @@
             </div>
           </div>
 
-          <div class="footer-col is-open">
-            <button type="button" class="footer-col__head" aria-expanded="true">
+          <div class="footer-col">
+            <button type="button" class="footer-col__head" aria-expanded="false">
               <span>Destek</span>
               <span class="footer-col__chev" aria-hidden="true"></span>
             </button>
@@ -420,8 +441,8 @@
             </div>
           </div>
 
-          <div class="footer-col is-open">
-            <button type="button" class="footer-col__head" aria-expanded="true">
+          <div class="footer-col">
+            <button type="button" class="footer-col__head" aria-expanded="false">
               <span>Sosyal</span>
               <span class="footer-col__chev" aria-hidden="true"></span>
             </button>

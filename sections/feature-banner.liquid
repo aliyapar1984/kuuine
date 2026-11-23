@@ -1,7 +1,7 @@
 <section class="feature-banners tw:grid tw:bg-bg tw:px-pad-x" data-feature-slideshow {{ section.shopify_attributes }}>
   {% for block in section.blocks %}
     <article
-      class="feature-banner tw:relative tw:flex tw:min-h-[min(85dvh,820px)] tw:items-end tw:overflow-hidden tw:text-white"
+      class="feature-banner tw:relative tw:flex tw:items-end tw:overflow-hidden tw:text-white"
       data-feature-slide
       {{ block.shopify_attributes }}
       {% unless forloop.first %}hidden{% endunless %}

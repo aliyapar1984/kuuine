@@ -326,7 +326,15 @@
             </select>
           </label>
           <button type="button" class="catalog__filter-btn" data-catalog-filter-open aria-haspopup="dialog" aria-controls="catalog-filter-modal"><span class="catalog__filter-label">Filtrele<span class="catalog__filter-count" data-catalog-filter-count hidden></span></span></button>
-          <div class="catalog__view" role="group" aria-label="Görünüm">
+          <div class="catalog__view catalog__view--mobile" role="group" aria-label="Mobil görünüm">
+            <button type="button" class="catalog__view-btn" data-catalog-view="1" aria-pressed="false" aria-label="Tekli">
+              <svg viewBox="0 0 10 14" width="12" height="14" aria-hidden="true"><rect x="0" y="0" width="10" height="14" fill="currentColor"/></svg>
+            </button>
+            <button type="button" class="catalog__view-btn is-active" data-catalog-view="2" aria-pressed="true" aria-label="İkili">
+              <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><rect x="0" y="0" width="5.5" height="14" fill="currentColor"/><rect x="8.5" y="0" width="5.5" height="14" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <div class="catalog__view catalog__view--desktop" role="group" aria-label="Masaüstü görünüm">
             <button type="button" class="catalog__view-btn" data-catalog-view="3" aria-pressed="false" aria-label="3 kolon">
               <svg viewBox="0 0 18 14" width="18" height="14" aria-hidden="true"><rect x="0" y="0" width="4" height="14" fill="currentColor"/><rect x="7" y="0" width="4" height="14" fill="currentColor"/><rect x="14" y="0" width="4" height="14" fill="currentColor"/></svg>
             </button>
@@ -338,7 +346,7 @@
       </div>
 
       <div class="catalog__layout">
-        <div class="catalog__grid catalog__grid--cols-4" data-catalog-grid>
+        <div class="catalog__grid catalog__grid--cols-2 catalog__grid--cols-4" data-catalog-grid>
           <!-- 1 Amber cam seti -->
           <article class="product-card">
             <div class="product-card__media">
@@ -354,7 +362,9 @@
                 <p class="product-card__brand">Cam koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine glassware</p>
-                  <p class="product-card__price">₺12.900</p>
+                  <p class="product-card__price">
+                  <span class="product-card__price-current">₺12.900</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -385,7 +395,11 @@
                 <p class="product-card__brand">Cam koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine stoneware</p>
-                  <p class="product-card__price">₺1.850</p>
+                  <p class="product-card__price is-sale">
+                  <span class="product-card__price-current">₺1.850</span>
+                  <s class="product-card__price-compare">₺2.450</s>
+                  <span class="product-card__price-badge">%24</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -428,7 +442,9 @@
                 <p class="product-card__brand">Solace koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine stoneware</p>
-                  <p class="product-card__price">₺2.450</p>
+                  <p class="product-card__price">
+                  <span class="product-card__price-current">₺2.450</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -459,7 +475,11 @@
                 <p class="product-card__brand">Ziyafet koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine stoneware</p>
-                  <p class="product-card__price">₺1.290</p>
+                  <p class="product-card__price is-sale">
+                  <span class="product-card__price-current">₺1.290</span>
+                  <s class="product-card__price-compare">₺1.890</s>
+                  <span class="product-card__price-badge">%32</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -476,7 +496,7 @@
           </article>
           <a class="catalog-banner catalog-banner--wide" href="collection.html">
             <span class="catalog-banner__media" aria-hidden="true">
-              <img src="../public/images/Housewares_store_hero_banner_9b719f34.jpg" alt="" loading="lazy" decoding="async">
+              <img src="../public/images/tw-kitchenware-ceramics.jpg" alt="" loading="lazy" decoding="async">
             </span>
             <span class="catalog-banner__shade" aria-hidden="true"></span>
             <span class="catalog-banner__inner">
@@ -503,7 +523,9 @@
                 <p class="product-card__brand">Atölye koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine stoneware</p>
-                  <p class="product-card__price">₺3.750</p>
+                  <p class="product-card__price">
+                  <span class="product-card__price-current">₺3.750</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -534,7 +556,9 @@
                 <p class="product-card__brand">Servis koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine stoneware</p>
-                  <p class="product-card__price">₺4.200</p>
+                  <p class="product-card__price">
+                  <span class="product-card__price-current">₺4.200</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -565,7 +589,11 @@
                 <p class="product-card__brand">Kase koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine stoneware</p>
-                  <p class="product-card__price">₺2.890</p>
+                  <p class="product-card__price is-sale">
+                  <span class="product-card__price-current">₺2.890</span>
+                  <s class="product-card__price-compare">₺3.650</s>
+                  <span class="product-card__price-badge">%21</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -596,7 +624,9 @@
                 <p class="product-card__brand">Doğa koleksiyon</p>
                 <div class="product-card__meta">
                   <p class="product-card__fabric">kuuine stoneware</p>
-                  <p class="product-card__price">₺1.650</p>
+                  <p class="product-card__price">
+                  <span class="product-card__price-current">₺1.650</span>
+                </p>
                 </div>
               </div>
               <div class="product-card__swatches">
@@ -613,7 +643,7 @@
           </article>
           <a class="catalog-banner catalog-banner--wide" href="collection.html">
             <span class="catalog-banner__media" aria-hidden="true">
-              <img src="../public/images/tw-feast-table-spread.jpg" alt="" loading="lazy" decoding="async">
+              <img src="../public/images/Kitchenware_store_hero_banner_di…_d0cc7f18.jpg" alt="" loading="lazy" decoding="async">
             </span>
             <span class="catalog-banner__shade" aria-hidden="true"></span>
             <span class="catalog-banner__inner">
@@ -704,8 +734,8 @@
         </div>
 
         <div class="footer-cols footer-accordion" data-footer-accordion>
-          <div class="footer-col is-open">
-            <button type="button" class="footer-col__head" aria-expanded="true">
+          <div class="footer-col">
+            <button type="button" class="footer-col__head" aria-expanded="false">
               <span>Keşfet</span>
               <span class="footer-col__chev" aria-hidden="true"></span>
             </button>
@@ -731,8 +761,8 @@
             </div>
           </div>
 
-          <div class="footer-col is-open">
-            <button type="button" class="footer-col__head" aria-expanded="true">
+          <div class="footer-col">
+            <button type="button" class="footer-col__head" aria-expanded="false">
               <span>Destek</span>
               <span class="footer-col__chev" aria-hidden="true"></span>
             </button>
@@ -750,8 +780,8 @@
             </div>
           </div>
 
-          <div class="footer-col is-open">
-            <button type="button" class="footer-col__head" aria-expanded="true">
+          <div class="footer-col">
+            <button type="button" class="footer-col__head" aria-expanded="false">
               <span>Sosyal</span>
               <span class="footer-col__chev" aria-hidden="true"></span>
             </button>

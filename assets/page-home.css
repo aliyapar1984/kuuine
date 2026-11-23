@@ -418,7 +418,27 @@
    Layout / tipografi: Tailwind (tw:…, tw:lg:…) */
 
 /* ——— Feature banner ———
-   Shell + tipografi → Tailwind. Overlay gradient: CSS. */
+   Shell + tipografi → Tailwind. Yükseklik aspect token’dan. */
+.feature-banner {
+  aspect-ratio: var(--aspect-feature);
+  width: 100%;
+  min-height: 0;
+  height: auto;
+}
+
+@media (min-width: 900px) {
+  .feature-banner {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+.feature-banner__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .feature-banner__overlay {
   position: absolute;
   inset: 0;
@@ -828,6 +848,26 @@
 /* ——— Journal / Instagram ———
    Layout / tipografi: Tailwind (tw:…, tw:lg:…) */
 
+.journal-card__media {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.journal-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.journal-card h3,
+.journal-card .btn--text {
+  position: relative;
+  z-index: 1;
+}
+
 /* Below-fold: boyama/layout maliyetini ertele (LCP hero hariç) */
 .collection-tabs,
 .benefits,
@@ -840,5 +880,17 @@
 .instagram {
   content-visibility: auto;
   contain-intrinsic-size: auto 720px;
+}
+
+@media (max-width: 899px) {
+  .journal__grid {
+    row-gap: 1.25rem;
+  }
+
+  /* Mobilde ilk kart başlığını kesmesin */
+  .journal {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
 }
 

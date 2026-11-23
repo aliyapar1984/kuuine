@@ -1331,28 +1331,77 @@
       });
     });
 
+    const syncBannerHeight = () => {
+      if (!grid) return;
+      const card = grid.querySelector(".product-card");
+      if (!card) return;
+      const h = Math.ceil(card.getBoundingClientRect().height);
+      if (h > 0) grid.style.setProperty("--catalog-card-h", `${h}px`);
+    };
+
+    const deskMq = window.matchMedia("(min-width: 900px)");
+    const isDesk = () => deskMq.matches;
+
     const setView = (cols) => {
       if (!grid) return;
-      grid.classList.toggle("catalog__grid--cols-3", cols === 3);
-      grid.classList.toggle("catalog__grid--cols-4", cols === 4);
+      const n = Number(cols);
+      if (isDesk()) {
+        if (n !== 3 && n !== 4) return;
+        grid.classList.toggle("catalog__grid--cols-3", n === 3);
+        grid.classList.toggle("catalog__grid--cols-4", n === 4);
+        try {
+          localStorage.setItem("kuuine-catalog-cols-desk", String(n));
+        } catch (e) {}
+      } else {
+        if (n !== 1 && n !== 2) return;
+        grid.classList.toggle("catalog__grid--cols-1", n === 1);
+        grid.classList.toggle("catalog__grid--cols-2", n === 2);
+        try {
+          localStorage.setItem("kuuine-catalog-cols-mobile", String(n));
+        } catch (e) {}
+      }
       qsa("[data-catalog-view]", root).forEach((btn) => {
-        const on = Number(btn.dataset.catalogView) === cols;
+        const on = Number(btn.dataset.catalogView) === n;
         btn.classList.toggle("is-active", on);
         btn.setAttribute("aria-pressed", on ? "true" : "false");
       });
+      requestAnimationFrame(syncBannerHeight);
+    };
+
+    const restoreView = () => {
       try {
-        localStorage.setItem("kuuine-catalog-cols", String(cols));
-      } catch (e) {}
+        if (isDesk()) {
+          const saved = Number(localStorage.getItem("kuuine-catalog-cols-desk"));
+          setView(saved === 3 || saved === 4 ? saved : 4);
+        } else {
+          const saved = Number(localStorage.getItem("kuuine-catalog-cols-mobile"));
+          setView(saved === 1 || saved === 2 ? saved : 2);
+        }
+      } catch (e) {
+        setView(isDesk() ? 4 : 2);
+      }
     };
 
     qsa("[data-catalog-view]", root).forEach((btn) => {
-      btn.addEventListener("click", () => setView(Number(btn.dataset.catalogView) || 4));
+      btn.addEventListener("click", () => setView(Number(btn.dataset.catalogView)));
     });
 
-    try {
-      const saved = Number(localStorage.getItem("kuuine-catalog-cols"));
-      if (saved === 3 || saved === 4) setView(saved);
-    } catch (e) {}
+    restoreView();
+    if (typeof deskMq.addEventListener === "function") {
+      deskMq.addEventListener("change", restoreView);
+    } else if (typeof deskMq.addListener === "function") {
+      deskMq.addListener(restoreView);
+    }
+
+    syncBannerHeight();
+    window.addEventListener("resize", syncBannerHeight, { passive: true });
+    if (typeof ResizeObserver !== "undefined" && grid) {
+      const card = grid.querySelector(".product-card");
+      if (card) {
+        const ro = new ResizeObserver(() => syncBannerHeight());
+        ro.observe(card);
+      }
+    }
 
     if (filterModal) {
       let filterOpen = false;
@@ -1743,13 +1792,29 @@
       }
     };
 
+    const syncColorLabel = () => {
+      qsa(".pdp__option--color", root).forEach((fieldset) => {
+        const label = qs("[data-pdp-color-label]", fieldset);
+        const checked = qs("[data-pdp-option]:checked", fieldset);
+        if (label && checked) label.textContent = `: ${checked.value}`;
+      });
+    };
+
     const syncVariant = () => {
       const v = findVariant();
+      syncColorLabel();
       if (!v) return;
       if (variantInput) variantInput.value = v.id;
       if (priceEl) {
-        const compare = v.compare_at_price && v.compare_at_price > v.price ? `<s>${money(v.compare_at_price)}</s>` : "";
-        priceEl.innerHTML = `${money(v.price)}${compare ? ` ${compare}` : ""}`;
+        const onSale = v.compare_at_price && v.compare_at_price > v.price;
+        let html = `<span class="pdp__price-current">${money(v.price)}</span>`;
+        if (onSale) {
+          const pct = Math.round(((v.compare_at_price - v.price) / v.compare_at_price) * 100);
+          html += `<s class="pdp__price-compare">${money(v.compare_at_price)}</s>`;
+          html += `<span class="pdp__price-badge">%${pct}</span>`;
+        }
+        priceEl.classList.toggle("is-sale", !!onSale);
+        priceEl.innerHTML = html;
       }
       if (submit) {
         submit.disabled = !v.available;

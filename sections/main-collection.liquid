@@ -211,7 +211,32 @@
         </span>
       </button>
 
-      <div class="catalog__view" role="group" aria-label="Görünüm">
+      <div class="catalog__view catalog__view--mobile" role="group" aria-label="Mobil görünüm">
+        <button
+          type="button"
+          class="catalog__view-btn"
+          data-catalog-view="1"
+          aria-pressed="false"
+          aria-label="Tekli"
+        >
+          <svg viewBox="0 0 10 14" width="12" height="14" aria-hidden="true">
+            <rect x="0" y="0" width="10" height="14" fill="currentColor"/>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="catalog__view-btn is-active"
+          data-catalog-view="2"
+          aria-pressed="true"
+          aria-label="İkili"
+        >
+          <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+            <rect x="0" y="0" width="5.5" height="14" fill="currentColor"/>
+            <rect x="8.5" y="0" width="5.5" height="14" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+      <div class="catalog__view catalog__view--desktop" role="group" aria-label="Masaüstü görünüm">
         <button
           type="button"
           class="catalog__view-btn"
@@ -245,7 +270,7 @@
 
   {% paginate collection.products by section.settings.products_per_page %}
     <div class="catalog__layout">
-      <div class="catalog__grid catalog__grid--cols-4" data-catalog-grid>
+      <div class="catalog__grid catalog__grid--cols-2 catalog__grid--cols-4" data-catalog-grid>
         {% for product in collection.products %}
           {% render 'product-card', product: product %}
         {% else %}

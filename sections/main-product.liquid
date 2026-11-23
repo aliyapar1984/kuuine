@@ -101,26 +101,26 @@
                 {% if forloop.first %}
                   {{
                     media
-                    | image_url: width: 2000
+                    | image_url: width: 1200
                     | image_tag:
                       class: 'pdp__media',
                       loading: 'eager',
                       fetchpriority: 'high',
                       decoding: 'async',
-                      widths: '600,900,1200,1600,2000',
-                      sizes: '(min-width: 900px) 42vw, 100vw',
+                      widths: '400,600,900,1200',
+                      sizes: '(min-width: 900px) 600px, 100vw',
                       alt: media.alt | default: product.title
                   }}
                 {% else %}
                   {{
                     media
-                    | image_url: width: 2000
+                    | image_url: width: 1200
                     | image_tag:
                       class: 'pdp__media',
                       loading: 'lazy',
                       decoding: 'async',
-                      widths: '600,900,1200,1600,2000',
-                      sizes: '(min-width: 900px) 42vw, 100vw',
+                      widths: '400,600,900,1200',
+                      sizes: '(min-width: 900px) 600px, 100vw',
                       alt: media.alt | default: product.title
                   }}
                 {% endif %}
@@ -150,6 +150,18 @@
           ></span>
         </div>
       {% endif %}
+      {%- capture pdp_crumb_links -%}
+        <a href="{{ routes.root_url }}">{{ section.settings.crumb_home | default: 'Anasayfa' }}</a>
+        <span class="pdp__crumbs-sep" aria-hidden="true">|</span>
+        {% if crumb_collection != blank %}
+          <a href="{{ crumb_collection.url }}">{{ crumb_collection.title }}</a>
+        {% else %}
+          <a href="{{ routes.all_products_collection_url }}">{{ section.settings.crumb_fallback | default: 'Ürünler' }}</a>
+        {% endif %}
+      {%- endcapture -%}
+      <nav class="pdp__crumbs pdp__crumbs--stage" aria-label="Kategori">
+        {{ pdp_crumb_links }}
+      </nav>
     </div>
 
     <div class="pdp__buy" data-pdp-buy>
@@ -160,24 +172,27 @@
             001 – {% if media_count > 0 %}{{ media_count | prepend: '00' | slice: -3, 3 }}{% else %}001{% endif %}
           </span>
         </div>
-        <nav class="pdp__crumbs" aria-label="Kategori">
-          <a href="{{ routes.root_url }}">{{ section.settings.crumb_home | default: 'Anasayfa' }}</a>
-          <span class="pdp__crumbs-sep" aria-hidden="true">-</span>
-          {% if crumb_collection != blank %}
-            <a href="{{ crumb_collection.url }}">{{ crumb_collection.title }}</a>
-          {% else %}
-            <a href="{{ routes.all_products_collection_url }}">{{ section.settings.crumb_fallback | default: 'Ürünler' }}</a>
-          {% endif %}
+        <nav class="pdp__crumbs pdp__crumbs--buy" aria-label="Kategori">
+          {{ pdp_crumb_links }}
         </nav>
       </div>
 
       <div class="pdp__buy-main">
         <h1 class="pdp__title">{{ product.title }}</h1>
 
-        <p class="pdp__price" data-pdp-price>
-          {{ current_variant.price | money }}
-          {% if current_variant.compare_at_price > current_variant.price %}
-            <s>{{ current_variant.compare_at_price | money }}</s>
+        {%- liquid
+          assign pdp_on_sale = false
+          assign pdp_save_pct = 0
+          if current_variant.compare_at_price > current_variant.price
+            assign pdp_on_sale = true
+            assign pdp_save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
+          endif
+        -%}
+        <p class="pdp__price{% if pdp_on_sale %} is-sale{% endif %}" data-pdp-price>
+          <span class="pdp__price-current">{{ current_variant.price | money }}</span>
+          {% if pdp_on_sale %}
+            <s class="pdp__price-compare">{{ current_variant.compare_at_price | money }}</s>
+            <span class="pdp__price-badge">-%{{ pdp_save_pct }}</span>
           {% endif %}
         </p>
 
@@ -187,21 +202,64 @@
           {% unless product.has_only_default_variant %}
             <div class="pdp__options">
               {% for option in product.options_with_values %}
-                <fieldset class="pdp__option">
-                  <legend class="pdp__option-label">{{ option.name }}</legend>
-                  <div class="pdp__option-values">
+                {%- liquid
+                  assign opt_key = option.name | downcase
+                  assign is_color_option = false
+                  if opt_key == 'color' or opt_key == 'colour' or opt_key == 'renk'
+                    assign is_color_option = true
+                  endif
+                -%}
+                <fieldset class="pdp__option{% if is_color_option %} pdp__option--color{% endif %}">
+                  <legend class="pdp__option-label">
+                    {{ option.name }}{% if is_color_option %}<span class="pdp__option-selected" data-pdp-color-label>{% if option.selected_value != blank %}: {{ option.selected_value }}{% endif %}</span>{% endif %}
+                  </legend>
+                  <div class="pdp__option-values{% if is_color_option %} pdp__option-values--swatches{% endif %}">
                     {% for value in option.values %}
-                      <label class="pdp__swatch-label">
-                        <input
-                          type="radio"
-                          name="option{{ option.position }}"
-                          value="{{ value | escape }}"
-                          data-pdp-option
-                          data-option-position="{{ option.position }}"
-                          {% if option.selected_value == value %}checked{% endif %}
-                        >
-                        <span>{{ value }}</span>
-                      </label>
+                      {% if is_color_option %}
+                        {% assign swatch_variant = value.variant %}
+                        <label class="pdp__swatch-label pdp__swatch-label--color">
+                          <input
+                            type="radio"
+                            name="option{{ option.position }}"
+                            value="{{ value | escape }}"
+                            data-pdp-option
+                            data-option-position="{{ option.position }}"
+                            {% if option.selected_value == value %}checked{% endif %}
+                          >
+                          <span class="pdp__swatch" title="{{ value | escape }}">
+                            {% if value.swatch.image %}
+                              {{
+                                value.swatch.image
+                                | image_url: width: 40
+                                | image_tag: alt: value, loading: 'lazy', decoding: 'async'
+                              }}
+                            {% elsif value.swatch.color %}
+                              <span class="pdp__swatch-fill" style="background: {{ value.swatch.color }}"></span>
+                            {% elsif swatch_variant.image %}
+                              {{
+                                swatch_variant.image
+                                | image_url: width: 40
+                                | image_tag: alt: value, loading: 'lazy', decoding: 'async'
+                              }}
+                            {% else %}
+                              <span class="pdp__swatch-fill pdp__swatch-fill--fallback" aria-hidden="true"></span>
+                            {% endif %}
+                          </span>
+                          <span class="visually-hidden">{{ value }}</span>
+                        </label>
+                      {% else %}
+                        <label class="pdp__swatch-label">
+                          <input
+                            type="radio"
+                            name="option{{ option.position }}"
+                            value="{{ value | escape }}"
+                            data-pdp-option
+                            data-option-position="{{ option.position }}"
+                            {% if option.selected_value == value %}checked{% endif %}
+                          >
+                          <span>{{ value }}</span>
+                        </label>
+                      {% endif %}
                     {% endfor %}
                   </div>
                 </fieldset>

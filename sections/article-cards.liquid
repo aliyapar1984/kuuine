@@ -14,12 +14,12 @@
     {% if section.settings.blog != blank %}
       {% for article in section.settings.blog.articles limit: section.settings.articles_to_show %}
         <article class="journal-card">
-          <a href="{{ article.url }}" class="journal-card__media tw:mb-3.5 tw:aspect-[16/10] tw:overflow-hidden tw:bg-soft">
+          <a href="{{ article.url }}" class="journal-card__media tw:relative tw:mb-3.5 tw:block tw:aspect-[16/10] tw:overflow-hidden tw:bg-soft">
             {% if article.image %}
               {{
                 article.image
                 | image_url: width: 1200
-                | image_tag: loading: 'lazy', decoding: 'async', alt: article.title, class: 'tw:size-full tw:object-cover'
+                | image_tag: loading: 'lazy', decoding: 'async', alt: article.title, class: 'tw:absolute tw:inset-0 tw:size-full tw:object-cover'
               }}
             {% endif %}
           </a>

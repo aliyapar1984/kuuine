@@ -21,6 +21,7 @@
   position: relative;
   background: var(--pdp-cream);
   color: var(--pdp-ink);
+  padding-bottom: 20px;
 }
 
 /* ——— Mobil ——— */
@@ -71,7 +72,7 @@
   flex: 0 0 100%;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--aspect-product);
   overflow: hidden;
   background: var(--color-soft, #f3eee4);
   scroll-snap-align: start;
@@ -79,9 +80,10 @@
 }
 
 .pdp__progress {
-  height: 2px;
-  margin: 0.85rem var(--pad-x) 0;
-  background: rgba(26, 24, 20, 0.12);
+  height: 1px;
+  margin: 0;
+  width: 100%;
+  background: rgba(26, 24, 20, 0.1);
   overflow: hidden;
 }
 
@@ -91,6 +93,43 @@
   width: 0;
   background: var(--pdp-ink);
   transition: width 0.28s ease;
+}
+
+/* Mobil kategori yolu — çizgilerle ayrılmış */
+.pdp__crumbs.pdp__crumbs--stage {
+  margin: 0;
+  padding: 0.7rem var(--pad-x);
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(26, 24, 20, 0.14);
+  gap: 0;
+  align-items: center;
+}
+
+.pdp__crumbs.pdp__crumbs--stage a {
+  padding: 0 0.75rem;
+  opacity: 0.78;
+}
+
+.pdp__crumbs.pdp__crumbs--stage a:first-child {
+  padding-left: 0;
+}
+
+.pdp__crumbs.pdp__crumbs--stage a:last-of-type {
+  padding-right: 0;
+}
+
+.pdp__crumbs.pdp__crumbs--stage .pdp__crumbs-sep {
+  display: block;
+  width: 1px;
+  height: 0.85em;
+  margin: 0;
+  padding: 0;
+  background: rgba(26, 24, 20, 0.22);
+  opacity: 1;
+  align-self: center;
+  overflow: hidden;
+  text-indent: -999px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -189,7 +228,7 @@
 .pdp__bullet-media {
   display: block;
   width: 36px;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--aspect-product);
   overflow: hidden;
   background: #ebe6dc;
   outline: 1px solid transparent;
@@ -208,11 +247,7 @@
 }
 
 .pdp__buy-top {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.65rem;
-  margin-bottom: 1.5rem;
+  display: none;
 }
 
 .pdp__counter {
@@ -234,6 +269,10 @@
   letter-spacing: 0.06em;
   line-height: 1.35;
   color: inherit;
+}
+
+.pdp__crumbs--buy {
+  display: none;
 }
 
 .pdp__crumbs a {
@@ -282,13 +321,38 @@
 }
 
 .pdp__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
   margin: 0 0 1.1rem;
   font-size: 0.875rem;
+  line-height: 1.3;
+  color: var(--pdp-ink, #1a1814);
 }
 
-.pdp__price s {
-  margin-left: 0.45rem;
-  opacity: 0.4;
+.pdp__price-current {
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.pdp__price-compare {
+  font-size: inherit;
+  font-weight: 400;
+  color: rgba(26, 24, 20, 0.45);
+  text-decoration: line-through;
+}
+
+.pdp__price-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.10rem 0.30rem;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: #fff;
+  background: #1a1814;
 }
 
 .pdp__options {
@@ -307,7 +371,16 @@
   font-size: 0.65rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.55;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.pdp__option-selected {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  opacity: 1;
+  font-weight: 500;
+  color: var(--pdp-ink, #1a1814);
 }
 
 .pdp__option-values {
@@ -316,7 +389,13 @@
   gap: 0.35rem;
 }
 
+.pdp__option-values--swatches {
+  gap: 8px;
+  align-items: center;
+}
+
 .pdp__swatch-label {
+  position: relative;
   cursor: pointer;
 }
 
@@ -326,7 +405,7 @@
   pointer-events: none;
 }
 
-.pdp__swatch-label span {
+.pdp__swatch-label > span:not(.pdp__swatch):not(.visually-hidden) {
   display: inline-flex;
   align-items: center;
   min-height: 1.75rem;
@@ -335,8 +414,46 @@
   font-size: 0.8125rem;
 }
 
-.pdp__swatch-label input:checked + span {
+.pdp__swatch-label input:checked + span:not(.pdp__swatch) {
   border-bottom-color: currentColor;
+}
+
+/* Liste kartındaki swatch dili */
+.pdp__swatch-label--color {
+  display: inline-flex;
+  padding: 3px;
+}
+
+.pdp__swatch {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #ddd;
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+}
+
+.pdp__swatch img,
+.pdp__swatch-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdp__swatch-fill--fallback {
+  background: #cfc8bc;
+}
+
+.pdp__swatch-label--color input:checked + .pdp__swatch {
+  outline-color: rgba(26, 24, 20, 0.7);
+}
+
+.pdp__swatch-label--color:hover .pdp__swatch {
+  outline-color: rgba(26, 24, 20, 0.35);
 }
 
 .pdp__specs {
@@ -438,8 +555,20 @@
   }
 
   .pdp__buy-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
     flex: 0 0 auto;
     margin-bottom: 0;
+  }
+
+  .pdp__crumbs--stage {
+    display: none;
+  }
+
+  .pdp__crumbs--buy {
+    display: flex;
   }
 
   .pdp__buy-main {
@@ -449,9 +578,13 @@
 
   .pdp__media-stage {
     order: unset;
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
   }
 
   .pdp__gallery {
+    display: flex;
     flex-direction: column;
     overflow: visible;
     scroll-snap-type: none;
@@ -462,7 +595,7 @@
     flex: none;
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: var(--aspect-product);
     scroll-snap-align: unset;
     scroll-margin-top: var(--nav-height, 56px);
   }

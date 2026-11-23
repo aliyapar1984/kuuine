@@ -48,6 +48,15 @@
         <p class="product-card__brand">{{ product.collections.first.title }}</p>
       {% endif %}
 
+      {%- liquid
+        assign card_variant = product.selected_or_first_available_variant
+        assign card_on_sale = false
+        assign card_save_pct = 0
+        if card_variant.compare_at_price > card_variant.price
+          assign card_on_sale = true
+          assign card_save_pct = card_variant.compare_at_price | minus: card_variant.price | times: 100.0 | divided_by: card_variant.compare_at_price | round
+        endif
+      -%}
       <div class="product-card__meta">
         {% if product.metafields.custom.fabric != blank %}
           <p class="product-card__fabric">{{ product.metafields.custom.fabric.value }}</p>
@@ -56,7 +65,13 @@
         {% else %}
           <p class="product-card__fabric">&nbsp;</p>
         {% endif %}
-        <p class="product-card__price">{{ product.price | money }}</p>
+        <p class="product-card__price{% if card_on_sale %} is-sale{% endif %}">
+          <span class="product-card__price-current">{{ card_variant.price | money }}</span>
+          {% if card_on_sale %}
+            <s class="product-card__price-compare">{{ card_variant.compare_at_price | money }}</s>
+            <span class="product-card__price-badge">%{{ card_save_pct }}</span>
+          {% endif %}
+        </p>
       </div>
     </div>
 

@@ -47,8 +47,8 @@
 
       <div class="footer-cols footer-accordion" data-footer-accordion>
         {% for block in section.blocks %}
-          <div class="footer-col is-open" {{ block.shopify_attributes }}>
-            <button type="button" class="footer-col__head" aria-expanded="true">
+          <div class="footer-col" {{ block.shopify_attributes }}>
+            <button type="button" class="footer-col__head" aria-expanded="false">
               <span>{{ block.settings.heading }}</span>
               <span class="footer-col__chev" aria-hidden="true"></span>
             </button>
