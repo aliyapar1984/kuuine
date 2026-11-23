@@ -1,0 +1,81 @@
+{%- comment -%}
+  Mobil menü — soldan kayan drawer (filtre paneli ritmi).
+{%- endcomment -%}
+<div
+  class="nav-drawer"
+  id="kuuine-nav-drawer"
+  data-nav-drawer
+  hidden
+  aria-hidden="true"
+>
+  <div class="nav-drawer__backdrop" data-nav-drawer-close tabindex="-1"></div>
+  <div
+    class="nav-drawer__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="nav-drawer-title"
+  >
+    <div class="nav-drawer__head">
+      <h2 id="nav-drawer-title">Menü</h2>
+      <button type="button" class="nav-drawer__x" data-nav-drawer-close aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="nav-drawer__body">
+      <nav class="nav-drawer__nav" aria-label="Mobil menü">
+        {%- if section.settings.menu != blank and section.settings.menu.links.size > 0 -%}
+          {%- for link in section.settings.menu.links -%}
+            {%- assign title_down = link.title | downcase -%}
+            {%- if title_down == 'ürünler' or title_down == 'urunler' or title_down == 'products' or title_down == 'shop' -%}
+              <details class="nav-drawer__group">
+                <summary class="nav-drawer__link nav-drawer__link--summary">{{ link.title }}</summary>
+                <ul class="nav-drawer__sub" role="list">
+                  <li><a href="{{ routes.all_products_collection_url }}">Yeni Gelenler</a></li>
+                  <li><a href="{{ routes.all_products_collection_url }}">Tüm Ürünler</a></li>
+                  <li><a href="{{ routes.all_products_collection_url }}">Sofra Ürünleri</a></li>
+                  <li><a href="{{ routes.all_products_collection_url }}">Mutfak Gereçleri</a></li>
+                  <li><a href="{{ routes.all_products_collection_url }}">Banyo Aksesuarları</a></li>
+                  <li><a href="{{ routes.all_products_collection_url }}">Emaye</a></li>
+                  <li><a href="{{ routes.all_products_collection_url }}">Outlet</a></li>
+                </ul>
+              </details>
+            {%- else -%}
+              {%- assign nav_href = link.url -%}
+              {%- if title_down == 'indirim' or title_down == 'katalog' or title_down == 'sale' or title_down == 'catalog' -%}
+                {%- if nav_href == blank or nav_href == '/' or nav_href == '#' -%}
+                  {%- assign nav_href = routes.all_products_collection_url -%}
+                {%- endif -%}
+              {%- endif -%}
+              <a class="nav-drawer__link" href="{{ nav_href }}">{{ link.title }}</a>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <details class="nav-drawer__group" open>
+            <summary class="nav-drawer__link nav-drawer__link--summary">Ürünler</summary>
+            <ul class="nav-drawer__sub" role="list">
+              <li><a href="{{ routes.all_products_collection_url }}">Yeni Gelenler</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">Tüm Ürünler</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">Sofra Ürünleri</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">Mutfak Gereçleri</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">Banyo Aksesuarları</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">Emaye</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">Outlet</a></li>
+            </ul>
+          </details>
+          <a class="nav-drawer__link" href="{{ routes.all_products_collection_url }}">İndirim</a>
+          <a class="nav-drawer__link" href="{{ routes.all_products_collection_url }}">Katalog</a>
+          <a class="nav-drawer__link" href="{{ routes.root_url }}">Firma Hikayesi</a>
+        {%- endif -%}
+      </nav>
+
+      {%- if section.settings.trade_link != blank -%}
+        <div class="nav-drawer__meta">
+          <a class="nav-drawer__meta-link" href="{{ section.settings.trade_link }}">{{ section.settings.trade_label }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

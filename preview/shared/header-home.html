@@ -2,8 +2,8 @@
   <header data-shopify-section="header" class="site-header site-header--over-hero" data-site-header>
     <div class="site-header__inner">
       <div class="site-header__left">
-        <button type="button" class="menu-toggle" aria-label="Menü">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <button type="button" class="menu-toggle" data-nav-drawer-open aria-label="Menü" aria-haspopup="dialog" aria-controls="kuuine-nav-drawer" aria-expanded="false">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
         <a href="#" class="logo" aria-label="kuuine">
           <span class="logo__mark">
@@ -207,4 +207,35 @@
         {"title":"Pastel outlet set","brand":"Outlet","price":"₺990","tags":"outlet indirim","url":"collection.html","image":"../assets/tw-plates-pastel-flatlay.jpg"}
       ]
     </script>
+    <div class="nav-drawer" id="kuuine-nav-drawer" data-nav-drawer hidden aria-hidden="true">
+      <div class="nav-drawer__backdrop" data-nav-drawer-close tabindex="-1"></div>
+      <div class="nav-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="nav-drawer-title">
+        <div class="nav-drawer__head">
+          <h2 id="nav-drawer-title">Menü</h2>
+          <button type="button" class="nav-drawer__x" data-nav-drawer-close aria-label="Kapat">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+        <div class="nav-drawer__body">
+          <nav class="nav-drawer__nav" aria-label="Mobil menü">
+            <details class="nav-drawer__group" open>
+              <summary class="nav-drawer__link nav-drawer__link--summary">Ürünler</summary>
+              <ul class="nav-drawer__sub" role="list">
+                <li><a href="collection.html">Yeni Gelenler</a></li>
+                <li><a href="collection.html">Tüm Ürünler</a></li>
+                <li><a href="collection.html">Sofra Ürünleri</a></li>
+                <li><a href="collection.html">Mutfak Gereçleri</a></li>
+                <li><a href="collection.html">Banyo Aksesuarları</a></li>
+                <li><a href="collection.html">Emaye</a></li>
+                <li><a href="collection.html">Outlet</a></li>
+              </ul>
+            </details>
+            <a class="nav-drawer__link" href="collection.html">İndirim</a>
+            <a class="nav-drawer__link" href="collection.html">Katalog</a>
+            <a class="nav-drawer__link" href="index.html#about">Firma Hikayesi</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
   </header>

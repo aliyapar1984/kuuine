@@ -970,15 +970,16 @@
 
   initViewportVideos();
 
-  /* Our Story: sticky media + scroll spy */
+  /* Our Story: sticky media + scroll spy (medya geçişi yalnız desktop) */
   qsa("[data-our-story]").forEach((root) => {
     const tabs = qsa("[data-story-tab]", root);
     const slides = qsa("[data-story-slide]", root);
     const medias = qsa("[data-story-media]", root);
+    const mqDesk = window.matchMedia("(min-width: 900px)");
+    const firstMediaId = medias[0]?.dataset.storyMedia || slides[0]?.dataset.storySlide || "";
     let activeId =
       medias.find((m) => m.classList.contains("is-active"))?.dataset.storyMedia ||
-      slides[0]?.dataset.storySlide ||
-      "";
+      firstMediaId;
     /* Tüm slide oranları — callback’te yalnız değişen entry’ye bakmak yanlış medyayı flash’lıyordu */
     const slideEntries = new Map();
 
@@ -990,17 +991,29 @@
       });
     };
 
-    const activate = (id, scrollTo) => {
-      if (!id) return;
-      if (id === activeId && !scrollTo) return;
-      activeId = id;
-      tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.storyTab === id));
+    const setMedia = (id) => {
       medias.forEach((m) => {
         const on = m.dataset.storyMedia === id;
         m.classList.toggle("is-active", on);
         m.setAttribute("aria-hidden", on ? "false" : "true");
       });
       syncStoryMediaVideos();
+    };
+
+    const lockFirstMedia = () => {
+      if (!firstMediaId) return;
+      activeId = firstMediaId;
+      setMedia(firstMediaId);
+      tabs.forEach((t, i) => t.classList.toggle("is-active", i === 0 || t.dataset.storyTab === firstMediaId));
+    };
+
+    const activate = (id, scrollTo) => {
+      if (!id) return;
+      if (id === activeId && !scrollTo) return;
+      activeId = id;
+      tabs.forEach((t) => t.classList.toggle("is-active", t.dataset.storyTab === id));
+      /* Mobilde yalnız ilk görsel — scroll spy / tab ile medya değişmez */
+      if (mqDesk.matches) setMedia(id);
       if (scrollTo) {
         const target = slides.find((s) => s.dataset.storySlide === id);
         if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1044,20 +1057,39 @@
       return nearest;
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => slideEntries.set(entry.target, entry));
-        const best = pickBestSlide();
-        if (best) activate(best.dataset.storySlide, false);
-      },
-      {
-        root: null,
-        threshold: [0, 0.15, 0.3, 0.45, 0.6, 0.75],
-        rootMargin: "-18% 0px -42% 0px",
+    let observer = null;
+    const bindObserver = () => {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
       }
-    );
+      slideEntries.clear();
+      if (!mqDesk.matches) {
+        lockFirstMedia();
+        return;
+      }
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (!mqDesk.matches) return;
+          entries.forEach((entry) => slideEntries.set(entry.target, entry));
+          const best = pickBestSlide();
+          if (best) activate(best.dataset.storySlide, false);
+        },
+        {
+          root: null,
+          threshold: [0, 0.15, 0.3, 0.45, 0.6, 0.75],
+          rootMargin: "-18% 0px -42% 0px",
+        }
+      );
+      slides.forEach((slide) => observer.observe(slide));
+    };
 
-    slides.forEach((slide) => observer.observe(slide));
+    bindObserver();
+    if (typeof mqDesk.addEventListener === "function") {
+      mqDesk.addEventListener("change", bindObserver);
+    } else if (typeof mqDesk.addListener === "function") {
+      mqDesk.addListener(bindObserver);
+    }
   });
 
   /* Footer accordion (mobile) */
@@ -1096,7 +1128,8 @@
     if (!header || !header.classList.contains("site-header--over-hero")) return;
     if (
       document.body.classList.contains("mega-menu-open") ||
-      document.body.classList.contains("ai-search-open")
+      document.body.classList.contains("ai-search-open") ||
+      document.body.classList.contains("nav-drawer-open")
     ) {
       header.classList.add("site-header--solid");
       return;
@@ -1108,6 +1141,56 @@
     syncHeaderSolid();
     window.addEventListener("scroll", syncHeaderSolid, { passive: true });
   }
+
+  /* Mobil menü drawer — soldan (filtre ritmi) */
+  (() => {
+    const drawer = qs("[data-nav-drawer]");
+    const openBtns = qsa("[data-nav-drawer-open]");
+    if (!drawer || !openBtns.length) return;
+
+    if (drawer.parentElement !== document.body) {
+      document.body.appendChild(drawer);
+    }
+
+    let open = false;
+
+    const openDrawer = () => {
+      if (open) return;
+      open = true;
+      drawer.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("nav-drawer-open");
+      openBtns.forEach((btn) => btn.setAttribute("aria-expanded", "true"));
+      syncHeaderSolid();
+      requestAnimationFrame(() => drawer.classList.add("is-open"));
+    };
+
+    const closeDrawer = () => {
+      if (!open) return;
+      open = false;
+      drawer.classList.remove("is-open");
+      document.body.classList.remove("nav-drawer-open");
+      openBtns.forEach((btn) => btn.setAttribute("aria-expanded", "false"));
+      drawer.setAttribute("aria-hidden", "true");
+      syncHeaderSolid();
+      window.setTimeout(() => {
+        if (!open) drawer.hidden = true;
+      }, 480);
+    };
+
+    openBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (open) closeDrawer();
+        else openDrawer();
+      });
+    });
+    qsa("[data-nav-drawer-close]", drawer).forEach((el) => {
+      el.addEventListener("click", closeDrawer);
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && open) closeDrawer();
+    });
+  })();
 
   /* Mega menü — Ürünler hover / focus */
   (() => {

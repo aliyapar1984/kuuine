@@ -752,6 +752,20 @@
     height: 100%;
   }
 
+  /* Mobilde medya geçişi yok — yalnız ilk görsel */
+  .our-story__media-slide {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+    transition: none;
+  }
+
+  .our-story__media-slide:first-child {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 1 !important;
+  }
+
   .our-story__gradient {
     display: none;
   }
