@@ -19,7 +19,8 @@
       </p>
     {% endif %}
     {% if section.settings.button_label != blank %}
-      <a class="btn thematic-duo__cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+      {% assign duo_cta_href = section.settings.button_link | default: routes.all_products_collection_url %}
+      <a class="btn thematic-duo__cta" href="{{ duo_cta_href }}">{{ section.settings.button_label }}</a>
     {% endif %}
   </div>
 
@@ -49,7 +50,8 @@
             <p class="thematic-duo__caption-text">{{ section.settings.wide_text }}</p>
           {% endif %}
           {% if section.settings.wide_button_label != blank %}
-            <a class="btn btn--ghost-light" href="{{ section.settings.wide_button_link }}">{{ section.settings.wide_button_label }}</a>
+            {% assign wide_cta_href = section.settings.wide_button_link | default: routes.all_products_collection_url %}
+            <a class="btn btn--ghost-light" href="{{ wide_cta_href }}">{{ section.settings.wide_button_label }}</a>
           {% endif %}
         </div>
       {% endif %}
@@ -79,7 +81,8 @@
             <p class="thematic-duo__caption-text">{{ section.settings.tall_text }}</p>
           {% endif %}
           {% if section.settings.tall_button_label != blank %}
-            <a class="btn btn--ghost-light" href="{{ section.settings.tall_button_link }}">{{ section.settings.tall_button_label }}</a>
+            {% assign tall_cta_href = section.settings.tall_button_link | default: routes.all_products_collection_url %}
+            <a class="btn btn--ghost-light" href="{{ tall_cta_href }}">{{ section.settings.tall_button_label }}</a>
           {% endif %}
         </div>
       {% endif %}
@@ -109,7 +112,7 @@
       "type": "textarea",
       "id": "text",
       "label": "Metin",
-      "default": "Daha yavaş sofralar için tasarlandı. Her detayı düşünülmüş, ışığı taşıyan formlar."
+      "default": "Özenli sofralar için tasarlandı. Her detayı düşünülmüş, ışığı taşıyan formlar."
     },
     {
       "type": "text",

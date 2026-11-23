@@ -54,10 +54,14 @@
         {% for link in section.settings.menu.links %}
           {% assign title_down = link.title | downcase %}
           {% if title_down == 'ürünler' or title_down == 'urunler' or title_down == 'products' or title_down == 'shop' %}
+            {% assign mega_href = link.url %}
+            {% if mega_href == blank or mega_href == '/' or mega_href == '#' %}
+              {% assign mega_href = routes.all_products_collection_url %}
+            {% endif %}
             <div class="nav-item nav-item--mega" data-mega-trigger-wrap>
               <a
                 class="nav-link"
-                href="{{ link.url }}"
+                href="{{ mega_href }}"
                 data-mega-trigger
                 aria-expanded="false"
                 aria-controls="kuuine-mega-menu"
@@ -66,7 +70,13 @@
               </a>
             </div>
           {% else %}
-            <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+            {% assign nav_href = link.url %}
+            {% if title_down == 'indirim' or title_down == 'katalog' or title_down == 'sale' or title_down == 'catalog' %}
+              {% if nav_href == blank or nav_href == '/' or nav_href == '#' %}
+                {% assign nav_href = routes.all_products_collection_url %}
+              {% endif %}
+            {% endif %}
+            <a class="nav-link" href="{{ nav_href }}">{{ link.title }}</a>
           {% endif %}
         {% endfor %}
       </nav>
@@ -86,9 +96,9 @@
         {% endif %}
       </div>
       <div class="header-icons">
-        <a href="{{ routes.search_url }}" aria-label="Search">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        </a>
+        <button type="button" class="header-icon-btn" data-ai-search-open aria-label="Ara" aria-haspopup="dialog" aria-controls="kuuine-ai-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
         <a href="{{ routes.account_url }}" aria-label="Account">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.5-3 4-4.5 7-4.5s5.5 1.5 7 4.5"/></svg>
         </a>
@@ -99,6 +109,7 @@
     </div>
   </div>
   {% render 'mega-menu' %}
+  {% render 'ai-search' %}
 </header>
 
 {% schema %}

@@ -1,0 +1,35 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "c1": { "type": "chip", "settings": { "label": "Tabaklar" } },
+        "c2": { "type": "chip", "settings": { "label": "Bardaklar" } },
+        "c3": { "type": "chip", "settings": { "label": "Tepsiler" } },
+        "c4": { "type": "chip", "settings": { "label": "Sofra setleri" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"],
+      "settings": {
+        "show_landing": true,
+        "landing_eyebrow": "Koleksiyon",
+        "landing_title": "Sofra zarafeti\niçin tasarlandı",
+        "landing_text": "Özenli sofralar için düşünülmüş cam, seramik ve ahşap seçkiler.",
+        "manifesto_label": "Atelier",
+        "manifesto_text": "Her parça, paylaşımı derinleştirmek ve sofrayı bir ritüele dönüştürmek için seçildi.",
+        "split1_eyebrow": "Seramik",
+        "split1_title": "Işığı tutan formlar",
+        "split1_text": "Sakin silüetler, yumuşak stoneware.",
+        "split2_eyebrow": "Cam",
+        "split2_title": "Amber & kristal",
+        "split2_text": "Işığı sofraya taşıyan sade camlar.",
+        "split3_eyebrow": "Sofra",
+        "split3_title": "Paylaşım anı",
+        "split3_text": "Birlikte kurulan masalar için.",
+        "description": "Sofra, cam ve seramik seçkiler — özenli sofralar için zamansız formlar.",
+        "products_per_page": 16,
+        "show_categories": true
+      }
+    }
+  },
+  "order": ["main"]
+}

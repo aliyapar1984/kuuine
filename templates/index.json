@@ -5,7 +5,8 @@
       "settings": {
         "heading": "Sofra\nMükemmel.",
         "text": "Premium züccaciye — tabak, bardak, tepsi; ziyafet sofraları için zamansız zarafet.",
-        "button_label": "Koleksiyonu keşfet"
+        "button_label": "Koleksiyonu keşfet",
+        "button_link": "/collections/all"
       }
     },
     "tabs": {
@@ -15,35 +16,40 @@
           "type": "tab",
           "settings": {
             "title": "Tabaklar",
-            "link_label": "Tabakları keşfet"
+            "link_label": "Tabakları keşfet",
+            "link": "/collections/all"
           }
         },
         "ham": {
           "type": "tab",
           "settings": {
             "title": "Bardaklar",
-            "link_label": "Bardakları keşfet"
+            "link_label": "Bardakları keşfet",
+            "link": "/collections/all"
           }
         },
         "sun": {
           "type": "tab",
           "settings": {
             "title": "Organik seramik",
-            "link_label": "Organik seramiği keşfet"
+            "link_label": "Organik seramiği keşfet",
+            "link": "/collections/all"
           }
         },
         "lounge": {
           "type": "tab",
           "settings": {
             "title": "Ziyafet setleri",
-            "link_label": "Ziyafet setlerini keşfet"
+            "link_label": "Ziyafet setlerini keşfet",
+            "link": "/collections/all"
           }
         },
         "day": {
           "type": "tab",
           "settings": {
             "title": "Kaseler",
-            "link_label": "Kaseleri keşfet"
+            "link_label": "Kaseleri keşfet",
+            "link": "/collections/all"
           }
         }
       },
@@ -112,7 +118,8 @@
           "settings": {
             "eyebrow": "Yeni koleksiyon",
             "title": "Rüya gibi\nziyafet sofraları",
-            "button_label": "Koleksiyonu keşfet"
+            "button_label": "Koleksiyonu keşfet",
+            "button_link": "/collections/all"
           }
         }
       },
@@ -290,8 +297,11 @@
       "settings": {
         "eyebrow": "Züccaciye koleksiyon",
         "title": "Sofra zarafeti\niçin tasarlandı",
-        "text": "Daha yavaş sofralar için tasarlandı. Her detayı düşünülmüş, ışığı taşıyan formlar; mevsime ve ruh haline göre yenilenebilir bir zarafet.",
-        "button_label": "Züccaciye koleksiyonu keşfet"
+        "text": "Özenli sofralar için tasarlandı. Her detayı düşünülmüş, ışığı taşıyan formlar; mevsime ve ruh haline göre yenilenebilir bir zarafet.",
+        "button_label": "Züccaciye koleksiyonu keşfet",
+        "button_link": "/collections/all",
+        "wide_button_link": "/collections/all",
+        "tall_button_link": "/collections/all"
       }
     }
   },

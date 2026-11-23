@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "story_label": "i.",
+        "story_secondary_label": "ii.",
+        "story_secondary": "Soft stoneware — özenli sofralar için.",
+        "spec_style_label": "Stil",
+        "spec_dimensions_label": "Ölçüler",
+        "spec_materials_label": "Malzeme",
+        "detail_label": "Detay",
+        "add_label": "Sepete ekle",
+        "sold_out_label": "Tükendi"
+      }
+    }
+  },
+  "order": ["main"]
+}

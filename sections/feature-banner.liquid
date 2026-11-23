@@ -36,7 +36,8 @@
           </p>
         {% endif %}
         {% if block.settings.button_label != blank %}
-          <a class="btn btn--ghost-light" href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
+          {% assign feature_cta_href = block.settings.button_link | default: routes.all_products_collection_url %}
+          <a class="btn btn--ghost-light" href="{{ feature_cta_href }}">{{ block.settings.button_label }}</a>
         {% endif %}
       </div>
     </article>

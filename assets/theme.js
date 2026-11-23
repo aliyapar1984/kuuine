@@ -190,10 +190,15 @@
       const isHover =
         video.dataset.kuuineVideo === "hover" || !!video.closest(".product-card__hover");
       const storySlide = video.closest("[data-story-media]");
+      /* Uzun section (katalog vb.) intersectionRatio’yu düşürüp ambient play’i engeller —
+         önce yakın medya/hero kabı, section yalnızca kısa bloklarda. */
       const observeTarget =
+        video.closest(".catalog-atelier__hero") ||
+        video.closest("[data-catalog-landing]") ||
         video.closest(".thematic-duo__figure") ||
         video.closest(".product-card") ||
         storySlide ||
+        video.closest(".feature-banner") ||
         video.closest("section") ||
         video;
 
@@ -1070,14 +1075,21 @@
 
   /* Header: sadece görünüm değişir (fixed kalır → layout kayması olmaz) */
   const header = qs("[data-site-header]");
+  const syncHeaderSolid = () => {
+    if (!header || !header.classList.contains("site-header--over-hero")) return;
+    if (
+      document.body.classList.contains("mega-menu-open") ||
+      document.body.classList.contains("ai-search-open")
+    ) {
+      header.classList.add("site-header--solid");
+      return;
+    }
+    const solid = window.scrollY > window.innerHeight * 0.7;
+    header.classList.toggle("site-header--solid", solid);
+  };
   if (header && header.classList.contains("site-header--over-hero")) {
-    const onScroll = () => {
-      if (document.body.classList.contains("mega-menu-open")) return;
-      const solid = window.scrollY > window.innerHeight * 0.7;
-      header.classList.toggle("site-header--solid", solid);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    syncHeaderSolid();
+    window.addEventListener("scroll", syncHeaderSolid, { passive: true });
   }
 
   /* Mega menü — Ürünler hover / focus */
@@ -1252,4 +1264,511 @@
   };
 
   initInfoLottie();
+
+  /* Katalog: sıralama, kategori, görünüm, filtre modal */
+  qsa("[data-catalog]").forEach((root) => {
+    const sort = qs("[data-catalog-sort]", root);
+    const grid = qs("[data-catalog-grid]", root);
+    const filterModal = qs("[data-catalog-filter-modal]", root);
+    const landing = qs("[data-catalog-landing]", root);
+
+    if (landing) {
+      if ("IntersectionObserver" in window) {
+        const landIo = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              landing.classList.add("is-inview");
+              landIo.disconnect();
+            }
+          },
+          { threshold: 0.15 }
+        );
+        landIo.observe(landing);
+      } else {
+        landing.classList.add("is-inview");
+      }
+    }
+
+    if ("IntersectionObserver" in window) {
+      const revealIo = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-revealed");
+            revealIo.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
+      );
+      qsa("[data-catalog-reveal]", root).forEach((el) => revealIo.observe(el));
+    } else {
+      qsa("[data-catalog-reveal]", root).forEach((el) => el.classList.add("is-revealed"));
+    }
+
+    if (sort) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("sort_by")) sort.value = params.get("sort_by");
+      sort.addEventListener("change", () => {
+        if (!window.Shopify) return;
+        const url = new URL(window.location.href);
+        url.searchParams.set("sort_by", sort.value);
+        window.location.assign(url.toString());
+      });
+    }
+
+    const categoryLabel = qs("[data-catalog-category]", root);
+    const categoryDefault = categoryLabel?.textContent?.trim() || "";
+
+    qsa("[data-catalog-chip]", root).forEach((chip) => {
+      chip.addEventListener("click", () => {
+        qsa("[data-catalog-chip]", root).forEach((c) => c.classList.remove("is-active"));
+        chip.classList.add("is-active");
+        if (categoryLabel) {
+          const key = chip.dataset.catalogChip || "all";
+          const label = (chip.textContent || "").trim();
+          categoryLabel.textContent = key === "all" ? categoryDefault || label : label;
+        }
+      });
+    });
+
+    const setView = (cols) => {
+      if (!grid) return;
+      grid.classList.toggle("catalog__grid--cols-3", cols === 3);
+      grid.classList.toggle("catalog__grid--cols-4", cols === 4);
+      qsa("[data-catalog-view]", root).forEach((btn) => {
+        const on = Number(btn.dataset.catalogView) === cols;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      try {
+        localStorage.setItem("kuuine-catalog-cols", String(cols));
+      } catch (e) {}
+    };
+
+    qsa("[data-catalog-view]", root).forEach((btn) => {
+      btn.addEventListener("click", () => setView(Number(btn.dataset.catalogView) || 4));
+    });
+
+    try {
+      const saved = Number(localStorage.getItem("kuuine-catalog-cols"));
+      if (saved === 3 || saved === 4) setView(saved);
+    } catch (e) {}
+
+    if (filterModal) {
+      let filterOpen = false;
+      const filterCountEls = qsa("[data-catalog-filter-count]", root);
+      const openFilterBtns = qsa("[data-catalog-filter-open]", root);
+
+      /* Header altında kalmasın: viewport’a sabitle */
+      if (filterModal.parentElement !== document.body) {
+        document.body.appendChild(filterModal);
+      }
+
+      const filterInputs = qsa("[data-catalog-filter]", filterModal);
+      const filterTitle = qs("#catalog-filter-title", filterModal);
+      if (filterTitle) filterTitle.textContent = "Filtrele";
+
+      const activeFilterCount = () =>
+        filterInputs.filter((input) => {
+          if (!input.checked) return false;
+          /* Varsayılan "Stokta" sayaca dahil değil */
+          return input.dataset.catalogFilter !== "available";
+        }).length;
+
+      const syncFilterCount = () => {
+        const n = activeFilterCount();
+        filterCountEls.forEach((el) => {
+          if (n > 0) {
+            el.hidden = false;
+            el.textContent = String(n);
+          } else {
+            el.hidden = true;
+            el.textContent = "";
+          }
+        });
+        openFilterBtns.forEach((btn) => {
+          btn.setAttribute("aria-label", n > 0 ? `Filtrele, ${n} aktif` : "Filtrele");
+          btn.classList.toggle("has-filters", n > 0);
+        });
+      };
+
+      const openFilter = () => {
+        if (filterOpen) return;
+        filterOpen = true;
+        if (filterTitle) filterTitle.textContent = "Filtrele";
+        filterModal.hidden = false;
+        filterModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("catalog-filter-open");
+        requestAnimationFrame(() => filterModal.classList.add("is-open"));
+      };
+      const closeFilter = () => {
+        if (!filterOpen) return;
+        filterOpen = false;
+        filterModal.classList.remove("is-open");
+        document.body.classList.remove("catalog-filter-open");
+        filterModal.setAttribute("aria-hidden", "true");
+        window.setTimeout(() => {
+          if (!filterOpen) filterModal.hidden = true;
+        }, 480);
+      };
+
+      openFilterBtns.forEach((btn) => {
+        btn.addEventListener("click", openFilter);
+      });
+      qsa("[data-catalog-filter-close]", filterModal).forEach((btn) => {
+        btn.addEventListener("click", closeFilter);
+      });
+      qsa("[data-catalog-filter-reset]", filterModal).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          filterInputs.forEach((input) => {
+            input.checked = input.dataset.catalogFilter === "available";
+          });
+          syncFilterCount();
+        });
+      });
+      filterInputs.forEach((input) => {
+        input.addEventListener("change", syncFilterCount);
+      });
+      syncFilterCount();
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && filterOpen) closeFilter();
+      });
+    }
+  });
+
+  /* Header AI arama — üstten aşağı drawer */
+  (() => {
+    const root = qs("[data-ai-search]");
+    const openBtns = qsa("[data-ai-search-open]");
+    if (!root || !openBtns.length) return;
+
+    if (root.parentElement !== document.body) {
+      document.body.appendChild(root);
+    }
+
+    const input = qs("[data-ai-search-input]", root);
+    const form = qs("[data-ai-search-form]", root);
+    const clearBtn = qs("[data-ai-search-clear]", root);
+    const results = qs("[data-ai-search-results]", root);
+    const assist = qs("[data-ai-search-assist]", root);
+    const reply = qs("[data-ai-search-reply]", root);
+    const backdrop = qs("[data-ai-search-backdrop]", root);
+    const catalogNode = qs("[data-ai-search-catalog]");
+    let open = false;
+    let catalog = [];
+
+    const syncClearBtn = () => {
+      if (!clearBtn) return;
+      const has = !!(input?.value || "").trim();
+      clearBtn.hidden = !has;
+    };
+
+    try {
+      if (catalogNode) catalog = JSON.parse(catalogNode.textContent || "[]");
+    } catch (e) {
+      catalog = [];
+    }
+
+    const replyFor = (q) => {
+      const t = q.toLowerCase();
+      if (t.includes("yemek") || t.includes("takım") || t.includes("sofra")) {
+        return "Sofra için yemek takımı ve seramik seçkiler hazırladım — misafir sayınıza göre setleri öne çıkardım.";
+      }
+      if (t.includes("bardak") || t.includes("cam") || t.includes("fincan")) {
+        return "Cam ve bardak tarafında soft, amber ve kristal seçenekleri bir araya getirdim.";
+      }
+      if (t.includes("emaye")) {
+        return "Emaye parçalarda mutfak ve sofra kesişiminde sade formlar öneriyorum.";
+      }
+      if (t.includes("outlet") || t.includes("indirim")) {
+        return "Outlet ve sınırlı stoklu parçaları ayıkladım — kaçırmadan bakın.";
+      }
+      return `“${q}” için kuuine kataloğundan en yakın eşleşmeleri getirdim.`;
+    };
+
+    const filterLocal = (q) => {
+      const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+      if (!terms.length) return catalog.slice(0, 6);
+      return catalog
+        .filter((p) => {
+          const hay = `${p.title} ${p.brand || ""} ${p.tags || ""}`.toLowerCase();
+          return terms.some((t) => hay.includes(t));
+        })
+        .slice(0, 6);
+    };
+
+    const renderCards = (items) => {
+      if (!results) return;
+      if (!items.length) {
+        results.innerHTML = `<p class="ai-search__hint">Eşleşen ürün yok — arama sayfasında tüm sonuçlara bakabilirsiniz.</p>`;
+        return;
+      }
+      results.innerHTML = items
+        .map(
+          (p) => `
+        <a class="ai-search__card" href="${p.url || "#"}">
+          <div class="ai-search__card-media">
+            ${p.image ? `<img src="${p.image}" alt="" loading="lazy" decoding="async" width="320" height="400">` : ""}
+          </div>
+          <div class="ai-search__card-body">
+            <h3 class="ai-search__card-title">${p.title}</h3>
+            <p class="ai-search__card-meta">${p.brand || ""} · ${p.price || ""}</p>
+          </div>
+        </a>`
+        )
+        .join("");
+    };
+
+    const runQuery = (q) => {
+      const query = (q || "").trim();
+      if (!query) return;
+      if (assist && reply) {
+        assist.hidden = false;
+        reply.textContent = replyFor(query);
+      }
+      if (catalog.length) {
+        renderCards(filterLocal(query));
+        return;
+      }
+      /* Shopify Predictive Search */
+      const url = `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`;
+      fetch(url)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          const products = data?.resources?.results?.products || [];
+          renderCards(
+            products.map((p) => ({
+              title: p.title,
+              url: p.url,
+              image: p.image,
+              brand: p.vendor || "",
+              price: p.price || "",
+            }))
+          );
+        })
+        .catch(() => {
+          if (results) {
+            results.innerHTML = `<p class="ai-search__hint">Öneri alınamadı. <a href="/search?q=${encodeURIComponent(query)}">Arama sayfasına git</a></p>`;
+          }
+        });
+    };
+
+    const openSearch = () => {
+      if (open) return;
+      open = true;
+      root.hidden = false;
+      root.setAttribute("aria-hidden", "false");
+      document.body.classList.add("ai-search-open");
+      header?.classList.add("site-header--solid");
+      requestAnimationFrame(() => {
+        root.classList.add("is-open");
+        input?.focus();
+      });
+    };
+
+    const closeSearch = () => {
+      if (!open) return;
+      open = false;
+      root.classList.remove("is-open");
+      document.body.classList.remove("ai-search-open");
+      root.setAttribute("aria-hidden", "true");
+      if (typeof syncHeaderSolid === "function") syncHeaderSolid();
+      window.setTimeout(() => {
+        if (!open) root.hidden = true;
+      }, 520);
+    };
+
+    openBtns.forEach((btn) => btn.addEventListener("click", openSearch));
+    qsa("[data-ai-search-close]", root).forEach((btn) => btn.addEventListener("click", closeSearch));
+    backdrop?.addEventListener("click", closeSearch);
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && open) closeSearch();
+    });
+
+    form?.addEventListener("submit", (e) => {
+      if (!catalog.length) return; /* Shopify: normal form submit → search page */
+      e.preventDefault();
+      runQuery(input?.value || "");
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      if (!input) return;
+      input.value = "";
+      syncClearBtn();
+      if (assist) assist.hidden = true;
+      if (reply) reply.textContent = "";
+      if (results) results.innerHTML = "";
+      qsa("[data-ai-chip]", root).forEach((c) => c.classList.remove("is-active"));
+      input.focus();
+    });
+
+    let debounce;
+    input?.addEventListener("input", () => {
+      syncClearBtn();
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(() => {
+        if ((input.value || "").trim().length >= 2) runQuery(input.value);
+      }, 280);
+    });
+
+    qsa("[data-ai-chip]", root).forEach((chip) => {
+      chip.addEventListener("click", () => {
+        qsa("[data-ai-chip]", root).forEach((c) => c.classList.remove("is-active"));
+        chip.classList.add("is-active");
+        if (input) input.value = chip.dataset.aiChip || chip.textContent.trim();
+        syncClearBtn();
+        runQuery(input?.value || "");
+      });
+    });
+
+    syncClearBtn();
+  })();
+
+  /* ——— PDP: galeri index (mobil snap / masaüstü scroll) + varyant ——— */
+  qsa("[data-pdp]").forEach((root) => {
+    const frames = qsa("[data-pdp-frame]", root);
+    const indexEl = qs("[data-pdp-index]", root);
+    const gallery = qs("[data-pdp-gallery]", root);
+    const progressEl = qs("[data-pdp-progress]", root);
+    const progressFill = qs("[data-pdp-progress-fill]", root);
+    const form = qs("[data-pdp-form]", root);
+    const variantInput = qs("[data-pdp-variant-id]", root);
+    const priceEl = qs("[data-pdp-price]", root);
+    const submit = qs("[data-pdp-submit]", root);
+    const optionInputs = qsa("[data-pdp-option]", root);
+    let variants = [];
+    try {
+      const raw = qs("[data-pdp-variants]", root)?.textContent || "[]";
+      variants = JSON.parse(raw);
+    } catch (_) {
+      variants = [];
+    }
+
+    const pad = (n) => String(n).padStart(2, "0");
+    const total = frames.length;
+    const bullets = qsa("[data-pdp-jump]", root);
+    const mqDesk = window.matchMedia("(min-width: 900px)");
+    let galleryIo = null;
+
+    const setIndex = (n) => {
+      const i = Math.max(1, Math.min(n, total || 1));
+      if (indexEl) indexEl.textContent = pad(i);
+      if (progressFill && total) {
+        progressFill.style.width = `${(i / total) * 100}%`;
+      }
+      if (progressEl) progressEl.setAttribute("aria-valuenow", String(i));
+      bullets.forEach((btn) => {
+        const on = Number(btn.dataset.pdpJump || "0") === i;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-current", on ? "true" : "false");
+      });
+    };
+
+    const bindGalleryIo = () => {
+      if (!frames.length || !("IntersectionObserver" in window)) return;
+      if (galleryIo) {
+        galleryIo.disconnect();
+        galleryIo = null;
+      }
+      const desk = mqDesk.matches;
+      galleryIo = new IntersectionObserver(
+        (entries) => {
+          let best = null;
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
+          }
+          if (best) {
+            setIndex(Number(best.target.getAttribute("data-index") || "1"));
+          }
+        },
+        desk
+          ? { root: null, threshold: [0.45, 0.6, 0.8], rootMargin: "-10% 0px -10% 0px" }
+          : { root: gallery, threshold: [0.55, 0.75] }
+      );
+      frames.forEach((f) => galleryIo.observe(f));
+    };
+
+    bindGalleryIo();
+    if (typeof mqDesk.addEventListener === "function") {
+      mqDesk.addEventListener("change", bindGalleryIo);
+    } else if (typeof mqDesk.addListener === "function") {
+      mqDesk.addListener(bindGalleryIo);
+    }
+
+    bullets.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const i = Number(btn.dataset.pdpJump || "1") - 1;
+        const frame = frames[i];
+        if (!frame) return;
+        const smooth = reduceMotion() ? "auto" : "smooth";
+        if (mqDesk.matches) {
+          frame.scrollIntoView({ behavior: smooth, block: "start" });
+        } else if (gallery) {
+          gallery.scrollTo({ left: frame.offsetLeft, behavior: smooth });
+        }
+        setIndex(i + 1);
+      });
+    });
+
+    const selectedOptions = () => {
+      const map = {};
+      optionInputs.forEach((input) => {
+        if (input.checked) map[input.dataset.optionPosition] = input.value;
+      });
+      return map;
+    };
+
+    const findVariant = () => {
+      if (!variants.length) return null;
+      const selected = selectedOptions();
+      return (
+        variants.find((v) => {
+          const opts = v.options || [];
+          return opts.every((val, idx) => {
+            const pos = String(idx + 1);
+            return selected[pos] == null || selected[pos] === val;
+          });
+        }) || variants[0]
+      );
+    };
+
+    const money = (cents) => {
+      try {
+        return new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(
+          (Number(cents) || 0) / 100
+        );
+      } catch (_) {
+        return `₺${Math.round((Number(cents) || 0) / 100)}`;
+      }
+    };
+
+    const syncVariant = () => {
+      const v = findVariant();
+      if (!v) return;
+      if (variantInput) variantInput.value = v.id;
+      if (priceEl) {
+        const compare = v.compare_at_price && v.compare_at_price > v.price ? `<s>${money(v.compare_at_price)}</s>` : "";
+        priceEl.innerHTML = `${money(v.price)}${compare ? ` ${compare}` : ""}`;
+      }
+      if (submit) {
+        submit.disabled = !v.available;
+        submit.textContent = v.available ? submit.dataset.labelAdd || "Sepete ekle" : submit.dataset.labelSold || "Tükendi";
+      }
+    };
+
+    if (submit) {
+      submit.dataset.labelAdd = submit.textContent.trim();
+      submit.dataset.labelSold = "Tükendi";
+    }
+    optionInputs.forEach((input) => input.addEventListener("change", syncVariant));
+    if (optionInputs.length) syncVariant();
+
+    /* Preview: form submit engelle */
+    form?.addEventListener("submit", (e) => {
+      if (!root.closest(".template-product") || location.protocol === "file:" || /\/preview\//.test(location.pathname)) {
+        e.preventDefault();
+      }
+    });
+  });
 })();

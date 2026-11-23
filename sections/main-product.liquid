@@ -1,0 +1,308 @@
+{%- comment -%}
+  Ürün detay — Lusano üç kolon (sol hikâye / orta galeri / sağ satın al), kuuine dili.
+{%- endcomment -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign media_count = product.media.size
+  assign crumb_collection = collection
+  if crumb_collection == blank
+    assign crumb_collection = product.collections.first
+  endif
+  assign story = product.description
+  if section.settings.story != blank
+    assign story = section.settings.story
+  endif
+  assign story_ii = section.settings.story_secondary
+  if product.metafields.custom.material != blank
+    assign story_ii = product.metafields.custom.material.value | default: product.metafields.custom.material
+  endif
+  assign spec_style = product.metafields.custom.style.value | default: product.type
+  assign spec_dims = product.metafields.custom.dimensions.value | default: section.settings.spec_dimensions
+  assign spec_mat = product.metafields.custom.fabric.value | default: product.vendor
+-%}
+
+<section
+  class="pdp"
+  data-shopify-section="main-product"
+  data-pdp
+  {{ section.shopify_attributes }}
+>
+  <div class="pdp__layout">
+    <aside class="pdp__aside" data-pdp-aside>
+      <div class="pdp__story">
+        {% if story != blank %}
+          <p class="pdp__story-block">
+            <span class="pdp__story-index">{{ section.settings.story_label }}</span>
+            <span class="pdp__story-text">{{ story | strip_html }}</span>
+          </p>
+        {% endif %}
+        {% if story_ii != blank %}
+          <p class="pdp__story-block">
+            <span class="pdp__story-index">{{ section.settings.story_secondary_label }}</span>
+            <span class="pdp__story-text">{{ story_ii }}</span>
+          </p>
+        {% endif %}
+      </div>
+
+      {% if media_count > 0 %}
+        <div class="pdp__aside-foot">
+          <ol class="pdp__bullets" data-pdp-bullets aria-label="Ürün görselleri">
+            {% for media in product.media %}
+              <li>
+                <button
+                  type="button"
+                  class="pdp__bullet{% if forloop.first %} is-active{% endif %}"
+                  data-pdp-jump="{{ forloop.index }}"
+                  aria-label="Görsel {{ forloop.index }}"
+                  aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                >
+                  <span class="pdp__bullet-n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                  <span class="pdp__bullet-media">
+                    {% if media.preview_image %}
+                      {{
+                        media.preview_image
+                        | image_url: width: 200
+                        | image_tag: loading: 'lazy', decoding: 'async', alt: ''
+                      }}
+                    {% elsif media.media_type == 'image' %}
+                      {{
+                        media
+                        | image_url: width: 200
+                        | image_tag: loading: 'lazy', decoding: 'async', alt: ''
+                      }}
+                    {% endif %}
+                  </span>
+                </button>
+              </li>
+            {% endfor %}
+          </ol>
+        </div>
+      {% endif %}
+    </aside>
+
+    <div class="pdp__media-stage">
+      <div class="pdp__gallery" data-pdp-gallery>
+        {% if media_count > 0 %}
+          {% for media in product.media %}
+            <figure class="pdp__frame" data-pdp-frame data-index="{{ forloop.index }}">
+              {% if media.media_type == 'video' or media.media_type == 'external_video' %}
+                {{
+                  media
+                  | media_tag:
+                    image_size: '1600x',
+                    autoplay: false,
+                    loop: true,
+                    controls: true,
+                    muted: true,
+                    class: 'pdp__media',
+                    loading: 'lazy'
+                }}
+              {% else %}
+                {% if forloop.first %}
+                  {{
+                    media
+                    | image_url: width: 2000
+                    | image_tag:
+                      class: 'pdp__media',
+                      loading: 'eager',
+                      fetchpriority: 'high',
+                      decoding: 'async',
+                      widths: '600,900,1200,1600,2000',
+                      sizes: '(min-width: 900px) 42vw, 100vw',
+                      alt: media.alt | default: product.title
+                  }}
+                {% else %}
+                  {{
+                    media
+                    | image_url: width: 2000
+                    | image_tag:
+                      class: 'pdp__media',
+                      loading: 'lazy',
+                      decoding: 'async',
+                      widths: '600,900,1200,1600,2000',
+                      sizes: '(min-width: 900px) 42vw, 100vw',
+                      alt: media.alt | default: product.title
+                  }}
+                {% endif %}
+              {% endif %}
+            </figure>
+          {% endfor %}
+        {% else %}
+          <figure class="pdp__frame pdp__frame--empty" data-pdp-frame data-index="1">
+            <div class="pdp__media pdp__media--placeholder" aria-hidden="true"></div>
+          </figure>
+        {% endif %}
+      </div>
+      {% if media_count > 1 %}
+        <div
+          class="pdp__progress"
+          role="progressbar"
+          aria-label="Galeri"
+          aria-valuemin="1"
+          aria-valuemax="{{ media_count }}"
+          aria-valuenow="1"
+          data-pdp-progress
+        >
+          <span
+            class="pdp__progress-fill"
+            data-pdp-progress-fill
+            style="width: {{ 100 | times: 1.0 | divided_by: media_count }}%;"
+          ></span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="pdp__buy" data-pdp-buy>
+      <div class="pdp__buy-top">
+        <div class="pdp__counter" aria-live="polite">
+          <span class="pdp__counter-current" data-pdp-index>01</span>
+          <span class="pdp__counter-range" data-pdp-range>
+            001 – {% if media_count > 0 %}{{ media_count | prepend: '00' | slice: -3, 3 }}{% else %}001{% endif %}
+          </span>
+        </div>
+        <nav class="pdp__crumbs" aria-label="Kategori">
+          <a href="{{ routes.root_url }}">{{ section.settings.crumb_home | default: 'Anasayfa' }}</a>
+          <span class="pdp__crumbs-sep" aria-hidden="true">-</span>
+          {% if crumb_collection != blank %}
+            <a href="{{ crumb_collection.url }}">{{ crumb_collection.title }}</a>
+          {% else %}
+            <a href="{{ routes.all_products_collection_url }}">{{ section.settings.crumb_fallback | default: 'Ürünler' }}</a>
+          {% endif %}
+        </nav>
+      </div>
+
+      <div class="pdp__buy-main">
+        <h1 class="pdp__title">{{ product.title }}</h1>
+
+        <p class="pdp__price" data-pdp-price>
+          {{ current_variant.price | money }}
+          {% if current_variant.compare_at_price > current_variant.price %}
+            <s>{{ current_variant.compare_at_price | money }}</s>
+          {% endif %}
+        </p>
+
+        {% form 'product', product, data-pdp-form: '' %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-pdp-variant-id>
+
+          {% unless product.has_only_default_variant %}
+            <div class="pdp__options">
+              {% for option in product.options_with_values %}
+                <fieldset class="pdp__option">
+                  <legend class="pdp__option-label">{{ option.name }}</legend>
+                  <div class="pdp__option-values">
+                    {% for value in option.values %}
+                      <label class="pdp__swatch-label">
+                        <input
+                          type="radio"
+                          name="option{{ option.position }}"
+                          value="{{ value | escape }}"
+                          data-pdp-option
+                          data-option-position="{{ option.position }}"
+                          {% if option.selected_value == value %}checked{% endif %}
+                        >
+                        <span>{{ value }}</span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </fieldset>
+              {% endfor %}
+            </div>
+          {% endunless %}
+
+          <dl class="pdp__specs">
+            {% if spec_style != blank %}
+              <div class="pdp__spec">
+                <dt>{{ section.settings.spec_style_label }}</dt>
+                <dd>{{ spec_style }}</dd>
+              </div>
+            {% endif %}
+            {% if spec_dims != blank %}
+              <div class="pdp__spec">
+                <dt>{{ section.settings.spec_dimensions_label }}</dt>
+                <dd>{{ spec_dims }}</dd>
+              </div>
+            {% endif %}
+            {% if spec_mat != blank %}
+              <div class="pdp__spec">
+                <dt>{{ section.settings.spec_materials_label }}</dt>
+                <dd>{{ spec_mat }}</dd>
+              </div>
+            {% endif %}
+            {% for block in section.blocks %}
+              {% if block.type == 'spec' and block.settings.label != blank %}
+                <div class="pdp__spec" {{ block.shopify_attributes }}>
+                  <dt>{{ block.settings.label }}</dt>
+                  <dd>{{ block.settings.value }}</dd>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </dl>
+
+          <button
+            type="submit"
+            class="pdp__submit"
+            data-pdp-submit
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            {% if current_variant.available %}
+              {{ section.settings.add_label }}
+            {% else %}
+              {{ section.settings.sold_out_label }}
+            {% endif %}
+          </button>
+        {% endform %}
+
+        <script type="application/json" data-pdp-variants>
+          {{ product.variants | json }}
+        </script>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product detail",
+  "tag": "section",
+  "class": "section-main-product",
+  "settings": [
+    { "type": "header", "content": "Kategori yolu" },
+    { "type": "text", "id": "crumb_home", "label": "Anasayfa metni", "default": "Anasayfa" },
+    { "type": "text", "id": "crumb_fallback", "label": "Koleksiyon yoksa", "default": "Ürünler" },
+    { "type": "header", "content": "Hikâye" },
+    { "type": "text", "id": "story_label", "label": "Birincil etiket", "default": "i." },
+    {
+      "type": "textarea",
+      "id": "story",
+      "label": "Birincil metin (boşsa ürün açıklaması)"
+    },
+    { "type": "text", "id": "story_secondary_label", "label": "İkincil etiket", "default": "ii." },
+    {
+      "type": "textarea",
+      "id": "story_secondary",
+      "label": "İkincil metin",
+      "default": "Soft stoneware — özenli sofralar için."
+    },
+    { "type": "text", "id": "detail_label", "label": "Detay etiketi", "default": "Detay" },
+    { "type": "header", "content": "Özellikler" },
+    { "type": "text", "id": "spec_style_label", "label": "Stil etiketi", "default": "Stil" },
+    { "type": "text", "id": "spec_dimensions_label", "label": "Ölçü etiketi", "default": "Ölçüler" },
+    { "type": "text", "id": "spec_dimensions", "label": "Ölçü (metafield yoksa)", "default": "Ø 28 cm" },
+    { "type": "text", "id": "spec_materials_label", "label": "Malzeme etiketi", "default": "Malzeme" },
+    { "type": "header", "content": "Satın al" },
+    { "type": "text", "id": "add_label", "label": "Sepete ekle", "default": "Sepete ekle" },
+    { "type": "text", "id": "sold_out_label", "label": "Tükendi", "default": "Tükendi" }
+  ],
+  "blocks": [
+    {
+      "type": "spec",
+      "name": "Özellik satırı",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Etiket", "default": "Koleksiyon" },
+        { "type": "text", "id": "value", "label": "Değer", "default": "Solace" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Product detail" }]
+}
+{% endschema %}

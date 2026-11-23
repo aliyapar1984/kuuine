@@ -1,0 +1,70 @@
+{% comment %}
+  Header AI arama — üstten aşağı kayan drawer (filtre ile aynı geçiş ritmi).
+  Gerçek mağazada Predictive Search /search/suggest.json; preview’da yerel katalog.
+{% endcomment %}
+<div
+  class="ai-search"
+  id="kuuine-ai-search"
+  data-ai-search
+  hidden
+  aria-hidden="true"
+>
+  <div class="ai-search__backdrop" data-ai-search-backdrop></div>
+  <div
+    class="ai-search__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ai-search-title"
+  >
+    <div class="ai-search__top">
+      <p class="ai-search__eyebrow" id="ai-search-title">Ara</p>
+      <button type="button" class="ai-search__close" data-ai-search-close aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="ai-search__body">
+      <form class="ai-search__form" action="{{ routes.search_url }}" method="get" role="search" data-ai-search-form>
+        <input type="hidden" name="type" value="product">
+        <label class="ai-search__label" for="ai-search-input">Ne arıyorsunuz?</label>
+        <div class="ai-search__field">
+          <input
+            id="ai-search-input"
+            class="ai-search__input"
+            type="search"
+            name="q"
+            autocomplete="off"
+            placeholder="Örn. 8 kişilik soft seramik yemek takımı"
+            data-ai-search-input
+          >
+          <div class="ai-search__actions">
+            <button type="button" class="ai-search__clear" data-ai-search-clear hidden>Sil</button>
+            <button type="submit" class="ai-search__submit">Ara</button>
+          </div>
+        </div>
+      </form>
+
+      <ul class="ai-search__chips" data-ai-search-chips role="list">
+        <li><button type="button" data-ai-chip="yemek takımı">Yemek takımı</button></li>
+        <li><button type="button" data-ai-chip="cam bardak">Cam bardak</button></li>
+        <li><button type="button" data-ai-chip="emaye">Emaye</button></li>
+        <li><button type="button" data-ai-chip="tepsi">Tepsi</button></li>
+        <li><button type="button" data-ai-chip="outlet">Outlet</button></li>
+      </ul>
+
+      <div class="ai-search__assist" data-ai-search-assist hidden>
+        <p class="ai-search__assist-label">Asistan</p>
+        <p class="ai-search__assist-text" data-ai-search-reply></p>
+      </div>
+
+      <div class="ai-search__results" data-ai-search-results aria-live="polite"></div>
+
+      <p class="ai-search__hint">
+        Doğal dilde yazın — asistan sofra, cam ve seramik seçkilerinizi sadeleştirir.
+        <a href="{{ routes.all_products_collection_url }}" data-ai-search-all>Katalog</a>
+      </p>
+    </div>
+  </div>
+</div>

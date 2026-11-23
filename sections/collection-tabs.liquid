@@ -50,7 +50,8 @@
             {{ block.settings.text }}
           </p>
           {% if block.settings.link_label != blank %}
-            <a class="btn--text" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
+            {% assign tab_href = block.settings.link | default: routes.all_products_collection_url %}
+            <a class="btn--text" href="{{ tab_href }}">{{ block.settings.link_label }}</a>
           {% endif %}
         </div>
       {% endfor %}

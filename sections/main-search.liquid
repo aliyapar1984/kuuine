@@ -1,0 +1,84 @@
+<section
+  class="catalog"
+  data-shopify-section="main-search"
+  data-catalog
+  {{ section.shopify_attributes }}
+>
+  <header class="catalog__hero">
+    <nav aria-label="Breadcrumb">
+      <ol class="catalog__crumb">
+        <li><a href="{{ routes.root_url }}">Ana sayfa</a></li>
+        <li aria-current="page">Arama</li>
+      </ol>
+    </nav>
+    <h1 class="catalog__title">
+      {% if search.performed %}
+        “{{ search.terms | escape }}”
+      {% else %}
+        Ara
+      {% endif %}
+    </h1>
+    <p class="catalog__desc">
+      {% if search.performed %}
+        {{ search.results_count }} sonuç
+      {% else %}
+        Ürün, koleksiyon veya doğal dilde arayın — örn. “6 kişilik soft seramik yemek takımı”.
+      {% endif %}
+    </p>
+  </header>
+
+  <div class="catalog__toolbar">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="catalog__tools" style="width:100%;justify-content:space-between">
+      <input type="hidden" name="type" value="product">
+      <label class="catalog__search-field" style="flex:1;max-width:28rem">
+        <span class="catalog__sort-label">Sorgu</span>
+        <input
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="Ne arıyorsunuz?"
+          aria-label="Arama"
+          style="width:100%;border:0;border-bottom:1px solid currentColor;background:transparent;padding:0.35rem 0;font:inherit"
+        >
+      </label>
+      <button type="submit" class="catalog__filter-btn">Ara</button>
+    </form>
+  </div>
+
+  <div class="catalog__layout">
+    <div class="catalog__grid" data-catalog-grid>
+      {% if search.performed %}
+        {% paginate search.results by section.settings.products_per_page %}
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}
+              {% render 'product-card', product: item %}
+            {% endif %}
+          {% else %}
+            <p class="catalog__empty">Sonuç bulunamadı. Farklı bir ifade deneyin.</p>
+          {% endfor %}
+        {% endpaginate %}
+      {% else %}
+        <p class="catalog__empty">Aramaya başlamak için yukarıdaki alanı kullanın veya header’daki AI aramayı açın.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "class": "section-main-search",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Sayfa başına ürün",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 16
+    }
+  ]
+}
+{% endschema %}

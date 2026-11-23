@@ -28,7 +28,8 @@
       </p>
     {% endif %}
     {% if section.settings.button_label != blank %}
-      <a class="btn btn--ghost-light" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+      {% assign hero_cta_href = section.settings.button_link | default: routes.all_products_collection_url %}
+      <a class="btn btn--ghost-light" href="{{ hero_cta_href }}">{{ section.settings.button_label }}</a>
     {% endif %}
   </div>
 </section>
