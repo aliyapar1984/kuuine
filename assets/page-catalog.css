@@ -851,12 +851,27 @@
 }
 
 .catalog-banner--wide {
-  grid-column: 1 / -1;
+  grid-column: span 2;
+  min-width: 0;
   aspect-ratio: auto;
-  width: 100%;
+  width: auto;
+  max-width: none;
   height: var(--catalog-card-h);
   max-height: none;
   min-height: var(--catalog-card-h);
+}
+
+/* Tekli görünümde tam satır */
+.catalog__grid--cols-1 .catalog-banner--wide {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 900px) {
+  /* Masaüstünde ikili span; satır ortasında sıkışmasın */
+  .catalog__grid--cols-3 .catalog-banner--wide,
+  .catalog__grid--cols-4 .catalog-banner--wide {
+    grid-column: span 2;
+  }
 }
 
 .catalog-banner__media,
