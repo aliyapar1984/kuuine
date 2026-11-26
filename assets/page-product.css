@@ -31,8 +31,8 @@
 }
 
 .pdp__aside {
-  order: 2;
-  padding: 1.75rem var(--pad-x) 1.5rem;
+  order: 3;
+  padding: 0.5rem var(--pad-x) 2.5rem;
 }
 
 .pdp__media-stage {
@@ -62,8 +62,8 @@
 }
 
 .pdp__buy {
-  order: 3;
-  padding: 1.5rem var(--pad-x) 2.5rem;
+  order: 2;
+  padding: 1.5rem var(--pad-x) 1.25rem;
 }
 
 .pdp__frame {

@@ -1949,8 +1949,8 @@ body.ai-search-open .site-header .logo__icon--light {
 
 .product-card__wishlist {
   position: absolute;
-  top: 26px;
-  right: 28px;
+  top: 16px;
+  right: 16px;
   z-index: 3;
   width: 28px;
   height: 28px;
@@ -2116,6 +2116,10 @@ body.ai-search-open .site-header .logo__icon--light {
   .product-card__wishlist,
   .product-card__add {
     opacity: 1;
+  }
+  .product-card__wishlist {}
+    top: 10px;
+    right: 10px;
   }
 }
 
