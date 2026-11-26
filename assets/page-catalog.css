@@ -233,6 +233,7 @@
 }
 
 .catalog-look__media img,
+.catalog-look__media video,
 .catalog-look__media .catalog-landing__placeholder {
   position: absolute;
   inset: 0;
@@ -244,7 +245,8 @@
   transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.catalog-look:hover .catalog-look__media img {
+.catalog-look:hover .catalog-look__media img,
+.catalog-look:hover .catalog-look__media video {
   transform: scale(1);
 }
 
@@ -336,7 +338,8 @@
 @media (prefers-reduced-motion: reduce) {
   .catalog-atelier__media video,
   .catalog-atelier__media img,
-  .catalog-look__media img {
+  .catalog-look__media img,
+  .catalog-look__media video {
     transform: none !important;
     transition: none !important;
   }

@@ -193,6 +193,7 @@
       /* Uzun section (katalog vb.) intersectionRatio’yu düşürüp ambient play’i engeller —
          önce yakın medya/hero kabı, section yalnızca kısa bloklarda. */
       const observeTarget =
+        video.closest(".catalog-look") ||
         video.closest(".catalog-atelier__hero") ||
         video.closest("[data-catalog-landing]") ||
         video.closest(".thematic-duo__figure") ||

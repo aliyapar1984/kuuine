@@ -99,7 +99,13 @@
 
         <article class="catalog-look" data-catalog-reveal>
           <figure class="catalog-look__media">
-            {% if section.settings.split2_image != blank %}
+            {% if section.settings.split2_video != blank %}
+              {% render 'lazy-video',
+                video: section.settings.split2_video,
+                class: 'catalog-look__video',
+                mode: 'auto'
+              %}
+            {% elsif section.settings.split2_image != blank %}
               {{
                 section.settings.split2_image
                 | image_url: width: 1200
@@ -401,7 +407,8 @@
       "label": "Metin",
       "default": "Işığı sofraya taşıyan sade camlar."
     },
-    { "type": "image_picker", "id": "split2_image", "label": "Görsel" },
+    { "type": "video", "id": "split2_video", "label": "Video" },
+    { "type": "image_picker", "id": "split2_image", "label": "Görsel (video yoksa)" },
     { "type": "header", "content": "Look 03" },
     { "type": "text", "id": "split3_eyebrow", "label": "Üst etiket", "default": "Sofra" },
     { "type": "textarea", "id": "split3_title", "label": "Başlık", "default": "Paylaşım anı" },
