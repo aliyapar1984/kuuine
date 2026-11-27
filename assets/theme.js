@@ -789,7 +789,12 @@
           syncPipFromVideo(video);
         } else {
           pauseLazyVideo(video);
-          unloadLazyVideo(video);
+          /* Fade bitmeden unload poster’ı son karenin üstüne basıyor */
+          const hold = slide;
+          window.setTimeout(() => {
+            if (hold.classList.contains("is-active")) return;
+            unloadLazyVideo(video);
+          }, 900);
         }
       });
     };
